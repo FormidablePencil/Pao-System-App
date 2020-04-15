@@ -1,28 +1,36 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { EnterMethodContext } from '../../screens/WelcomeScreen'
 //@ reusable comp
 
 const styles = StyleSheet.create({
   defaultBtnStyles: {
-    height: 10,
-    width: 20,
+    padding: 10,
     borderRadius: 5,
-    color: '#FFDF5B'
+    backgroundColor: '#B6F4FF'
   },
   defaultTextStyles: {
-    color: 'grey'
+    color: 'grey',
+    alignSelf: 'center'
   }
 })
 interface BtnTypes {
-  btnText: string
+  btnText?: string
   overRideBtnStyles?: object
   overRideTextStyles?: object
+  funcOnPress?: object
+  children?: any
 }
-export const Btn = ({ btnText, overRideBtnStyles, overRideTextStyles }: BtnTypes) => {
+export const Btn = ({ btnText, overRideBtnStyles, overRideTextStyles, funcOnPress, children }: BtnTypes) => {
+
   return (
-    <View style={{ ...styles.defaultBtnStyles, ...overRideBtnStyles }}>
-      <Text style={{...styles.defaultTextStyles, ...overRideTextStyles}} >{btnText}</Text>
-    </View>
+    <TouchableOpacity onPress={funcOnPress} style={{ ...styles.defaultBtnStyles, ...overRideBtnStyles }}>
+      {children}
+      {btnText &&
+        <Text style={{ ...styles.defaultTextStyles, ...overRideTextStyles }} >{btnText}</Text>
+      }
+    </TouchableOpacity>
   )
 }
 

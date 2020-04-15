@@ -8,8 +8,8 @@ const TableHeader = () => {
     <LinearGradient
       start={[.8, 0.8]}
       colors={['#2CC3DB', '#17739B']}
-      style={{ borderRadius: 5, paddingTop: 30, paddingBottom: 5, position: 'relative' }}>
-      <View className="absolute mx-2" style={{ top: 40 }}>
+      style={{ borderRadius: 5,  paddingBottom: 5, position: 'relative' }}>
+      <View className="absolute mx-2" style={{ top: 10 }}>
         <Image style={{ width: 30, height: 30 }} source={playingCards} />
       </View>
       <View className="flex flex-row justify-around mx-2 self-center">
