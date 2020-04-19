@@ -5,3 +5,4 @@
 declare module "react-native-tailwind"
 declare module "react-native-vector-icons/MaterialIcons"
 declare module 'react-native-vector-icons/FontAwesome5'
+// declare module "react-native-textinput-effects"

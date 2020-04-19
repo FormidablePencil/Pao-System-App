@@ -1,0 +1,24 @@
+{
+  "name": "@bit/formidablepencil.list-of-textinputs.dynamic-form-fields",
+  "version": "0.0.3",
+  "homepage": "https://bit.dev/formidablepencil/list-of-textinputs/dynamic-form-fields",
+  "main": "dist/DynamicFormFields.tsx",
+  "dependencies": {
+    "@expo/vector-icons": "10.0.6",
+    "react-native-textinput-effects": "0.5.1"
+  },
+  "devDependencies": {
+    "@types/react-native": "^0.62.2",
+    "@types/react": "^16.9.33"
+  },
+  "peerDependencies": {
+    "react": "~16.9.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "bit": {
+    "env": {
+      "compiler": "bit.envs/compilers/react@1.0.16"
+    }
+  }
+}
