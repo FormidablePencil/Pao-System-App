@@ -11,7 +11,7 @@ export const globalStyles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginHorizontal: 20,
     marginTop: 40,
-    marginBottom: 20
+    marginBottom: 20,
   },
   flashcard: {
     height: '80%', borderRadius: 20,
@@ -35,28 +35,27 @@ export const globalStyles = StyleSheet.create({
     zIndex: 300
   },
   card: {
-    width: '80%',
-    height: '90%',
-    display: 'flex',
-    alignSelf: 'center',
+    // width: '80%',
+    // height: '90%',
     borderRadius: 20,
     backgroundColor: 'white',
     elevation: 2,
-    marginTop: 30,
   },
   cardFlip: {
-    flex: 1,
+    borderRadius: 20,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: '100%'
-  }, 
+    height: 600,
+    width: 300,
+    alignSelf: 'center'
+  },
   flashView: {
   }
 })
 
-  {/* < View className = "flex justify-center items-center bg-white w-full" style = {{ ...globalStyles.flashcard }}> */}
+{/* < View className = "flex justify-center items-center bg-white w-full" style = {{ ...globalStyles.flashcard }}> */ }
 
 
 // style={{rotate: '90deg'}}

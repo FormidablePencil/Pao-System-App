@@ -6,7 +6,7 @@ import * as Animatable from 'react-native-animatable';
 import { comps } from '../constants/constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-import DynamicFormFields from './dynamic-form-fields/DynamicFormFields'
+import DynamicFormFields from '@bit/formidablepencil.list-of-textinputs.dynamic-form-fields'
 import { useSelector, useDispatch } from 'react-redux';
 import { RESET_NOTIFY_MESG } from '../actions/types';
 

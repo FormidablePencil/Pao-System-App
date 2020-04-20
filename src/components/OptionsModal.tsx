@@ -1,16 +1,16 @@
 import React, { useState, useContext } from 'react'
 import { View, Text } from 'react-native-tailwind'
-import { Image, Modal, Button, TouchableOpacity, TextInput } from 'react-native';
+import { Image, Modal, TouchableOpacity, TextInput } from 'react-native';
 import { globalStyles } from '../styles/global'
 import { StyledText } from '../styles/global'
 import * as Animatable from 'react-native-animatable';
 import { PaoAppContext } from '../routes/TabNavigator';
 import ToggleSwitchComp from './ToggleSwitchComp';
 import SimpleBtn, { BtnSlider } from './BtnComps';
+import { Button } from 'react-native-paper'
 
-const OptionsModal = (props) => {
-  const { modalOpen } = useContext(PaoAppContext)
-
+const OptionsModal = () => {
+  const { modalOpen, toggleFlashcardEffectDirectionVertical, setToggleFlashcardEffectDirectionVertical } = useContext(PaoAppContext)
 
   return (
     <Modal visible={modalOpen} transparent={true} >
@@ -32,6 +32,10 @@ const OptionsModal = (props) => {
             </View>
 
             <BtnSlider />
+
+            <Button mode='contained' onPress={() => setToggleFlashcardEffectDirectionVertical(!toggleFlashcardEffectDirectionVertical)}>
+              Switch flip direction
+            </Button>
 
             <SimpleBtn color='red' />
             <SimpleBtn color='blue' />

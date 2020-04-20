@@ -15,11 +15,16 @@ const StackNavigator = () => {
           screenOptions={{
             headerShown: false
           }}>
-          <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
           <Stack.Screen name='TabNavigator' component={TabNavigator} />
+          <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
   )
 }
+
+//~react-native-swipe-gestures
+//~react-native-deck-swiper
+// react-native-card-stack-swiper
+// @react-navigation/material-bottom-tabs
 
 export default StackNavigator

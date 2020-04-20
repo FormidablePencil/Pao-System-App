@@ -11,3 +11,16 @@ export enum inputErrMessages {
   invalidSigninMsg = "Invalid username or password",
   emptyFields = 'empty fields'
 }
+
+export enum flashcardModeOptions {
+  random,
+  accending,
+  deccending
+}
+
+export enum swipeDirection {
+  left,
+  right,
+  up,
+  dowm
+}
