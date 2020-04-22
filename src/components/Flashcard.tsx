@@ -37,7 +37,7 @@ const Flashcard = ({ flashcardMode }) => {
   const swiper = useRef(null)
   const cardRef = useRef(null)
   const cardRef2 = useRef(null)
-  console.log(paoList, 'did I grab the paoList????')
+  // console.log(paoList, 'did I grab the paoList????')
   
   const [paoDoc, setPaoDoc] = useState(0)
   const sortedPaoList = sortPaoList({ list: paoList, mode: flashcardMode })

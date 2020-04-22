@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { View, Text } from 'react-native-tailwind'
 import TableHeader from '../components/TableHeader'
-import RenderList from '../components/RenderList'
+import RenderPaoItems from '../components/RenderPaoItems'
 import { Button } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchPao, putPaoList } from '../actions/paoActions'
@@ -10,6 +10,7 @@ import { useNavigationState } from '@react-navigation/native'
 import { PaoAppContext } from '../routes/TabNavigator'
 import Pagination from '../components/Pagination'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import ListTable from '../components/ListTable'
 
 
 
@@ -20,7 +21,6 @@ export const PaotableScreen = ({ navigation }: any) => {
   const [sets, setSets] = useState([]);
   const dispatch = useDispatch()
   const { accessToken } = useSelector((state: any) => state.auth)
-
   const state = useNavigationState(state => state);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const PaotableScreen = ({ navigation }: any) => {
   return (
     <>
       <TableHeader />
-      <RenderList />
+        <RenderPaoItems />
     </>
   )
 }

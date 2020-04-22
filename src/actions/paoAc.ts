@@ -1,4 +1,3 @@
-import { Control } from '../components/RenderList'
 import { UPDATE_PAO_LIST, ADD_TO_PAO_LIST } from './types'
 import { PaoAction } from '../reducerTypes/paoTypes'
 

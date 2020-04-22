@@ -20,7 +20,7 @@ export const PaoAppContext = createContext();
 //~ check if logged in, if so then: 
 //~ get pao data 
 //~ else redirect user back to WelcomeScreen
-
+// Change out inputs for texts and render then conditionally when user presses on the test
 const TabNavigator = () => {
   const initialRouteName = tabScreens.Paotable
   const [modalOpen, setModalOpen] = useState(false)
@@ -33,9 +33,10 @@ const TabNavigator = () => {
   const [currentScreen, setCurrentScreen] = useState(null)
   //likely there will be two parameters. One for edit text input, another for flashcard modes, and likely even more.
   const [fabAction, setFabAction] = useState({
-    fabVisibility: false,
+    fabVisibility: true,
     flashcardMode: fabActions.accending,
-    paotableEditMode: false
+    paotableEditMode: false,
+    paginationMode: true
   })
   console.log(currentScreen)
 
@@ -83,6 +84,7 @@ const TabNavigator = () => {
           open={showFab}
           icon={showFab ? 'calendar-today' : 'plus'}
           actions={[
+            { icon: 'square-edit-outline', label: fabAction.paginationMode ? 'list mode' : 'pagingation mode', onPress: () => setFabAction({ ...fabAction, paginationMode: !fabAction.paginationMode }) },
             { icon: 'square-edit-outline', label: 'Edit list', onPress: () => setFabAction({ ...fabAction, paotableEditMode: !fabAction.paotableEditMode }) },
             { icon: 'triangle', label: `${fabActions.accending}`, onPress: () => setFabAction({ ...fabAction, flashcardMode: fabActions.accending }) },
             { icon: 'triangle-outline', label: `${fabActions.deccending}`, onPress: () => setFabAction({ ...fabAction, flashcardMode: fabActions.deccending }) },

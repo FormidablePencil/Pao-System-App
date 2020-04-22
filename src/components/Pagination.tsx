@@ -1,16 +1,38 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text } from 'react-native-tailwind'
 import styled from 'styled-components';
 import { Button, DefaultTheme } from 'react-native-paper';
 
 interface PaginationType {
-  renderItemsToCurrentPage: any
-  paginateTo: any
+  currentRenderItemsRange: any
+  setCurrentRenderItemsRange: any
 }
 
-const Pagination = ({ renderItemsToCurrentPage, paginateTo }: PaginationType) => {
+const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange }: PaginationType) => {
+  enum paginateDirection {
+    next,
+    previous
+  }
+
+
+  const paginateTo = (num: number) => {
+    const newNum = num * 10
+    setCurrentRenderItemsRange(newNum)
+  } //table pagination option
+
+  const renderItemsToCurrentPage = (selected: number) => {
+    if (selected === paginateDirection.next) {
+      setCurrentRenderItemsRange((prevState: any) => prevState + 10)
+    } else if (selected === paginateDirection.previous) {
+      if (currentRenderItemsRange <= 0) return
+      setCurrentRenderItemsRange((prevState: any) => prevState - 10)
+    }
+  } //table pagination option
+
+
+
   return (
-    <Row style={{backgroundColor: DefaultTheme.colors.accent}}>
+    <Row style={{ backgroundColor: DefaultTheme.colors.accent }}>
       <Column>
         <Row>
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num: number) =>
@@ -20,10 +42,10 @@ const Pagination = ({ renderItemsToCurrentPage, paginateTo }: PaginationType) =>
           )}
         </Row>
         <Row style={{ justifyContent: 'space-around' }}>
-          <PaginationBtn onPress={() => renderItemsToCurrentPage(0)} mode="contained" >
+          <PaginationBtn onPress={() => renderItemsToCurrentPage(paginateDirection.previous)} mode="contained" >
             previous
           </PaginationBtn>
-          <PaginationBtn onPress={() => renderItemsToCurrentPage(1)} mode="contained" >
+          <PaginationBtn onPress={() => renderItemsToCurrentPage(paginateDirection.next)} mode="contained" >
             Next
       </PaginationBtn>
         </Row>

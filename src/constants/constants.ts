@@ -30,3 +30,8 @@ export enum tabScreens {
   Flashcards ='Flashcards',
   Settings = 'Settings'
 }
+
+export enum listMode {
+  pagination,
+  wholeList
+}

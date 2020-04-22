@@ -3,7 +3,6 @@
     "name": "The Pao System",
     "slug": "ThePaoSystem",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
