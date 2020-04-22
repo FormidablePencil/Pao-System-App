@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Text } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import { DefaultTheme } from '@react-navigation/native'
@@ -45,9 +45,8 @@ const PaoTextInput = ({
 
   return (
     <>
-      {toggleTextInputShow.show &&
-        toggleTextInputShow.number === tenPaoItemsArr[index].number
-        && toggleTextInputShow.name === name ?
+      {toggleTextInputShow.number !== tenPaoItemsArr[index].number
+        && toggleTextInputShow.name !== name ?
         <TextInput
           autoFocus={true}
           onBlur={() => saveControlledInputToReduxPaoList()}
