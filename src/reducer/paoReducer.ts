@@ -14,15 +14,18 @@ export default (state: PaoState = initialState, { type, payload }: any) => {
       return payload
 
     case ADD_TO_PAO_LIST:
-      return { ...state, ...payload }
+      // console.log(payload, 'add to list@@')
+      // console.log(payload)
+      return [...state, payload] //~ may need to add a uuid
 
     case UPDATE_PAO_LIST:
-      return {
-        ...state,
-        [payload.index]:
-          state[payload.index],
-        ...payload[payload.index] as {}
-      }
+      console.log('update list')
+      return state.map((document: any) => {
+        if (document.number === payload.number) {
+          document[payload.name] = payload.value
+          return document
+        } else return document
+      })
 
     case DELETE_PAO_LIST:
       return initialState

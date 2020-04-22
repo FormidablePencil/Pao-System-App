@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { DefaultTheme } from 'react-native-paper';
 import { PaoAppContext } from '../routes/TabNavigator';
 import sortPaoList from './logic/sortPaoList';
-import { flashcardModeOptions, swipeDirection } from '../constants/constants';
+import { fabActions, swipeDirection } from '../constants/constants';
 import { useSelector } from 'react-redux';
 
 //~ unless paper has it implement swipe card gesture...
@@ -53,7 +53,7 @@ const Flashcard = ({ flashcardMode }) => {
 /////  //* study in deccending order
 
 
-  const swipeHandler = ({ direction }) => {
+  const swipeHandler = ({ direction }: any) => {
     if (direction === swipeDirection.left) setPaoDoc(paoDoc - 1)
     if (direction === swipeDirection.right) setPaoDoc(paoDoc + 1)
   }
@@ -81,16 +81,16 @@ const Flashcard = ({ flashcardMode }) => {
               <TouchableHighlight underlayColor={'white'} style={globalStyles.card} onPress={() => flipCard()} >
                 <View className="flex flex-col h-full items-center justify-center">
                   <View className="w-full h-12">
-                    <Text className="text-center text-3xl">{sortedPaoList[swipeHandler].number}</Text>
+                    {/* <Text className="text-center text-3xl">{paoList[swipeHandler].number}</Text> */}
                   </View>
                 </View>
               </TouchableHighlight>
               <TouchableHighlight underlayColor={'white'} style={globalStyles.card} onPress={() => flipCard()} >
                 <View className="flex flex-col h-full items-center justify-center">
                   <View className="w-full h-12">
-                    <Text className="text-center text-3xl">{sortedPaoList[swipeHandler].person}</Text>
-                    <Text className="text-center text-3xl">{sortedPaoList[swipeHandler].action}</Text>
-                    <Text className="text-center text-3xl">{sortedPaoList[swipeHandler].object}</Text>
+                    {/* <Text className="text-center text-3xl">{paoList[swipeHandler].person}</Text>
+                    <Text className="text-center text-3xl">{paoList[swipeHandler].action}</Text>
+                    <Text className="text-center text-3xl">{paoList[swipeHandler].object}</Text> */}
                   </View>
                 </View>
               </TouchableHighlight>

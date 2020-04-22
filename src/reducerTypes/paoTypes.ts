@@ -20,11 +20,12 @@ export interface PaoReducer {
 
 export interface PaoState {
   [key: number]: {
-    number: number
-    person: string,
-    action: string,
-    object: string,
-  }
+    number: number | null
+    person: string | null
+    action: string | null
+    object: string | null
+  },
+  map: any
 }
 
 export interface PutPaoList {
@@ -33,4 +34,11 @@ export interface PutPaoList {
     action: string
     object: string
   }
+}
+
+export interface PaoAction {
+  number: number
+  person: string,
+  action: string,
+  object: string,
 }

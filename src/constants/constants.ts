@@ -12,10 +12,10 @@ export enum inputErrMessages {
   emptyFields = 'empty fields'
 }
 
-export enum flashcardModeOptions {
-  random,
-  accending,
-  deccending
+export enum fabActions {
+  random = 'random',
+  accending = 'accending',
+  deccending = 'deccending',
 }
 
 export enum swipeDirection {
@@ -23,4 +23,10 @@ export enum swipeDirection {
   right,
   up,
   dowm
+}
+
+export enum tabScreens {
+  Paotable = 'Paotable',
+  Flashcards ='Flashcards',
+  Settings = 'Settings'
 }
