@@ -30,7 +30,7 @@ export const FlashcardsScreen = () => {
     <View className="w-full h-full flex flex-row justify-center">
       <OptionsModal />
       <View className="relative" style={globalStyles.centerEverything}>
-        {/* <Flashcard flashcardMode={flashcardMode} /> */}
+        <Flashcard flashcardMode={flashcardMode} />
 
         
 

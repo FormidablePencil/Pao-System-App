@@ -31,7 +31,6 @@ const RenderPaoItems = () => {
   const paoList: any = useSelector((state: any) => state.pao)  //@
   const [flatlistItems, setFlatlistItems] = useState(arr) //@ !!!
 
-  console.log(flatlistItems)
   useEffect(() => {
     const newFlatListItem = mergePaoArrays(paoList, flatlistItems)
     setFlatlistItems(newFlatListItem)
@@ -53,7 +52,7 @@ const RenderPaoItems = () => {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'yellow' }}>
+    <View style={{ flex: 1 }}>
       <ScrollView
       
         keyboardDismissMode={'none'}
@@ -66,7 +65,7 @@ const RenderPaoItems = () => {
           }
         }}
         ref={flatListRef}
-        style={{ flex: 1, height: "100%", backgroundColor: 'pink' }}
+        style={{ flex: 1, height: "100%" }}
       >
         {paginationMode ?
           <PaginationModeTable

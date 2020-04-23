@@ -4,10 +4,12 @@ import { NavigationContainer } from '@react-navigation/native'
 import WelcomeScreen from '../screens/WelcomeScreen'
 import TabNavigator from './TabNavigator'
 import { createStackNavigator } from '@react-navigation/stack';
+import { enableScreens } from 'react-native-screens';
 
 const Stack = createStackNavigator()
 
 const StackNavigator = () => {
+  enableScreens();
   
   return ( 
       <NavigationContainer>

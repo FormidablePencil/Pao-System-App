@@ -1,37 +1,19 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { View, Text } from 'react-native-tailwind'
+import React from 'react'
 import TableHeader from '../components/TableHeader'
 import RenderPaoItems from '../components/RenderPaoItems'
-import { Button } from 'react-native-paper'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchPao, putPaoList } from '../actions/paoActions'
-import styled from 'styled-components'
-import { useNavigationState } from '@react-navigation/native'
-import { PaoAppContext } from '../routes/TabNavigator'
-import Pagination from '../components/Pagination'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import ListTable from '../components/ListTable'
-
-
+import { useSelector } from 'react-redux'
+import useSaveScreenIndex from '../hooks/useSaveScreenIndex'
 
 //~ everything has to work before CRUD with pao lists
 
 export const PaotableScreen = ({ navigation }: any) => {
-  const { currentScreen, setCurrentScreen } = useContext(PaoAppContext)
-  const [sets, setSets] = useState([]);
-  const dispatch = useDispatch()
   const { accessToken } = useSelector((state: any) => state.auth)
-  const state = useNavigationState(state => state);
-
-  useEffect(() => {
-    setCurrentScreen(state.index)
-  }, [state])
-  // console.log(state)
-
+  useSaveScreenIndex()
+  
   return (
     <>
       <TableHeader />
-        <RenderPaoItems />
+      <RenderPaoItems />
     </>
   )
 }

@@ -6,13 +6,14 @@ import ErrorBoundary from 'react-error-boundary';
 import { Provider as StoreProvider, useSelector } from 'react-redux'
 import configureStore from './store';
 import StackNavigator from './routes/StackNavigator';
-import { Provider as PaperProvider } from 'react-native-paper'
+import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper'
 
 const store = configureStore()
 
 const Index = () => {
   const [appReady, setAppReady] = useState(false)
   YellowBox.ignoreWarnings(['Require cycle', 'Warning: "RootErrorBoundary"'])
+
 
   if (Platform.OS === 'android') {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -33,8 +34,18 @@ const Index = () => {
     })()
   }, [])
 
+  const theme = {
+    ...DefaultTheme,
+    roundness: 2,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#3498db',
+      accent: '#67FF80',
+    },
+  };
+
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <StoreProvider store={store}>
         <ErrorBoundary>
           {appReady ?

@@ -33,13 +33,6 @@ const PaginationModeTable = ({
     setControlledInput,
     tenPaoItemsArr,
   })
-  interface ToggleInputTypes {
-    number: number | null
-    name: string | null
-    show: boolean | null
-  }
-  const [toggleTextInputShow, setToggleTextInputShow] = useState<ToggleInputTypes>({ number: null, name: null, show: false })
-
 
   return (
     <>
@@ -68,8 +61,6 @@ const PaginationModeTable = ({
               return (
                 <ItemInRow key={name}>
                   <PaoTextInput
-                    toggleTextInputShow={toggleTextInputShow}
-                    setToggleTextInputShow={setToggleTextInputShow}
                     tenPaoItemsArr={tenPaoItemsArr}
                     index={index}
                     name={name}

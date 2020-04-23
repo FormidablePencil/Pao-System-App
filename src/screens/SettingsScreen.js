@@ -10,11 +10,13 @@ import AccountSettings from '../components/AccountSettings'
 import profileImg from '../assets/mycat.jpg'
 import AppSettings from '../components/AppSettings'
 import AppInfo from '../components/AppInfo'
+import useSaveScreenIndex from '../hooks/useSaveScreenIndex'
 
 //~ I have to learn svg to get that border slanted effect on settings screen
 
 
 const SettingsScreen = ({navigation}) => {
+
   return (
     <View className="relative flex justify-around items-center h-full bg-blue-lightest">
 

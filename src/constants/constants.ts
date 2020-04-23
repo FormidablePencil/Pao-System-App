@@ -27,7 +27,7 @@ export enum swipeDirection {
 
 export enum tabScreens {
   Paotable = 'Paotable',
-  Flashcards ='Flashcards',
+  Flashcards = 'Flashcards',
   Settings = 'Settings'
 }
 
@@ -35,3 +35,5 @@ export enum listMode {
   pagination,
   wholeList
 }
+
+
