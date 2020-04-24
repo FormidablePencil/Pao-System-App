@@ -32,6 +32,7 @@ export const FlashcardsScreen = () => {
     action: false,
     object: false,
   })
+
   const [arrangment, setArrangment] = useState(arrangmentOpt.ascending)
 
   return (

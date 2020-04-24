@@ -11,9 +11,10 @@ import paoLogo from '../assets/playing-cards-png-11-original.png'
 //@ts-ignore
 export const EnterMethodContext = createContext()
 
-const WelcomeScreen = ({navigation}: any) => {
+const WelcomeScreen = ({ navigation }: any) => {
   const { spinAnim, opacityAnim } = useLogoAnimation()
-  
+  //! linearGradient over a card image
+
   return (
     <EnterMethodContext.Provider>
       <LinearGradient colors={['#67B4FF', '#4132D3']} style={styles.container} end={[1, 1.3]}>

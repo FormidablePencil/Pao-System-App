@@ -10,12 +10,27 @@ import SimpleBtn, { BtnSlider } from './BtnComps';
 import { Button, Provider, Portal, Title } from 'react-native-paper'
 import SwitchSelector from "react-native-switch-selector";
 import { FlashcardsContext, arrangmentOpt } from '../screens/FlashcardsScreen';
+import styled from 'styled-components';
+import { DefaultTheme } from '@react-navigation/native';
 
 
 const OptionsModal = () => {
   const { modalOpen, setModalOpen } = useContext(PaoAppContext)
   const { flashcardItemDisplayedFront, setflashcardItemDisplayedFront, arrangment, setArrangment } = useContext(FlashcardsContext)
   console.log({ flashcardItemDisplayedFront, setflashcardItemDisplayedFront, arrangment, setArrangment })
+
+  const switchSelectorsInfo: any = [
+    { name: 'number' },
+    { name: 'person' },
+    { name: 'action' },
+    { name: 'object' },
+  ]
+
+  const flashCardOrderBtnPayload: any = [
+    { order: 'ascending', arrangementOption: arrangmentOpt.ascending },
+    { order: 'descending', arrangementOption: arrangmentOpt.descending },
+    { order: 'random', arrangementOption: arrangmentOpt.random },
+  ]
 
   return (
     <Modal visible={modalOpen} transparent={true} >
@@ -30,112 +45,45 @@ const OptionsModal = () => {
             {/* <BtnSlider /> */}
             <View className='flex-col '>
               <View className="flex flex-col justify-center">
-
-                <Title style={{ alignSelf: 'center' }}>person</Title>
-                <SwitchSelector
-                  style={{ width: 250 }}
-                  initial={0}
-                  onPress={value => {
-                    if (value === 'front') setflashcardItemDisplayedFront({ ...flashcardItemDisplayedFront, person: true })
-                    else setflashcardItemDisplayedFront({ ...flashcardItemDisplayedFront, person: false })
-                  }}
-                  textColor={'red'} //'#7a44cf'
-                  selectedColor={'white'}
-                  buttonColor={'blue'}
-                  borderColor={'aqua'}
-                  hasPadding
-                  fontSize={20}
-                  options={[
-                    //@ts-ignore
-                    { label: "front", value: 'front' },
-                    { label: "back", value: 'back' }
-                  ]}
-                />
-                <Title style={{ alignSelf: 'center' }}>action</Title>
-                <SwitchSelector
-                  style={{ width: 250 }}
-                  selectedTextContainerStyle={{ width: 1003 }}
-                  initial={0}
-                  onPress={value => {
-                    if (value === 'front') setflashcardItemDisplayedFront({ ...flashcardItemDisplayedFront, action: true })
-                    else setflashcardItemDisplayedFront({ ...flashcardItemDisplayedFront, action: false })
-                  }}
-                  textColor={'red'} //'#7a44cf'
-                  selectedColor={'white'}
-                  buttonColor={'blue'}
-                  borderColor={'aqua'}
-                  hasPadding
-                  fontSize={20}
-                  options={[
-                    { label: "front", value: 'front' },
-                    { label: "back", value: 'back' }
-                  ]}
-                />
-                <Title style={{ alignSelf: 'center' }}>object</Title>
-                <SwitchSelector
-                  style={{ width: 250 }}
-                  selectedTextContainerStyle={{ width: 1003 }}
-                  initial={0}
-                  onPress={value => {
-                    if (value === 'front') setflashcardItemDisplayedFront({ ...flashcardItemDisplayedFront, object: true })
-                    else setflashcardItemDisplayedFront({ ...flashcardItemDisplayedFront, object: false })
-                  }}
-                  textColor={'red'} //'#7a44cf'
-                  selectedColor={'white'}
-                  buttonColor={'blue'}
-                  borderColor={'aqua'}
-                  hasPadding
-                  fontSize={20}
-                  options={[
-                    { label: "front", value: 'front' },
-                    { label: "back", value: 'back' }
-                  ]}
-                />
-                <Title style={{ alignSelf: 'center' }}>number</Title>
-                <SwitchSelector
-                  style={{ width: 250 }}
-                  selectedTextContainerStyle={{ width: 1003 }}
-                  initial={0}
-                  onPress={value => {
-                    if (value === 'front') setflashcardItemDisplayedFront({ ...flashcardItemDisplayedFront, number: true })
-                    else setflashcardItemDisplayedFront({ ...flashcardItemDisplayedFront, number: false })
-                  }}
-                  textColor={'red'} //'#7a44cf'
-                  selectedColor={'white'}
-                  buttonColor={'blue'}
-                  borderColor={'aqua'}
-                  hasPadding
-                  fontSize={20}
-                  options={[
-                    { label: "front", value: 'front' },
-                    { label: "back", value: 'back' }
-                  ]}
-                />
-                {/* //* choices for what'll be in the front card */}
+                {switchSelectorsInfo.map((collection: any) =>
+                  <>
+                    <Title style={{ alignSelf: 'center' }}>{collection.name}</Title>
+                    <SwitchSelector
+                      style={{ width: 250 }}
+                      initial={flashcardItemDisplayedFront[collection.name] === true ? 0 : 1}
+                      onPress={value => {
+                        if (value === 'front') setflashcardItemDisplayedFront({ ...flashcardItemDisplayedFront, [collection.name]: true })
+                        else setflashcardItemDisplayedFront({ ...flashcardItemDisplayedFront, [collection.name]: false })
+                      }}
+                      textColor={DefaultTheme.colors.primary} //'#7a44cf'
+                      selectedColor={'white'}
+                      buttonColor={DefaultTheme.colors.primary}
+                      borderColor={DefaultTheme.colors.primary}
+                      hasPadding
+                      fontSize={20}
+                      options={[
+                        //@ts-ignore
+                        { label: "front", value: 'front' },
+                        { label: "back", value: 'back' }
+                      ]}
+                    />
+                  </>
+                )}
               </View>
-
-              {/* //* study all or only stared */}
 
               <View className='flex-col'>
                 <Title style={{ alignSelf: 'center' }}>Order: </Title>
-                <Button mode={arrangment === arrangmentOpt.ascending ? 'contained' : 'outlined'}
-                  onPress={() => setArrangment(arrangmentOpt.ascending)}
-                >
-                  ascending
-                </Button>
-                <Button mode={arrangment === arrangmentOpt.descending ? 'contained' : 'outlined'}
-                  onPress={() => setArrangment(arrangmentOpt.descending)}
-                >
-                  descending
-                </Button>
-                <Button mode={arrangment === arrangmentOpt.random ? 'contained' : 'outlined'}
-                  onPress={() => setArrangment(arrangmentOpt.random)}
-                >
-                  random
-                </Button>
-                <Button onPress={() => setModalOpen(false)} mode='text'>
+                {flashCardOrderBtnPayload.map((collection: any) =>
+                  <>
+                    <Button mode={arrangment === collection.arrangementOption ? 'contained' : 'outlined'}
+                      onPress={() => setArrangment(collection.arrangementOption)}>
+                      {collection.order}
+                    </Button>
+                  </>
+                )}
+                <SaveButton onPress={() => setModalOpen(false)} mode='contained'>
                   close
-            </Button>
+                </SaveButton>
               </View>
             </View>
           </View>
@@ -145,5 +93,12 @@ const OptionsModal = () => {
     </Modal >
   )
 }
+
+const SaveButton = styled(Button)`
+  width: 150px;
+  border-radius: 20px;
+  margin-vertical: 5px;
+  align-self: center;
+`;
 
 export default OptionsModal

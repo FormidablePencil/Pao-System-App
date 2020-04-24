@@ -22,7 +22,7 @@ export enum swipeDirection {
   left,
   right,
   up,
-  dowm
+  down
 }
 
 export enum tabScreens {
@@ -35,8 +35,6 @@ export enum listMode {
   pagination,
   wholeList
 }
-
-
 
 
 // {
