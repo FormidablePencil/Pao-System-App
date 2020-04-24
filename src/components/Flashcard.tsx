@@ -10,6 +10,8 @@ import { PaoAppContext } from '../routes/TabNavigator';
 import sortPaoList from './logic/sortPaoList';
 import { fabActions, swipeDirection } from '../constants/constants';
 import { useSelector } from 'react-redux';
+import useFlashcardModes from '../hooks/useFlashcardModes';
+import {FlashcardsContext} from '../screens/FlashcardsScreen'
 
 //~ unless paper has it implement swipe card gesture...
 
@@ -31,8 +33,8 @@ const CoverupTextView = styled.View`
   width: 100px;
 `;
 
-const Flashcard = ({ flashcardMode }) => {
-  const { toggleFlashcardEffectDirectionVertical } = useContext(PaoAppContext)
+const Flashcard = ({  }) => {
+  // const {flashcardMode, setFlashcardMode} = useContext(FlashcardsContext)
   const paoList = useSelector(state => state.paoList)
   const swiper = useRef(null)
   const cardRef = useRef(null)
@@ -40,8 +42,7 @@ const Flashcard = ({ flashcardMode }) => {
   // console.log(paoList, 'did I grab the paoList????')
   
   const [paoDoc, setPaoDoc] = useState(0)
-  const sortedPaoList = sortPaoList({ list: paoList, mode: flashcardMode })
-  
+  // const sortedPaoList = sortPaoList({ list: paoList, mode: flashcardMode })
   
   //~ front will have one item and back the 2 others and the number
   //various settings: 

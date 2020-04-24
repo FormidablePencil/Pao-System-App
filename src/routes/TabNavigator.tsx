@@ -25,7 +25,6 @@ const TabNavigator = () => {
   const initialRouteName = tabScreens.Paotable
   const [modalOpen, setModalOpen] = useState(false)
   const tokenRefreshing = useHandleTokenRefreshing()
-  const [toggleFlashcardEffectDirectionVertical, setToggleFlashcardEffectDirectionVertical] = useState(true)
   const [currentScreen, setCurrentScreen] = useState(null)
 
   //@ this could become a seperate component as a useHook
@@ -43,7 +42,6 @@ const TabNavigator = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <PaoAppContext.Provider value={{
         modalOpen, setModalOpen,
-        toggleFlashcardEffectDirectionVertical, setToggleFlashcardEffectDirectionVertical,
         currentScreen, setCurrentScreen,
         fabAction, setFabAction
       }}>

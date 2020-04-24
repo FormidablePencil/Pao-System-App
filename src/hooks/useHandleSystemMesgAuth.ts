@@ -20,7 +20,6 @@ const useHandleSystemMesgAuth = () => {
     (async () => {
       if (signin === false || signup === false) {
         await setAuthenticated(false)
-        console.log('1')
         dispatch({ type: RESET_SIGNIN_MESG })
         dispatch({ type: RESET_SIGNUP_MESG })
         dispatch({ type: SET_NOT_LOADING })

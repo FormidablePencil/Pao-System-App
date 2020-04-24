@@ -37,3 +37,24 @@ export enum listMode {
 }
 
 
+
+
+// {
+//   style: { backgroundColor: fabProperties.arrangement.color },
+//   icon: fabProperties.arrangement.accending.icon.triangleRightSideUp,
+//   label: fabProperties.arrangement.accending.mesg,
+//   onPress: () => setFabAction({ ...fabAction, flashcardMode: fabActions.accending })
+// },
+// {
+//   style: { backgroundColor: fabProperties.arrangement.color },
+//   icon: fabProperties.arrangement.deccending.icon.triangleUpSideDown,
+//   label: fabProperties.arrangement.deccending.mesg,
+//   onPress: () => setFabAction({ ...fabAction, flashcardMode: fabActions.deccending })
+// },
+// {
+//   style: { backgroundColor: fabProperties.arrangement.color },
+//   icon: fabProperties.arrangement.scrambledMode.icon.shuffle,
+//   label: fabProperties.arrangement.scrambledMode.mesg,
+//   onPress: () => setFabAction({ ...fabAction, flashcardMode: fabActions.random })
+// },
+

@@ -1,22 +1,25 @@
 import { useState, useContext, useEffect } from "react"
 import { PaoAppContext } from "../routes/TabNavigator"
 import { fabModeOptions, fabProperties, fabActionOptions } from "../constants/fabConstants"
+import { tabScreens } from "../constants/constants"
 
 interface FAV {
-  currentScreen: any
-  setFabVisible: any
+  setFabVisible: (item: any) => void
   currentMainFab: any
-  setCurrentMainFab: any
-  setFabAction: any
+  setCurrentMainFab: (item: any) => void
+  setFabAction: (item: any) => void
   fabAction: any
+  currentScreen: any
+  setCurrentFabActions: (item: any) => void
 }
 
 interface Returned {
-  handleOnPressFabActions: any
-  handleOnPressMainFab: any
+  handleOnPressFabActions: (item: any) => void
+  handleOnPressMainFab: () => void
 }
 
-export const useFavPaoTable = ({
+export const useFavFunctions = ({
+  setCurrentFabActions,
   currentScreen,
   setFabVisible,
   currentMainFab,
@@ -30,15 +33,58 @@ export const useFavPaoTable = ({
     editMode: { mode: fabModeOptions.editing, icon: fabProperties.mainBtn.edit.icon.pencil, color: fabProperties.editMode.color }
   }
 
+  const paoTableFabActions = [
+    {
+      style: { backgroundColor: fabProperties.editMode.color },
+      icon: fabProperties.editMode.icon.pencil,
+      label: fabProperties.editMode.mesg,
+      onPress: () => handleOnPressFabActions(fabActionOptions.paotableEditMode)
+    },
+    {
+      style: { backgroundColor: fabProperties.listMode.color },
+      icon: fabProperties.listMode.wholeList.icon.list,
+      label: fabAction.paginationMode ? fabProperties.listMode.wholeList.mesg : fabProperties.listMode.pagination.mesg,
+      onPress: () => handleOnPressFabActions(fabActionOptions.paginationMode)
+    },
+    {
+      style: { backgroundColor: fabProperties.arrangement.mainBtn.color },
+      icon: fabProperties.arrangement.mainBtn.icon.arrangement,
+      label: fabProperties.arrangement.mainBtn.mesg,
+      onPress: () => { }
+    },
+  ]
+
+  //This flashcards screen will use the model to change the settings/modes of the flashcards instead of fabAction.
+  const flashcardFabActions = [
+    {
+      style: { backgroundColor: fabProperties.editMode.color },
+      icon: fabProperties.editMode.icon.pencil,
+      label: fabProperties.editMode.mesg,
+      onPress: () => { }
+    },
+  ]
+
 
   useEffect(() => {
-    if (currentScreen >= 1) {
-      setFabVisible(true)
-    } else if (currentScreen === 2) {
-      setFabVisible(false)
+    switch (currentScreen) {
+
+      case tabScreens.Paotable:
+        setFabVisible(true)
+        setCurrentFabActions(paoTableFabActions)
+        break;
+      case tabScreens.Flashcards:
+        setFabVisible(true)
+        setCurrentFabActions(flashcardFabActions)
+        break;
+      case tabScreens.Settings:
+        setFabVisible(false)
+        setCurrentFabActions([])
+        break;
+
+      default:
+        break;
     }
   }, [currentScreen])
-
 
   const handleOnPressMainFab = () => {
     switch (currentMainFab.mode) {

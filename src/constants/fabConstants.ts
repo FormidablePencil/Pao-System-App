@@ -76,3 +76,9 @@ export enum fabActionOptions {
   flashcardModedDescending,
   flashcardModedScrambled,
 }
+
+export const fabOpt = {
+  standby: { mode: fabModeOptions.standby, icon: fabProperties.mainBtn.menu.icon.menu, color: null },
+  menuOpen: { mode: fabModeOptions.menuOpen, icon: fabProperties.mainBtn.menuOpen.icon.cards, color: null },
+  editMode: { mode: fabModeOptions.editing, icon: fabProperties.mainBtn.edit.icon.pencil, color: fabProperties.editMode.color }
+}
