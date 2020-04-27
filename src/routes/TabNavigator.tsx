@@ -12,26 +12,12 @@ const Tab = createBottomTabNavigator()
 export const TabNavContext = createContext()
 
 const TabNavigator = ({ navigation }) => {
-  const [modalOpen, setModalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false) //@ keep
 
-  const [flashcardItemDisplayedFront, setflashcardItemDisplayedFront] = useState([
-    { number: true },
-    { person: false },
-    { action: false },
-    { object: false },
-  ])
-  const defaultautoPlayFlashcards = { play: false, duration: 5 } //rename to flashcard related
-  const [autoPlayFlashcards, setautoPlayFlashcards] = useState(defaultautoPlayFlashcards) //rename to flashcard related
-
-
-
+  // autoPlayFlashcards, setautoPlayFlashcards,
+  // flashcardItemDisplayedFront, setflashcardItemDisplayedFront
   return (
-    <TabNavContext.Provider value={{
-      modalOpen, setModalOpen,
-      
-      autoPlayFlashcards, setautoPlayFlashcards,
-      flashcardItemDisplayedFront, setflashcardItemDisplayedFront
-    }}>
+    <TabNavContext.Provider value={{ modalOpen, setModalOpen, }}>
       <SafeAreaView style={{ flex: 1 }}>
         <Tab.Navigator
           initialRouteName={tabScreens.Paotable}
@@ -41,7 +27,7 @@ const TabNavigator = ({ navigation }) => {
         </Tab.Navigator>
         <FabActionBtn navigation={navigation} />
       </SafeAreaView>
-      </TabNavContext.Provider>
+    </TabNavContext.Provider>
   )
 }
 

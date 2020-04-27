@@ -8,22 +8,29 @@ import styled from 'styled-components';
 import { DefaultTheme } from '@react-navigation/native';
 import { TabNavContext } from '../routes/TabNavigator'
 import { PaoAppContext } from '../routes/StackNavigator';
-import { arrangmentOpt } from '../constants/constants';
-
-//! hook up:
-// auto play duration
-// fontSize (to theme but later)... or not 
-// order for both screens
+import { useSelector, useDispatch } from 'react-redux';
+import { SET_AUTO_PLAY_DURATION, TOGGLE_AUTO_PLAY_DURATION, SAVED_FLASHCARD_SETTINGS_FROM_MODAL, UPDATE_FLASHCARD_ORDER } from '../actions/types';
+import { saveFlashcardSettings } from '../actions/flashcardSettingsActions'
+import { FlashcardSettingsTypes, arrangmentOpt } from '../reducer/flashcardOptionsReducer';
 
 const OptionsModal = () => {
   const { modalOpen, setModalOpen } = useContext(TabNavContext)
-const {
-  flashcardItemDisplayedFront, setflashcardItemDisplayedFront,
-  autoPlayFlashcards, setautoPlayFlashcards
-} = useContext(TabNavContext)
-  const { arrangment, setArrangment, tabScreenOptions: { screen } } = useContext(PaoAppContext)
-  const [sliderValueautoPlayFlashcardsDuration, setSliderValueautoPlayFlashcardsDuration] = useState<number>()
+  const { flashcardItemDisplayedFront, autoPlayFlashcards } = useSelector((state: any) => state.flashcardOptions)
+
+  const { /* arrangment, setArrangment, */ tabScreenOptions: { screen } } = useContext(PaoAppContext)
   const [fontSize, setFontSize] = useState<number>() //to theme provider
+  const dispatch = useDispatch()
+  const [sliderValueautoPlayFlashcardsDuration, setSliderValueautoPlayFlashcardsDuration] = useState()
+  const [flashcardSettings, setFlashcardSettings] = useState<FlashcardSettingsTypes>({
+    flashcardItemDisplayedFront: [
+      { number: true },
+      { person: false },
+      { action: true },
+      { object: false },
+    ],
+    autoPlayFlashcards: { play: false, duration: 5 },
+    flashcardOrder: null
+  })
 
   //~ text size, show pao hits, autoPlayFlashcards and it's timeout duration, ascending, descending and /* random option
 
@@ -40,25 +47,64 @@ const {
     { order: 'random', arrangementOption: arrangmentOpt.random },
   ]
 
-  const updateFlashcardDisplayFront = (value: string, name: any) => {
-    let valueInBoolean = true
-    if (value === 'back') valueInBoolean = false
-    const changedOneItem = flashcardItemDisplayedFront.map((cluster: any) => {
-      const itemName = Object.keys(cluster)[0]
-      if (itemName === name) {
-        return { [name]: valueInBoolean }
-      } else {
-        return cluster
-      }
-    })
-    console.log(changedOneItem)
-    setflashcardItemDisplayedFront(changedOneItem)
+  enum onPress {
+    save,
+    setOrder,
+    toggleAutoPlay,
+    switch
   }
 
-  const handleOnPressSave = () => {
-    setautoPlayFlashcards({ ...autoPlayFlashcards, duration: sliderValueautoPlayFlashcardsDuration })
-    setModalOpen(false)
+  const onPressHandler = async (action: any, payload?: any) => {
+    switch (action) {
+      case onPress.setOrder:
+        setFlashcardSettings({ ...flashcardSettings, flashcardOrder: payload })
+        break;
+
+      case onPress.save:
+        await setFlashcardSettings({
+          ...flashcardSettings, autoPlayFlashcards: {
+            ...flashcardSettings.autoPlayFlashcards,
+            duration: sliderValueautoPlayFlashcardsDuration
+          }
+        })
+        dispatch(saveFlashcardSettings(flashcardSettings))
+        setModalOpen(false)
+        break;
+
+      case onPress.switch:
+
+        setWhatSideItemWillDisplay(payload.name, payload.whatSide)
+        break
+
+      case onPress.toggleAutoPlay:
+        setFlashcardSettings({
+          ...flashcardSettings,
+          autoPlayFlashcards: {
+            ...flashcardSettings.autoPlayFlashcards,
+            play: !flashcardSettings.autoPlayFlashcards.play
+          }
+        })
+        break
+
+      default:
+        break;
+    }
   }
+
+
+  const setWhatSideItemWillDisplay = (name: any, value: string) => {
+    console.log('object')
+    let boolean = true
+    if (value === 'back') boolean = false
+    const updatedState = flashcardSettings.flashcardItemDisplayedFront.map(item => {
+      if (Object.keys(item)[0] === name) return { [name]: boolean }
+      else return item
+    })
+    //@ts-ignore
+    setFlashcardSettings({ ...flashcardSettings, flashcardItemDisplayedFront: updatedState })
+  }
+
+
   return (
     <Modal visible={modalOpen} transparent={true}>
       <View style={{ flex: 1, backgroundColor: "black" }}>
@@ -74,10 +120,12 @@ const {
               <View className='flex-col '>
                 <View className="flex flex-col justify-center w-full">
 
-                  <Button onPress={() => setautoPlayFlashcards({ ...autoPlayFlashcards, play: !autoPlayFlashcards.play })}>Auto play {autoPlayFlashcards.play ? 'on' : 'off'}</Button>
-                  <Text style={{ color: autoPlayFlashcards.play ? 'black' : 'lightgrey' }}>auto play duraton {Math.floor(sliderValueautoPlayFlashcardsDuration ? sliderValueautoPlayFlashcardsDuration : autoPlayFlashcards.duration)}</Text>
+                  <Button onPress={() => onPressHandler(onPress.toggleAutoPlay)}>Auto play {flashcardSettings.autoPlayFlashcards.play ? 'on' : 'off'}</Button>
+                  <Text style={{ color: flashcardSettings.autoPlayFlashcards.play ? 'black' : 'lightgrey' }}>
+                    auto play duraton {Math.floor(sliderValueautoPlayFlashcardsDuration ? sliderValueautoPlayFlashcardsDuration : autoPlayFlashcards.duration)}
+                  </Text>
                   <Slider
-                    disabled={!autoPlayFlashcards.play}
+                    disabled={!flashcardSettings.autoPlayFlashcards.play}
                     value={autoPlayFlashcards.duration}
                     onValueChange={(value) => setSliderValueautoPlayFlashcardsDuration(value)}
                     style={{ width: 200, height: 40 }}
@@ -99,7 +147,7 @@ const {
                   />
 
                   {switchSelectorsInfo.map((collection, index) => {
-                    const specificItem = flashcardItemDisplayedFront.filter(item => Object.keys(item)[0] === collection.name)[0]
+                    const specificItem = flashcardSettings.flashcardItemDisplayedFront.filter(item => Object.keys(item)[0] === collection.name)[0]
                     const toggle = Object.values(specificItem)[0]
                     return (
                       <View key={index}>
@@ -111,7 +159,7 @@ const {
                           height={21}
                           style={{ width: "100%", height: 10 }}
                           initial={toggle ? 0 : 1}
-                          onPress={value => updateFlashcardDisplayFront(value, Object.values(collection)[0])}
+                          onPress={whatSide => onPressHandler(onPress.switch, { name: Object.values(collection)[0], whatSide })}
                           // textColor={DefaultTheme.colors.primary} //'#7a44cf'
                           // selectedColor={'black'}
                           buttonColor={DefaultTheme.colors.primary}
@@ -134,13 +182,13 @@ const {
                   {flashCardOrderBtnPayload.map((collection, index) =>
                     <View key={index}>
                       <Button
-                        mode={arrangment === collection.arrangementOption ? 'contained' : 'outlined'}
-                        onPress={() => setArrangment({ ...arrangment, [screen]: collection.arrangementOption })}>
+                        mode={flashcardSettings.flashcardOrder === collection.arrangementOption ? 'contained' : 'outlined'}
+                        onPress={() => onPressHandler(onPress.setOrder, collection.arrangementOption)}>
                         {collection.order}
                       </Button>
                     </View>
                   )}
-                  <SaveButton onPress={() => handleOnPressSave()} mode='contained'>
+                  <SaveButton onPress={() => onPressHandler(onPress.save)} mode='contained'>
                     Save
                 </SaveButton>
                 </View>

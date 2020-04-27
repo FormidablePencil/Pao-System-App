@@ -1,13 +1,10 @@
 import React, { useState, createContext } from 'react'
-import { View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import WelcomeScreen from '../screens/WelcomeScreen'
 import TabNavigator from './TabNavigator'
 import { createStackNavigator } from '@react-navigation/stack';
-import { enableScreens } from 'react-native-screens';
-import useHandleTokenRefreshing from '../hooks/useHandleTokenRefreshing'
 import ProfileScreen from '../screens/SettingsScreen'
-import { arrangmentOpt } from '../constants/constants'
+import { arrangmentOpt } from '../reducer/flashcardOptionsReducer'
 
 const Stack = createStackNavigator()
 //@ts-ignore
@@ -16,6 +13,7 @@ export const PaoAppContext = createContext();
 const StackNavigator = () => {
 
   // const tokenRefreshing = useHandleTokenRefreshing()
+  //~ leave it here for testing out the proformance later on
   const defaultScreenOptions = { // its here and not in tab navigator where it would make sense to keep because there's a proformance hit
     fabVisibility: false,
     screen: null,

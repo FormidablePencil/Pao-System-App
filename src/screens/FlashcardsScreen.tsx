@@ -9,20 +9,19 @@ import styled from 'styled-components';
 import { TabNavContext } from '../routes/TabNavigator'
 
 //@ts-ignore
-export const FlashcardsContext = createContext()
 
 export const FlashcardsScreen = () => {
 
 
   return (
-    <FlashcardsContext.Provider value={{}}>
+    <>
       <OptionsModal />
       <View className="w-full h-full flex flex-row justify-center">
         <View className="relative" style={globalStyles.centerEverything}>
           <FlashcardSwiper />
         </View>
       </View>
-    </FlashcardsContext.Provider>
+    </>
   )
 }
 

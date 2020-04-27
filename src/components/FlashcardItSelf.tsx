@@ -1,18 +1,16 @@
-import React, { useRef, useState, useEffect, useContext } from 'react'
-import { View, Text, Animated, Easing, PanResponder, StyleSheet, Dimensions } from 'react-native'
-import { Button, Card, FAB, IconButton, TextInput, Surface } from 'react-native-paper'
+import React, { useRef, useState, useContext } from 'react'
+import {  Text, Animated,StyleSheet, Dimensions } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import styled from 'styled-components';
 import { createAnimatableComponent } from 'react-native-animatable';
 // import CardStack from 'react-native-card-stack-swiper';
-import { TouchableHighlight, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import Swiper from 'react-native-deck-swiper'
-import { TabNavContext } from '../routes/TabNavigator';
-import { DefaultTheme } from '@react-navigation/native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { PaoTheme } from '../Index'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { PaoAppContext } from '../routes/StackNavigator'
 import { tabScreens } from '../constants/constants';
 import useAnimation from '../hooks/useAnimation';
+import { useSelector } from 'react-redux';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -22,7 +20,7 @@ interface FlashcardsTypes {
 }
 
 const FlashcardItSelf = ({ collection }: FlashcardsTypes) => {
-  const { flashcardItemDisplayedFront } = useContext(TabNavContext)
+  const { flashcardItemDisplayedFront } = useSelector((state: any) => state.flashcardOptions)
   const { tabScreenOptions: { screen, config: { editMode } } } = useContext(PaoAppContext)
 
   let frontInterpolation: any = useRef(new Animated.Value(0)).current
@@ -79,12 +77,15 @@ const FlashcardItSelf = ({ collection }: FlashcardsTypes) => {
               <>
                 {paoDisplayOrder.map((name: any, index) => {
                   const gotObjectsByName = flashcardItemDisplayedFront.filter(document => Object.keys(document)[0] === name)[0]
+                  console.log('flashcardItemDisplayedFront')
+                  console.log(gotObjectsByName)
+                  console.log('flashcardItemDisplayedFront')
                   const key = Object.keys(gotObjectsByName)[0]
                   const valuePair = Object.values(gotObjectsByName)[0]
                   if (valuePair === sidesDocument.symbol) {
                     return (
                       <Wrapper key={index}>
-                        <Text style={{color: PaoTheme.colors.primary}}>{key}</Text>
+                        <Text style={{ color: PaoTheme.colors.primary }}>{key}</Text>
                         <TextInputWrapper>
                           <TextInput
                             style={styles.textInput}
@@ -111,7 +112,7 @@ const FlashcardItSelf = ({ collection }: FlashcardsTypes) => {
 }
 
 const PaoEmpty = ({ flashcardItemDisplayedFront, symbol }: any) => {
-  //if one side of the card contains no content then display "PAO"
+  // if one side of the card contains no content then display "PAO"
   const arrOfTrues = flashcardItemDisplayedFront.filter(item => Object.values(item)[0] === !symbol)
   if (arrOfTrues[3]) {
     return (

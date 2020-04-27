@@ -30,7 +30,7 @@ const useSettingTabScreenOptions = () => {
         setTabScreenOptions({
           fabVisibility: true,
           screen: tabScreens.Paotable,
-          config: { editMode: false, pagination: true, showHints: false },
+          config: { editMode: false, pagination: true, showHints: false }, //move to reducer 
           keyword: enumFabAction.sharedFabActions,
           mainFabProperties: fabOpt.standby
         })

@@ -36,11 +36,6 @@ export enum listMode {
   wholeList
 }
 
-export enum arrangmentOpt {
-  ascending,
-  descending,
-  random
-}
 
 
 // {

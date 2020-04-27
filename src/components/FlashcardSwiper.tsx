@@ -8,10 +8,13 @@ import Swiper from 'react-native-swiper'
 import { TabNavContext } from '../routes/TabNavigator';
 import { fabActions } from '../constants/constants';
 import sortPaoList from '../components/logic/sortPaoList'
+import { PaoAppContext } from '../routes/StackNavigator';
 
 const FlashcardSwiper = ({ }) => {
   const pao = useSelector((state: any) => state.pao[0] ? state.pao : [{ number: null, person: null, action: null, object: null }])
-  const { arrangment, autoPlayFlashcards, autoPlayFlashcards: { play, duration } } = useContext(TabNavContext)
+  const { autoPlayFlashcards: { play, duration } } = useSelector((state: any) => state.flashcardOptions)
+  const {arrangment} = useContext(PaoAppContext)
+  
   const [flashcardOrderAssortment, setFlashcardOrderAssortment] = useState()
   useEffect(() => {
     const sortedPao = sortPaoList({ list: pao, mode: arrangment })
@@ -27,12 +30,12 @@ const FlashcardSwiper = ({ }) => {
     <Container style={{ ...styles2.slide1 }}>
       <Swiper
         showsButtons={true}
-        autoPlayFlashcards={autoPlayFlashcards.play}
-        autoPlayFlashcardsTimeout={duration} //~ make this a setting
+        autoplay={play}
+        autoplayTimeout={duration} //~ make this a setting
         showsPagination={false}
         loop={true}
-        loadMinimal={true}
-        loadMinimalSize={1}
+        // loadMinimal={true}
+        // loadMinimalSize={1}
       >
         {flashcardOrderAssortment ? flashcardOrderAssortment.map((collection: any, index: number) => {
           return (
