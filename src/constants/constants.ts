@@ -28,12 +28,18 @@ export enum swipeDirection {
 export enum tabScreens {
   Paotable = 'Paotable',
   Flashcards = 'Flashcards',
-  Settings = 'Settings'
+  FavList ='FavList'
 }
 
 export enum listMode {
   pagination,
   wholeList
+}
+
+export enum arrangmentOpt {
+  ascending,
+  descending,
+  random
 }
 
 

@@ -10,7 +10,7 @@ import DynamicFormFields from '@bit/formidablepencil.list-of-textinputs.dynamic-
 import { useSelector, useDispatch } from 'react-redux';
 import { RESET_NOTIFY_MESG } from '../actions/types';
 
-interface propTypes {
+interface propertyTypes {
   compToRender: number
   setCompToRender: any
   initialInputFields: {
@@ -32,7 +32,7 @@ const InputFieldsComp = ({
   initialInputFields,
   getValuesOfInputFields,
   containerProps
-}: propTypes) => {
+}: propertyTypes) => {
   const { loading, signin, notifyMesg } = useSelector((state: any) => state.systemMessages)
   const dispatch = useDispatch()
 

@@ -2,12 +2,16 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import paoReducer from './reducer/paoReducer'
 import authReducer from './reducer/authReducer'
-import systemMesg from './reducer/systemMesgReducer'
+import systemMesgReducer from './reducer/systemMesgReducer'
+import screenSettingsReducer from './reducer/screenSettingsReducer'
+import favListReducer from './reducer/favListReducer'
 
 const rootReducer = combineReducers({
   pao: paoReducer,
   auth: authReducer,
-  systemMessages: systemMesg
+  systemMessages: systemMesgReducer,
+  screenSettings: screenSettingsReducer,
+  favList: favListReducer
 })
 
 const initialState = {}

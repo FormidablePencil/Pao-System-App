@@ -4,7 +4,7 @@ import { View, Text } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button, DefaultTheme } from 'react-native-paper'
 import styled from 'styled-components'
-import { PaoAppContext } from '../routes/TabNavigator'
+import { PaoAppContext } from '../routes/StackNavigator'
 import Pagination from './Pagination'
 import { FirstItemInRow, Row, ItemInRow } from '../styles/paoTableStyles'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -18,10 +18,12 @@ import { mergePaoArrays } from './logic/sortPaoList'
 
 const RenderPaoItems = () => {
   enum paginateDirection { previous, next }
-  const { fabAction: { paginationMode } } = useContext(PaoAppContext)
+  const { tabScreenOptions: { config: { pagination } } } = useContext(PaoAppContext)
+  const { tabScreenOptions } = useContext(PaoAppContext)
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }
   }) //~
+
   const [tenPaoItemsArr, setTenPaoItemsArr]: any = useState(arr) //~ 
   const [controlledInput, setControlledInput] = useState<Control>({ number: null, name: null, value: null }) //~ 
   const [heightOfScrollView, setheightOfScrollView] = useState<number>()
@@ -51,10 +53,11 @@ const RenderPaoItems = () => {
     if (index % 2 == 1) return 'lightgrey'; else return 'white'
   }
 
+  // console.log(tabScreenOptions)
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
-      
+
         keyboardDismissMode={'none'}
         blurOnSubmit={false}
         keyboardShouldPersistTaps={'always'}
@@ -67,7 +70,7 @@ const RenderPaoItems = () => {
         ref={flatListRef}
         style={{ flex: 1, height: "100%" }}
       >
-        {paginationMode ?
+        {pagination ?
           <PaginationModeTable
             tenPaoItemsArr={tenPaoItemsArr}
             controlledInput={controlledInput}
@@ -75,17 +78,17 @@ const RenderPaoItems = () => {
             bgColorByIndex={bgColorByIndex}
             heightOfScrollView={heightOfScrollView}
           />
-          :
-          <ListModeTable
-            arr={arr}
-            bgColorByIndex={bgColorByIndex}
-            heightOfScrollView={heightOfScrollView}
-            controlledInput={controlledInput}
-            setControlledInput={setControlledInput}
-          />
+          : null
+          // <ListModeTable
+          //   arr={arr}
+          //   bgColorByIndex={bgColorByIndex}
+          //   heightOfScrollView={heightOfScrollView}
+          //   controlledInput={controlledInput}
+          //   setControlledInput={setControlledInput}
+          // />
         }
       </ScrollView>
-      {paginationMode &&
+      {pagination &&
         <Pagination
           currentRenderItemsRange={currentRenderItemsRange}
           setCurrentRenderItemsRange={setCurrentRenderItemsRange}

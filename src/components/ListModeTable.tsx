@@ -4,7 +4,7 @@ import { ItemInRow, Row, FirstItemInRow } from '../styles/paoTableStyles'
 import { DefaultTheme } from 'react-native-paper'
 import { useSelector } from 'react-redux'
 import useTextInputHandler, { Control } from '../hooks/useTextInputHandler'
-import { PaoAppContext } from '../routes/TabNavigator'
+import { PaoAppContext } from '../routes/StackNavigator'
 import { listMode } from '../constants/constants'
 
 const ListModeTable = ({
@@ -20,7 +20,7 @@ const ListModeTable = ({
   setControlledInput: any
   arr: any
 }) => {
-  const { fabAction: { paotableEditMode } } = useContext(PaoAppContext)
+  const { tabScreenOptions: { config: {pagination} } } = useContext(PaoAppContext)
   const {
     saveControlledInputToReduxPaoList,
     onChangeTextHandler,
@@ -51,7 +51,7 @@ const ListModeTable = ({
               return (
                 <ItemInRow key={name}>
                   <TextInput
-                    editable={paotableEditMode}
+                    editable={pagination}
                     // onBlur={() => saveControlledInputToReduxPaoList()}
                     placeholder={name}
                     placeholderTextColor={'grey'}

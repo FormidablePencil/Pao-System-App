@@ -1,26 +1,49 @@
-import React from 'react'
+import React, { useState, createContext } from 'react'
 import { View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import WelcomeScreen from '../screens/WelcomeScreen'
 import TabNavigator from './TabNavigator'
 import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
+import useHandleTokenRefreshing from '../hooks/useHandleTokenRefreshing'
+import ProfileScreen from '../screens/SettingsScreen'
+import { arrangmentOpt } from '../constants/constants'
 
 const Stack = createStackNavigator()
+//@ts-ignore
+export const PaoAppContext = createContext();
 
 const StackNavigator = () => {
-  enableScreens();
-  
-  return ( 
+
+  // const tokenRefreshing = useHandleTokenRefreshing()
+  const defaultScreenOptions = { // its here and not in tab navigator where it would make sense to keep because there's a proformance hit
+    fabVisibility: false,
+    screen: null,
+    config: { editMode: null, pagination: true },
+    fabActionsProperties: null,
+    mainFabProperties: null
+  }
+  const defaultArrangment = {
+    FlashcardsScreen: arrangmentOpt.ascending,
+    PaoTableScreen: arrangmentOpt.ascending
+  }
+  const [tabScreenOptions, setTabScreenOptions] = useState(defaultScreenOptions)
+  const [arrangment, setArrangment] = useState(defaultArrangment)
+
+  return (
+    <PaoAppContext.Provider value={{
+      tabScreenOptions, setTabScreenOptions,
+      arrangment, setArrangment
+    }}>
       <NavigationContainer>
         <Stack.Navigator
-          screenOptions={{
-            headerShown: false
-          }}>
+          screenOptions={{ headerShown: false }}>
           <Stack.Screen name='TabNavigator' component={TabNavigator} />
           <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
+          <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
         </Stack.Navigator>
       </NavigationContainer>
+    </PaoAppContext.Provider>
   )
 }
 

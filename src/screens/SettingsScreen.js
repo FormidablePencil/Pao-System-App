@@ -10,34 +10,42 @@ import AccountSettings from '../components/AccountSettings'
 import profileImg from '../assets/mycat.jpg'
 import AppSettings from '../components/AppSettings'
 import AppInfo from '../components/AppInfo'
-import useSaveScreenIndex from '../hooks/useSaveScreenIndex'
+import useSettingTabScreenOptions from '../hooks/useSettingTabScreenOptions'
+import { Button, IconButton } from 'react-native-paper'
+import { tabScreens } from '../constants/constants'
 
 //~ I have to learn svg to get that border slanted effect on settings screen
 
 
-const SettingsScreen = ({navigation}) => {
+const ProfileScreen = ({ navigation }) => {
 
   return (
-    <View className="relative flex justify-around items-center h-full bg-blue-lightest">
+    <>
+      <IconButton
+        icon='keyboard-backspace'
+        size={25}
+        style={{ alignSelf: 'flex-start' }}
+        onPress={() => navigation.goBack()}
+      />
+      <View className="relative flex justify-around items-center h-full bg-blue-lightest">
+        <BackgroundSvg />
+        <View className="w-4/5 flex flex-row justify-around items-center">
+          <AccountSettings />
 
-      <BackgroundSvg />
-      <View className="w-4/5 flex flex-row justify-around items-center">
-        <AccountSettings />
+          <Image source={profileImg} style={{ height: 200, width: 200, borderRadius: 100, }} />
+        </View>
+        <AppSettings />
+        <View className="w-4/5 flex flex-row justify-around items-center">
+          <AppInfo navigation={navigation} />
+          <Image source={require('./../assets/playing-cards-png-11-original.png')} style={{ height: 125, width: 125 }} />
+        </View>
 
-        <Image source={profileImg} style={{ height: 200, width: 200, borderRadius: 100, }} />
       </View>
-      <AppSettings />
-      <View className="w-4/5 flex flex-row justify-around items-center">
-        <AppInfo navigation={navigation} />
-        <Image source={require('./../assets/playing-cards-png-11-original.png')} style={{ height: 125, width: 125 }} />
-      </View>
-
-    </View>
-
+    </>
   )
 }
 
 // Constants.statusBarHeight
 
 
-export default SettingsScreen
+export default ProfileScreen

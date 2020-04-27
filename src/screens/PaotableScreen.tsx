@@ -2,14 +2,15 @@ import React from 'react'
 import TableHeader from '../components/TableHeader'
 import RenderPaoItems from '../components/RenderPaoItems'
 import { useSelector } from 'react-redux'
-import useSaveScreenIndex from '../hooks/useSaveScreenIndex'
+import useSettingTabScreenOptions from '../hooks/useSettingTabScreenOptions'
+import FabActionBtn from '../components/FabActionBtn'
 
 //~ everything has to work before CRUD with pao lists
 
 export const PaotableScreen = ({ navigation }: any) => {
   const { accessToken } = useSelector((state: any) => state.auth)
-  useSaveScreenIndex()
-  
+  useSettingTabScreenOptions()
+
   return (
     <>
       <TableHeader />

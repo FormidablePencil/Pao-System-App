@@ -9,9 +9,28 @@ export const fabProperties = {
     },
     edit: {
       icon: { pencil: 'square-edit-outline' }
-    }
+    },
   },
 
+  settingOptions: {
+    color: '#61FF5B',
+    icon: { settings: 'settings' },
+    mesg: 'settings'
+  },
+
+  accountSettings: {
+    color: '#61FF5B',
+    icon: { accountSettings: 'account' },
+    mesg: 'account settings'
+  },
+
+
+  hint: {
+    color: '#A96DFF',
+    icon: { letterH: 'alpha-h' },
+    mesg: 'show hint messagees',
+    mesgOpposite: 'hide hint messagees'
+  },
 
   listMode: {
     color: '#A96DFF',
@@ -62,6 +81,10 @@ export const fabProperties = {
 
 }
 
+export enum enumFabAction {
+  sharedFabActions = 'sharedFabActions',
+}
+
 export enum fabModeOptions {
   standby,
   menuOpen,
@@ -70,8 +93,8 @@ export enum fabModeOptions {
 
 
 export enum fabActionOptions {
-  paginationMode,
-  paotableEditMode,
+  pagination,
+  editMode,
   flashcardModeAscending,
   flashcardModedDescending,
   flashcardModedScrambled,

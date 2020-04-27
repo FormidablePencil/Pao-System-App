@@ -10,6 +10,22 @@ import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper'
 
 const store = configureStore()
 
+//~ fab edit mode to turn on edit mode ->
+//~ edit to change pao in flashcard screen
+//~ account settings under FabGroups as a Stack screen
+//~ fav list
+//~ CRUD to the backend
+
+export const PaoTheme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#3498db',
+    accent: '#67FF80',
+  },
+};
+
 const Index = () => {
   const [appReady, setAppReady] = useState(false)
   YellowBox.ignoreWarnings(['Require cycle', 'Warning: "RootErrorBoundary"'])
@@ -34,18 +50,10 @@ const Index = () => {
     })()
   }, [])
 
-  const theme = {
-    ...DefaultTheme,
-    roundness: 2,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#3498db',
-      accent: '#67FF80',
-    },
-  };
+
 
   return (
-    <PaperProvider theme={theme}>
+    <PaperProvider theme={PaoTheme}>
       <StoreProvider store={store}>
         <ErrorBoundary>
           {appReady ?
@@ -57,5 +65,7 @@ const Index = () => {
     </PaperProvider>
   )
 }
+
+
 
 export default Index

@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { View, Text } from 'react-native-tailwind'
 import { TouchableOpacity } from 'react-native'
 import { StyledText, globalStyles } from '../styles/global'
-import { PaoAppContext } from '../routes/TabNavigator'
+import { TabNavContext } from '../routes/TabNavigator'
 
 interface SimpleBtnStyles { //for theming pruposes
   width?: number
@@ -12,7 +12,7 @@ interface SimpleBtnStyles { //for theming pruposes
 // defaulting to values if doesn't exist. 
 const SimpleBtn = ({ width = 64, text = 'btn', color = 'blue' }: SimpleBtnStyles) => {
 
-  const { modalOpen, setModalOpen } = useContext(PaoAppContext)
+  const { modalOpen, setModalOpen } = useContext(TabNavContext)
 
   const handleOnclick = () => {
     setModalOpen(!modalOpen)

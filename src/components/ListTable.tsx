@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import PaoTableItem from './PaoTableItem'
 import { useSelector } from 'react-redux'
-import { PaoAppContext } from '../routes/TabNavigator'
+import { PaoAppContext } from '../routes/StackNavigator'
 
 const ListTable = () => {
   const paoList: any = useSelector((state: any) => state.pao)

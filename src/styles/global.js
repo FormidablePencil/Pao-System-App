@@ -35,11 +35,7 @@ export const globalStyles = StyleSheet.create({
     zIndex: 300
   },
   card: {
-    // width: '80%',
-    // height: '90%',
-    borderRadius: 20,
-    backgroundColor: 'white',
-    elevation: 2,
+   
   },
   cardFlip: {
     borderRadius: 20,
