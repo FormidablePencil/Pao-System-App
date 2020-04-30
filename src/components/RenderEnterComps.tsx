@@ -9,15 +9,8 @@ import InputFieldsComp from './InputFieldsComp';
 import { comps } from '../constants/constants';
 import { INVALID_CREDENTIALS_NOTIFY_MESG, INPUT_FIELDS_EMPTY_NOTIFY_MESG } from '../actions/types';
 
-const RenderEnterComps = ({ navigation }: any) => {
+const RenderEnterComps = () => {
   const [enteringMethod, setEnteringMethod] = useState(comps.enterOptions)
-  const { authenticated } = useHandleSystemMesgAuth()
-  
-  useEffect(() => {
-    // if (authenticated === true) navigation.navigate('TabNavigator', { screen: 'Paotable' })
-    // if (authenticated === false) dispatch({ type: INVALID_CREDENTIALS_NOTIFY_MESG })
-  }, [authenticated])
-
 
   if (enteringMethod === comps.signin || enteringMethod === comps.signup) {
     return (

@@ -1,6 +1,7 @@
 import { SIGN_IN_FAILED_MESG, SIGNED_IN, SET_LOADING, SIGNED_UP, SIGN_UP_FAILED_MESG, SIGN_IN_SUCCESS_MESG, SIGNED_OUT, SIGN_OUT_FAILED } from "./types"
+import { form_res_msg } from "../hooks/useUserAuthentication"
 
-export const signUp = ({ username, password, email }: any) => async (dispatch: any) => {
+export const signUp = ({ username, password, email }) => async dispatch => {
   await dispatch({ type: SET_LOADING })
   const request = {
     method: 'POST',
@@ -11,16 +12,17 @@ export const signUp = ({ username, password, email }: any) => async (dispatch: a
   }
   const res = await fetch('http://10.0.0.6:4001/auth/signup', request)
   const fetchedData = await res.json()
+  console.log(fetchedData)
 
   if (fetchedData.accessToken && fetchedData.refreshToken) {
-    console.log('savigiginigning')
-    return dispatch({ type: SIGNED_UP, payload: { accessToken: fetchedData.accessToken, refreshToken: fetchedData.refreshToken, username } })
-  } else {
-    return dispatch({ type: SIGN_UP_FAILED_MESG })
+    dispatch({ type: SIGNED_UP, payload: { accessToken: fetchedData.accessToken, refreshToken: fetchedData.refreshToken, username } })
+    return form_res_msg.signed_up
+  } else if (fetchedData.message === 'user already exists') {
+    return form_res_msg.username_exists
   }
 }
 
-export const signIn = ({ username, password }: any) => async (dispatch: any) => {
+export const signIn = ({ username, password }) => async (dispatch) => {
   const res = await fetch('http://10.0.0.6:4001/auth/signin', {
     method: 'POST',
     headers: {
@@ -30,17 +32,16 @@ export const signIn = ({ username, password }: any) => async (dispatch: any) => 
   })
   const fetchedData = await res.json()
   //^ tokens or err message
+  console.log(fetchedData, 'fetchedData')
   if (fetchedData.accessToken && fetchedData.refreshToken) {
-    return dispatch({
-      type: SIGNED_IN,
-      payload: { username, accessToken: fetchedData.accessToken, refreshToken: fetchedData.refreshToken }
-    })
+    dispatch({ type: SIGNED_IN, payload: { username, accessToken: fetchedData.accessToken, refreshToken: fetchedData.refreshToken } })
+    return form_res_msg.signed_in
   } else {
-    return dispatch({ type: SIGN_IN_FAILED_MESG })
+    return form_res_msg.invalid_credentials
   }
 }
 
-export const signOut = ({ refreshToken }: any) => async (dispatch: any) => { //? I know you don't pass in refreshToken to clear it from db upon loging out
+export const signOut = ({ refreshToken }) => async dispatch => { //? I know you don't pass in refreshToken to clear it from db upon loging out
   await dispatch({ type: SET_LOADING })
   console.log(refreshToken)
   const request = {

@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { View, Text, StyleSheet, LayoutAnimation, Keyboard } from 'react-native'
 import styled from 'styled-components'
 import { Button, DefaultTheme, TextInput } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable';
-import { comps } from '../constants/constants';
+import { comps, tabScreens } from '../constants/constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 import DynamicFormFields from '../../components/dynamic-form-fields/DynamicFormFields'
@@ -13,7 +13,8 @@ import { withTheme } from 'react-native-paper'
 import { PaoThemeType } from '../styles/theming';
 import { inputErrMessages } from '../constants/constants'
 import { signIn, signUp } from '../actions/authActions';
-import useUserAuthentication, { ErrMsg } from '../hooks/useUserAuthentication';
+import useUserAuthentication, { form_res_msg } from '../hooks/useUserAuthentication';
+import { useNavigation } from '@react-navigation/native';
 
 interface propertyTypes {
   enteringMethod: number
@@ -27,12 +28,14 @@ const InputFieldsComp = ({
   setEnteringMethod,
   theme,
 }: propertyTypes) => {
-  const { loading } = useSelector((state: any) => state.systemMessages)
-  const { validateInputs } = useUserAuthentication()
-
+  const { } = useSelector((state: any) => state.systemMessages)
+  const { validate_inputs } = useUserAuthentication()
+  const [loading, setLoading] = useState(false)
   const defaultInputedValues = { email: '', username: '', password: '' }
   const [inputedValues, setInputedValues] = useState<DefaultInputedValuesTypes>(defaultInputedValues)
-  const [errorMsg, setErrorMsg] = useState<ErrMsg>(ErrMsg.no_err)
+  const [errorMsg, setErrorMsg] = useState<form_res_msg>(form_res_msg.no_err)
+  let error_text_anim = useRef(null)
+  const navigation = useNavigation()
 
   enum onPress {
     goBack,
@@ -44,45 +47,44 @@ const InputFieldsComp = ({
     switch (action) {
       case onPress.goBack:
         setEnteringMethod(comps.enterOptions)
-        break;
+        break
       case onPress.enter:
-        validate_user()
+        if (errorMsg === form_res_msg.invalid_credentials) {
+          error_text_anim.current.bounce()
+          return
+        }
+        setLoading(true)
+        await validate_user()
+        setLoading(false)
 
-        break;
+        break
 
       default:
-        break;
+        break
     }
   }
 
   const validate_user = async () => {
-    const response = await validateInputs(inputedValues, enteringMethod)
-    switch (response) {
-      case ErrMsg.empty_all:
-      case ErrMsg.empty_email:
-      case ErrMsg.empty_password:
-      case ErrMsg.empty_username:
-      case ErrMsg.no_err:
-        setErrorMsg(response)
-        break;
-
-      case 'something from dispatch':
-        break;
-
-      default:
-        break;
+    const response = await validate_inputs(inputedValues, enteringMethod)
+    if (response === form_res_msg.signed_in) {
+      navigation.navigate('TabNavigator', { screen: tabScreens.Flashcards })
+    } else if (response === form_res_msg.signed_up) {
+      navigation.navigate('TabNavigator', { screen: tabScreens.Flashcards })
+    } else {
+      setErrorMsg(response)
     }
   }
 
 
   const onChangeHandler = async (text, whatInput) => {
+    setErrorMsg(form_res_msg.no_err)
     await setInputedValues({ ...inputedValues, [whatInput]: text })
   }
 
 
   return (
     <View>
-      <Animatable.Text animation={errorMsg && 'bounce'} duration={1000} style={styles.errorMessage}>{errorMsg}</Animatable.Text>
+      <Animatable.Text ref={error_text_anim} animation={errorMsg !== form_res_msg.no_err && 'bounce'} duration={1000} style={styles.errorMessage}>{errorMsg !== form_res_msg.no_err && errorMsg}</Animatable.Text>
 
       <StyledTextInput
         multiline={false}
@@ -92,7 +94,7 @@ const InputFieldsComp = ({
         value={inputedValues.username}
         onChangeText={(text: any) => onChangeHandler(text, 'username')}
         keyboardType={'default'}
-        error={errorMsg !== ErrMsg.no_err && inputedValues.username === '' ? true : false}
+        error={errorMsg !== form_res_msg.no_err && inputedValues.username === '' ? true : false}
       />
       <StyledTextInput
         multiline={false}
@@ -103,7 +105,7 @@ const InputFieldsComp = ({
         secureTextEntry={true}
         onChangeText={(text: any) => onChangeHandler(text, 'password')}
         keyboardType={'default'}
-        error={errorMsg !== ErrMsg.no_err && inputedValues.username === '' ? true : false}
+        error={errorMsg !== form_res_msg.no_err && inputedValues.password === '' ? true : false}
       />
       {enteringMethod === comps.signup ?
         <StyledTextInput
@@ -115,7 +117,7 @@ const InputFieldsComp = ({
           secureTextEntry={true}
           onChangeText={(text: any) => onChangeHandler(text, 'email')}
           keyboardType={'email-address'}
-          error={errorMsg !== ErrMsg.no_err && inputedValues.email === '' ? true : false}
+          error={errorMsg !== form_res_msg.no_err && inputedValues.email === '' ? true : false}
         />
         : null
       }
