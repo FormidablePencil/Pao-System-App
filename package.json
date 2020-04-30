@@ -8,7 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@bit/formidablepencil.list-of-textinputs.dynamic-form-fields": "0.0.4",
+    "@bit/formidablepencil.list-of-textinputs.dynamic-form-fields": "file:./components/dynamic-form-fields",
     "@bit/formidablepencil.my-react-native-comps.add-and-delete-item-from-redux-btn": "0.0.2",
     "@react-native-community/masked-view": "0.1.6",
     "@react-native-community/slider": "^2.0.9",
@@ -61,7 +61,7 @@
     "@types/react-test-renderer": "^16.9.2",
     "@types/styled-components": "^5.1.0",
     "babel-preset-expo": "^8.1.0",
-    "typescript": "^3.8.3"
+    "typescript": "^4.0.0-dev.20200428"
   },
   "peerDependencies": {
     "react": "~16.9.0",

@@ -16,7 +16,7 @@ import { FlashcardSettingsTypes, arrangmentOpt } from '../reducer/flashcardOptio
 const OptionsModal = () => {
   const { modalOpen, setModalOpen } = useContext(TabNavContext)
   const { flashcardItemDisplayedFront, autoPlayFlashcards } = useSelector((state: any) => state.flashcardOptions)
-
+  const [loading, setLoading] = useState(false)
   const { /* arrangment, setArrangment, */ tabScreenOptions: { screen } } = useContext(PaoAppContext)
   const [fontSize, setFontSize] = useState<number>() //to theme provider
   const dispatch = useDispatch()
@@ -61,14 +61,16 @@ const OptionsModal = () => {
         break;
 
       case onPress.save:
+        await setLoading(true)
         await setFlashcardSettings({
           ...flashcardSettings, autoPlayFlashcards: {
             ...flashcardSettings.autoPlayFlashcards,
             duration: sliderValueautoPlayFlashcardsDuration
           }
         })
-        dispatch(saveFlashcardSettings(flashcardSettings))
+        await dispatch(saveFlashcardSettings(flashcardSettings))
         setModalOpen(false)
+        setLoading(false)
         break;
 
       case onPress.switch:
@@ -120,7 +122,7 @@ const OptionsModal = () => {
               <View className='flex-col '>
                 <View className="flex flex-col justify-center w-full">
 
-                  <Button onPress={() => onPressHandler(onPress.toggleAutoPlay)}>Auto play {flashcardSettings.autoPlayFlashcards.play ? 'on' : 'off'}</Button>
+                  <Button onPress={() => { onPressHandler(onPress.toggleAutoPlay) }}>Auto play {flashcardSettings.autoPlayFlashcards.play ? 'on' : 'off'}</Button>
                   <Text style={{ color: flashcardSettings.autoPlayFlashcards.play ? 'black' : 'lightgrey' }}>
                     auto play duraton {Math.floor(sliderValueautoPlayFlashcardsDuration ? sliderValueautoPlayFlashcardsDuration : autoPlayFlashcards.duration)}
                   </Text>
@@ -188,7 +190,10 @@ const OptionsModal = () => {
                       </Button>
                     </View>
                   )}
-                  <SaveButton onPress={() => onPressHandler(onPress.save)} mode='contained'>
+                  <SaveButton
+                    loading={loading}
+                    onPress={() => onPressHandler(onPress.save)}
+                    mode='contained'>
                     Save
                 </SaveButton>
                 </View>

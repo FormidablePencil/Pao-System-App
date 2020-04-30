@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react'
-import { View, Text, Animated } from 'react-native'
+import { View, Text, Animated, Easing } from 'react-native'
 
-const useLogoAnimation = () => {
-  const spinAnim: any = useRef(new Animated.Value(0)).current
-  const opacityAnim: any = useRef(new Animated.Value(0)).current
+const useLogoAnimation = ({ showSpinningImg }) => {
+  const spinAnim: any = useRef(new Animated.Value(1)).current
+  const opacityAnim: any = useRef(new Animated.Value(1)).current
+  let interpolatingSpinAnim = useRef(new Animated.Value(0)).current
 
   const executeAnimationIn = () => {
     //make these work concurrently
@@ -11,7 +12,6 @@ const useLogoAnimation = () => {
       Animated.parallel([
         Animated.timing(spinAnim, { //how would I get rid of these stupid red squgalies? 
           toValue: -1,
-          duration: 5000,
           useNativeDriver: true,
         }),
         Animated.sequence([
@@ -46,13 +46,30 @@ const useLogoAnimation = () => {
           }),
         ])
       ])
-    ]).start(() => executeAnimationIn())
-  }
+    ]).start(() => showSpinningImg && setTimeout(() => { executeAnimationIn() }, 3000))
+  }//! we don't need this long animation sequence. We will simply use interpolation
+
+  interpolatingSpinAnim = spinAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, -1.57],
+    // extrapolate: 'clamp',
+  })
 
   useEffect(() => {
+    // setTimeout(() => {
+    // console.log('@@')
+    console.log('####')
     executeAnimationIn()
+    // }, 5000);
   }, [])
-  return { spinAnim, opacityAnim }
+  useEffect(() => {
+    if (!showSpinningImg) {
+      //@ts-ignore
+      // spinAnim.stopAnimation(value => console.log(value))
+      // opacityAnim.stopAnimation(value => console.log('value'))
+    }
+  }, [showSpinningImg])
+  return { spinAnim, opacityAnim, interpolatingSpinAnim }
 }
 
 export default useLogoAnimation

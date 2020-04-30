@@ -1,16 +1,18 @@
 import React, { useState, createContext } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import WelcomeScreen from '../screens/WelcomeScreen'
 import TabNavigator from './TabNavigator'
 import { createStackNavigator } from '@react-navigation/stack';
 import ProfileScreen from '../screens/SettingsScreen'
 import { arrangmentOpt } from '../reducer/flashcardOptionsReducer'
+import { StatusBar } from 'react-native';
+import { withTheme } from 'react-native-paper';
 
 const Stack = createStackNavigator()
 //@ts-ignore
 export const PaoAppContext = createContext();
 
-const StackNavigator = () => {
+const StackNavigator = ({theme}) => {
 
   // const tokenRefreshing = useHandleTokenRefreshing()
   //~ leave it here for testing out the proformance later on
@@ -28,16 +30,19 @@ const StackNavigator = () => {
   const [tabScreenOptions, setTabScreenOptions] = useState(defaultScreenOptions)
   const [arrangment, setArrangment] = useState(defaultArrangment)
 
+
   return (
     <PaoAppContext.Provider value={{
       tabScreenOptions, setTabScreenOptions,
       arrangment, setArrangment
     }}>
+      <StatusBar backgroundColor={theme.colors.primary} />
+
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='TabNavigator' component={TabNavigator} />
           <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
+          <Stack.Screen name='TabNavigator' component={TabNavigator} />
           <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
         </Stack.Navigator>
       </NavigationContainer>
@@ -50,4 +55,4 @@ const StackNavigator = () => {
 // react-native-card-stack-swiper
 // @react-navigation/material-bottom-tabs
 
-export default StackNavigator
+export default withTheme(StackNavigator)

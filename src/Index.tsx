@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { YellowBox, Platform, UIManager } from 'react-native';
+import { YellowBox, Platform, UIManager, StatusBar } from 'react-native';
 import { View, Text } from 'react-native-tailwind';
 import * as Font from 'expo-font';
 import ErrorBoundary from 'react-error-boundary';
@@ -7,24 +7,13 @@ import { Provider as StoreProvider, useSelector } from 'react-redux'
 import configureStore from './store';
 import StackNavigator from './routes/StackNavigator';
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper'
+import { PaoTheme } from './styles/theming';
 
 const store = configureStore()
 
-//~ fab edit mode to turn on edit mode ->
-//~ edit to change pao in flashcard screen
-//~ account settings under FabGroups as a Stack screen
-//~ fav list
+//~ fav a card/collection
 //~ CRUD to the backend
 
-export const PaoTheme = {
-  ...DefaultTheme,
-  roundness: 2,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: '#3498db',
-    accent: '#67FF80',
-  },
-};
 
 const Index = () => {
   const [appReady, setAppReady] = useState(false)
@@ -42,6 +31,11 @@ const Index = () => {
       try {
         await Font.loadAsync({
           'rock-salt': require('./assets/fonts/RockSalt-Regular.ttf'),
+          'YesevaOne': require('./assets/fonts/YesevaOne-Regular.ttf'),
+          'MontserratThin': require('./assets/fonts/Montserrat/Montserrat-Thin.ttf'),
+          'MontserratLight': require('./assets/fonts/Montserrat/Montserrat-Light.ttf'),
+          'MontserratReg': require('./assets/fonts/Montserrat/Montserrat-Regular.ttf'),
+          'MontserratMed': require('./assets/fonts/Montserrat/Montserrat-Medium.ttf'),
         });
         setAppReady(true)
       } catch (err) {
@@ -49,8 +43,6 @@ const Index = () => {
       }
     })()
   }, [])
-
-
 
   return (
     <PaperProvider theme={PaoTheme}>

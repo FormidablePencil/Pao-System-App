@@ -1,82 +1,149 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, LayoutAnimation } from 'react-native'
+import { View, Text, StyleSheet, LayoutAnimation, Keyboard } from 'react-native'
 import styled from 'styled-components'
-import { Button, DefaultTheme } from 'react-native-paper'
+import { Button, DefaultTheme, TextInput } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable';
 import { comps } from '../constants/constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-import DynamicFormFields from '@bit/formidablepencil.list-of-textinputs.dynamic-form-fields'
+import DynamicFormFields from '../../components/dynamic-form-fields/DynamicFormFields'
 import { useSelector, useDispatch } from 'react-redux';
 import { RESET_NOTIFY_MESG } from '../actions/types';
+import { withTheme } from 'react-native-paper'
+import { PaoThemeType } from '../styles/theming';
+import { inputErrMessages } from '../constants/constants'
+import { signIn, signUp } from '../actions/authActions';
+import useUserAuthentication, { ErrMsg } from '../hooks/useUserAuthentication';
 
 interface propertyTypes {
-  compToRender: number
-  setCompToRender: any
-  initialInputFields: {
-    [index: number]: {
-      input: string | undefined
-      name: string | number
-    },
-  },
-  getInputedDataEnabled: boolean
-  setGetInputedDataEnabled: any
-  getValuesOfInputFields: (output: []) => any
-  containerProps?: {
-    signin: boolean
-  }
+  enteringMethod: number
+  setEnteringMethod: any
+  theme: PaoThemeType
 }
+export type DefaultInputedValuesTypes = { email: string, username: string, password: string }
+
 const InputFieldsComp = ({
-  compToRender, setCompToRender,
-  getInputedDataEnabled,setGetInputedDataEnabled,
-  initialInputFields,
-  getValuesOfInputFields,
-  containerProps
+  enteringMethod,
+  setEnteringMethod,
+  theme,
 }: propertyTypes) => {
-  const { loading, signin, notifyMesg } = useSelector((state: any) => state.systemMessages)
-  const dispatch = useDispatch()
+  const { loading } = useSelector((state: any) => state.systemMessages)
+  const { validateInputs } = useUserAuthentication()
 
-  const onPressHandlerEnter = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setGetInputedDataEnabled(true)
-    dispatch({ type: RESET_NOTIFY_MESG })
-    // LayoutAnimation
+  const defaultInputedValues = { email: '', username: '', password: '' }
+  const [inputedValues, setInputedValues] = useState<DefaultInputedValuesTypes>(defaultInputedValues)
+  const [errorMsg, setErrorMsg] = useState<ErrMsg>(ErrMsg.no_err)
+
+  enum onPress {
+    goBack,
+    enter
   }
 
-  const onPressHandlerBack = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setCompToRender(comps.enterOptions)
-    dispatch({ type: RESET_NOTIFY_MESG })
+  const onPressHandler = async (action: onPress) => {
+    await Keyboard.dismiss()
+    switch (action) {
+      case onPress.goBack:
+        setEnteringMethod(comps.enterOptions)
+        break;
+      case onPress.enter:
+        validate_user()
+
+        break;
+
+      default:
+        break;
+    }
   }
+
+  const validate_user = async () => {
+    const response = await validateInputs(inputedValues, enteringMethod)
+    switch (response) {
+      case ErrMsg.empty_all:
+      case ErrMsg.empty_email:
+      case ErrMsg.empty_password:
+      case ErrMsg.empty_username:
+      case ErrMsg.no_err:
+        setErrorMsg(response)
+        break;
+
+      case 'something from dispatch':
+        break;
+
+      default:
+        break;
+    }
+  }
+
+
+  const onChangeHandler = async (text, whatInput) => {
+    await setInputedValues({ ...inputedValues, [whatInput]: text })
+  }
+
 
   return (
-    <Container {...containerProps}>
-      <Animatable.Text animation={notifyMesg && 'bounce'} duration={1000} style={styles.errorMessage}>{notifyMesg}</Animatable.Text>
-      <DynamicFormFields
-        error={notifyMesg}
-        getInputDataEnabled={getInputedDataEnabled}
-        getDataFunc={(output: any) => getValuesOfInputFields(output)}
-        initialInputFields={initialInputFields}
+    <View>
+      <Animatable.Text animation={errorMsg && 'bounce'} duration={1000} style={styles.errorMessage}>{errorMsg}</Animatable.Text>
+
+      <StyledTextInput
+        multiline={false}
+        underlineColor={theme.colors.primary}
+        mode={'flat'}
+        label={'username'}
+        value={inputedValues.username}
+        onChangeText={(text: any) => onChangeHandler(text, 'username')}
+        keyboardType={'default'}
+        error={errorMsg !== ErrMsg.no_err && inputedValues.username === '' ? true : false}
       />
+      <StyledTextInput
+        multiline={false}
+        underlineColor={theme.colors.primary}
+        mode={'flat'}
+        label={'password'}
+        value={inputedValues.password}
+        secureTextEntry={true}
+        onChangeText={(text: any) => onChangeHandler(text, 'password')}
+        keyboardType={'default'}
+        error={errorMsg !== ErrMsg.no_err && inputedValues.username === '' ? true : false}
+      />
+      {enteringMethod === comps.signup ?
+        <StyledTextInput
+          multiline={false}
+          underlineColor={theme.colors.primary}
+          mode={'flat'}
+          label={'email'}
+          value={inputedValues.email}
+          secureTextEntry={true}
+          onChangeText={(text: any) => onChangeHandler(text, 'email')}
+          keyboardType={'email-address'}
+          error={errorMsg !== ErrMsg.no_err && inputedValues.email === '' ? true : false}
+        />
+        : null
+      }
       <BottomSection>
-        <StyledButtonLeft
+        <StyledButton
+          contentStyle={{ height: theme.btnHeight.large }}
           icon={'keyboard-backspace'}
           mode="contained"
-          onPress={() => onPressHandlerBack()}
+          onPress={() => onPressHandler(onPress.goBack)}
         >
           Back
-      </StyledButtonLeft>
-        <StyledButtonRight
+      </StyledButton>
+        <StyledButton
+          contentStyle={{ height: theme.btnHeight.large }}
           mode="contained"
-          onPress={() => onPressHandlerEnter()}
+          onPress={() => onPressHandler(onPress.enter)}
           loading={loading}
         >
-          {comps[compToRender]}
-        </StyledButtonRight>
+          {comps[enteringMethod]}
+        </StyledButton>
       </BottomSection>
-    </Container >
+    </View>
   )
 }
+
+const StyledTextInput = styled(TextInput)`
+  background-color: #fff; border-radius: 15; margin: 10px 0px; overflow: hidden; 
+`;
 
 const styles = StyleSheet.create({
   errorMessage: {
@@ -90,28 +157,13 @@ const styles = StyleSheet.create({
   }
 })
 
-const StyledButtonLeft = styled(Button)`
-  flex: 1; 
-  margin-right: 5;
-`
-const StyledButtonRight = styled(Button)`
-  flex: 1;
-  margin-left: 5;
+const StyledButton = styled(Button)`
+  margin-right: 5; flex: 1; 
 `
 
 const BottomSection = styled.View`
-  flex-direction: row;
-  justify-content: space-around;
-  margin-top: 10;
+  margin-top: 10; flex-direction: row; justify-content: space-around;
 `;
 
-const Container = styled.View`
-  justify-content: flex-start;
-  width: 350;
-  height: 100%;
-  top: ${(props: any) => props.signin ? 50 : 0};
-`;
-const ContainerSignUp = styled(Container)`
-`
 
-export default InputFieldsComp
+export default withTheme(InputFieldsComp)

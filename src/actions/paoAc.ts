@@ -1,5 +1,6 @@
-import { UPDATE_PAO_LIST, ADD_TO_PAO_LIST } from './types'
+import { UPDATE_PAO_LIST, ADD_TO_PAO_LIST, UPDATE_SPECIFIC_PAO_COLLECION } from './types'
 import { PaoAction } from '../reducerTypes/paoTypes'
+import { ControlledInputsTypes } from '../components/FlashcardItSelf'
 
 export const updatePaoItem = (controlledInput: any, docAlreadyExists: boolean) => (dispatch: any) => {
   // if "there's a document by that number theen dispatch only the value that's changed to pao reducer"
@@ -31,6 +32,11 @@ export const updatePaoItem = (controlledInput: any, docAlreadyExists: boolean) =
       dispatch({ type: ADD_TO_PAO_LIST, payload: document })
     }
   }
+}
+
+export const saveControlledInputsToPao = (controlledInputs: ControlledInputsTypes) => dispatch => {
+  dispatch({ type: UPDATE_SPECIFIC_PAO_COLLECION, payload: controlledInputs })
+  //and save it to db
 }
 
 

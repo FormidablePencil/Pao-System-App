@@ -5,7 +5,7 @@ import {
   UPDATED_DOCUMENT_IN_PAO_SUCCESS_MESG, UPDATED_DOCUMENT_IN_PAO_FAILED_MESG, RESET_UPDATED_DOCUMENT_IN_PAO_MESG,
   DELETE_DOCUMENT_IN_PAO_SUCCESS_MESG, DELETE_DOCUMENT_IN_PAO_FAILED_MESG, RESET_DELETE_DOCUMENT_IN_PAO_MESG,
   SIGNED_IN, SIGNED_UP,
-  SET_LOADING, SET_NOT_LOADING, SIGNED_OUT, SIGN_OUT_FAILED, RESET_SIGNED_OUT, INVALID_CREDENTIALS_NOTIFY_MESG, RESET_NOTIFY_MESG, INPUT_FIELDS_EMPTY_NOTIFY_MESG, SAVED_PAOLIST_TO_DB_FAILED_NO_TOKEN_MESG
+  SET_LOADING, SET_NOT_LOADING, SIGNED_OUT, SIGN_OUT_FAILED, RESET_SIGNED_OUT, INVALID_CREDENTIALS_NOTIFY_MESG, RESET_NOTIFY_MESG, INPUT_FIELDS_EMPTY_NOTIFY_MESG, SAVED_PAOLIST_TO_DB_FAILED_NO_TOKEN_MESG, FETCHED_PAOLIST
 } from "../actions/types"
 import { inputErrMessages } from "../constants/constants"
 
@@ -17,7 +17,8 @@ const initialState = {
   UpdatedWholePaoCollection: undefined,
   ToDeleteDocInPao: undefined,
   loading: false,
-  notifyMesg: null
+  notifyMesg: null,
+  retreivedPaoDataFromDb: null
 }
 
 export default (state: AppMessagesState = initialState, { type }: any) => {
@@ -81,6 +82,9 @@ export default (state: AppMessagesState = initialState, { type }: any) => {
     case RESET_NOTIFY_MESG:
       return { ...state, notifyMesg: null }
 
+      case FETCHED_PAOLIST: 
+      return {...state, retreivedPaoDataFromDb: true}
+      
     default:
       return state
   }

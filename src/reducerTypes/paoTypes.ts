@@ -25,7 +25,7 @@ export interface PaoState {
     action: string | null
     object: string | null
   },
-  map: any
+  // map: any
 }
 
 export interface PutPaoList {

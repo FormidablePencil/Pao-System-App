@@ -1,17 +1,22 @@
 import { fabActions } from '../../constants/constants'
 import shuffle from 'shuffle-array'
+import { arrangmentOpt } from '../../reducer/flashcardOptionsReducer';
 
-export const sortPaoList = ({ list, mode }: { list, mode: fabActions }) => {
+export const sortPaoList = ({ list, order }: { list, order: arrangmentOpt }) => {
+const listCopy = list.map(item => item)// can't mutate state so this is how we'd have to go about it 
   //first put them in order then do the operations
-  list.sort(compare);
-  if (mode === fabActions.random) {
-    return shuffle(list)
-  } else if (mode === fabActions.accending) {
-    return list
-  } else if (mode === fabActions.deccending) {
-    return list.reverse()
+  listCopy.sort(compare);
+  if (order === arrangmentOpt.random) {
+    console.log('random')
+    return shuffle(listCopy)
+  } else if (order === arrangmentOpt.ascending) {
+    console.log('ascending')
+    return listCopy
+  } else if (order === arrangmentOpt.descending) {
+    console.log('descending')
+    return listCopy.reverse()
   }
-  else return list
+  else return listCopy
 }
 
 function compare(a, b) {

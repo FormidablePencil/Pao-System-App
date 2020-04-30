@@ -6,8 +6,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { tabScreens } from '../constants/constants';
 import FabActionBtn from '../components/FabActionBtn';
 import FavScreen from '../screens/FavScreen';
+import { IconButton } from 'react-native-paper';
 
 const Tab = createBottomTabNavigator()
+
 //@ts-ignore
 export const TabNavContext = createContext()
 
@@ -21,7 +23,11 @@ const TabNavigator = ({ navigation }) => {
       <SafeAreaView style={{ flex: 1 }}>
         <Tab.Navigator
           initialRouteName={tabScreens.Paotable}
-          tabBarOptions={{ keyboardHidesTabBar: true }}>
+          tabBarOptions={{
+            keyboardHidesTabBar: true,
+            activeBackgroundColor: '#191D2E',
+            inactiveBackgroundColor: '#191D2E'
+          }}>
           <Tab.Screen name={tabScreens.Paotable} component={PaotableScreen} />
           <Tab.Screen name={tabScreens.Flashcards} component={FlashcardsScreen} />
         </Tab.Navigator>

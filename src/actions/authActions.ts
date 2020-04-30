@@ -21,7 +21,6 @@ export const signUp = ({ username, password, email }: any) => async (dispatch: a
 }
 
 export const signIn = ({ username, password }: any) => async (dispatch: any) => {
-  console.log('signingign')
   const res = await fetch('http://10.0.0.6:4001/auth/signin', {
     method: 'POST',
     headers: {

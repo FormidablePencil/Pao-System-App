@@ -1,36 +1,29 @@
 import React from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
 import styled from 'styled-components'
-import { Button } from 'react-native-paper'
+import { Button, withTheme } from 'react-native-paper'
 
-const ChooseEnteringOption = ({ setCompToRender, comps }: any) => {
+const ChooseEnteringOption = ({ setEnteringMethod, comps, theme }: any) => {
 
   const funcOnPressHandler = (setComp: any) => {
-    setCompToRender(setComp)
+    setEnteringMethod(setComp)
   }
+  
   return (
-    <Container>
-      <ButtonStyled contentStyle={styles.btnContentStyle} mode='contained' onPress={() => funcOnPressHandler(comps.signin)}>
+    <>
+      <ButtonStyled contentStyle={{ height: theme.btnHeight.large }} mode='contained' onPress={() => funcOnPressHandler(comps.signin)}>
         Login
       </ButtonStyled>
-      <ButtonStyled contentStyle={styles.btnContentStyle} mode='contained' onPress={() => funcOnPressHandler(comps.signup)}>
+      <ButtonStyled contentStyle={{ height: theme.btnHeight.large }} mode='contained' onPress={() => funcOnPressHandler(comps.signup)}>
         New account
       </ButtonStyled>
-    </Container>
+    </>
   )
 }
 
-const Container = styled.View`
-  top: 85;
-`;
 const ButtonStyled = styled(Button)`
-  margin-vertical: 7;
-  justify-content: center;
+  /* height: ${props => props}; */
+  margin-vertical: 10;
 `;
-const styles = StyleSheet.create({
-  btnContentStyle: {
-    height: 50
-  }
-})
 
-export default ChooseEnteringOption
+export default withTheme(ChooseEnteringOption)

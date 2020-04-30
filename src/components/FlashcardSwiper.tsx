@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { FAB } from 'react-native-paper';
+import { FAB, Colors } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import FlashcardItSelf from './FlashcardItSelf';
@@ -9,50 +9,58 @@ import { TabNavContext } from '../routes/TabNavigator';
 import { fabActions } from '../constants/constants';
 import sortPaoList from '../components/logic/sortPaoList'
 import { PaoAppContext } from '../routes/StackNavigator';
+import initialStatePao from '../reducer/paoReducer'
+import { LinearGradient } from 'expo-linear-gradient';
+import { LightenDarkenColor } from 'lighten-darken-color'; 
 
 const FlashcardSwiper = ({ }) => {
-  const pao = useSelector((state: any) => state.pao[0] ? state.pao : [{ number: null, person: null, action: null, object: null }])
+  const pao = useSelector((state: any) => state.pao)
+  const { flashcardOptions } = useSelector((state: any) => state)
   const { autoPlayFlashcards: { play, duration } } = useSelector((state: any) => state.flashcardOptions)
-  const {arrangment} = useContext(PaoAppContext)
-  
-  const [flashcardOrderAssortment, setFlashcardOrderAssortment] = useState()
-  useEffect(() => {
-    const sortedPao = sortPaoList({ list: pao, mode: arrangment })
-    console.log(sortedPao)
-    setFlashcardOrderAssortment(sortedPao)
-  }, [arrangment])
+  const { retreivedPaoDataFromDb } = useSelector((state: any) => state.systemMessages)
 
+  const [flashcardOrderAssortment, setFlashcardOrderAssortment] = useState(null)
+  useEffect(() => {
+    if (pao !== initialStatePao) {
+      const sortedPao = sortPaoList({ list: pao, order: flashcardOptions.flashcardOrder })
+      // console.log(sortedPao)
+      setFlashcardOrderAssortment(sortedPao)
+    } else setFlashcardOrderAssortment(null)
+  }, [flashcardOptions])
 
   //! hook up:
+  
   // order for both screens
 
   return (
     <Container style={{ ...styles2.slide1 }}>
-      <Swiper
-        showsButtons={true}
-        autoplay={play}
-        autoplayTimeout={duration} //~ make this a setting
-        showsPagination={false}
-        loop={true}
+      <LinearGradient colors={[Colors.purpleA700, Colors.pink500]} end={[.75, .2]} start={[.01, .75]}>
+        <Swiper
+          showsButtons={true}
+          autoplay={play}
+          autoplayTimeout={duration} //~ make this a setting
+          showsPagination={true}
+          loop={true}
         // loadMinimal={true}
         // loadMinimalSize={1}
-      >
-        {flashcardOrderAssortment ? flashcardOrderAssortment.map((collection: any, index: number) => {
-          return (
-            <AlignCenterWrapper key={index}>
-              <FlashcardItSelf collection={collection} />
-            </AlignCenterWrapper>
-          )
-        })
-          : pao.map((collection: any, index: number) => {
+        >
+          {flashcardOrderAssortment ? flashcardOrderAssortment.map((collection: any, index: number) => {
             return (
               <AlignCenterWrapper key={index}>
                 <FlashcardItSelf collection={collection} />
               </AlignCenterWrapper>
             )
           })
-        }
-      </Swiper>
+            : pao.map((collection: any, index: number) => {
+              return (
+                <AlignCenterWrapper key={index}>
+                  <FlashcardItSelf collection={collection} />
+                </AlignCenterWrapper>
+              )
+            })
+          }
+        </Swiper>
+      </LinearGradient>
     </Container>
   )
 }

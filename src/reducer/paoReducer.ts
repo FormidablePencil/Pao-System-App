@@ -1,10 +1,9 @@
-import { NEW_PAO_LIST, ADD_TO_PAO_LIST, UPDATE_PAO_LIST, DELETE_PAO_LIST, DELETE_PAO_DOC, FETCHED_PAOLIST } from "../actions/types"
+import { NEW_PAO_LIST, ADD_TO_PAO_LIST, UPDATE_PAO_LIST, DELETE_PAO_LIST, DELETE_PAO_DOC, FETCHED_PAOLIST, UPDATE_SPECIFIC_PAO_COLLECION } from "../actions/types"
 import { PaoReducer, PaoState } from "../reducerTypes/paoTypes"
 
-const initialState: any = [
-]
+export const initialStatePao: any = [{ number: null, person: null, action: null, object: null }]
 
-export default (state: PaoState = initialState, { type, payload }: any) => {
+export default (state: PaoState = initialStatePao, { type, payload }: any) => {
   switch (type) {
 
     case NEW_PAO_LIST:
@@ -32,6 +31,11 @@ export default (state: PaoState = initialState, { type, payload }: any) => {
 
     case DELETE_PAO_DOC:
       return state.list.filter((doc: any) => doc !== payload.deletedDocId)
+
+    case UPDATE_SPECIFIC_PAO_COLLECION:
+      console.log(payload, 'payload from paoReducer')
+      // return {...state, } //~ update the state with the payload, the submited controlled inputs
+      return state
 
     default:
       return state
