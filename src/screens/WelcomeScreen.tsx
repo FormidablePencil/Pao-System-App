@@ -14,13 +14,13 @@ export const EnterMethodContext = createContext()
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
 interface WelcomeScreenTypes {
-  navigation: any 
+  navigation: any
   theme: PaoThemeType
 }
 
 const WelcomeScreen = ({ navigation, theme }: WelcomeScreenTypes) => {
   const [showSpinningImg, setShowSpinningImg] = useState(true)
-  const { spinAnim, opacityAnim, interpolatingSpinAnim } = useLogoAnimation({ showSpinningImg })
+  const { interpolatingSpinAnim, interpolationOpacity } = useLogoAnimation({ showSpinningImg })
   let headerTextRef = useRef(null)
   // let interpolatingSpinAnim = useRef(new Animated.Value(0)).current
   //! change color of logo perhaps
@@ -43,26 +43,34 @@ const WelcomeScreen = ({ navigation, theme }: WelcomeScreenTypes) => {
 
   return (
     <EnterMethodContext.Provider>
-      <ImageBackground style={{ flex: 1, height: SCREEN_HEIGHT, alignItems: "center", justifyContent:'center' }} source={bgImg}>
+      <ImageBackground style={{
+        flex: 1, height: SCREEN_HEIGHT, alignItems: "center", justifyContent: 'center'
+      }} source={bgImg}>
 
         {showSpinningImg &&
-          <AnimatedImg source={paoLogo} style={{ transform: [{ scaleX: spinAnim }], opacity: opacityAnim }} />
+          <Animated.View style={{
+            transform: [{ rotateY: interpolatingSpinAnim }],
+            opacity: interpolationOpacity,
+            height: 120, position: 'absolute', top: '35%', resizeMode: 'contain', width: 120
+           }}>
+            <AnimatedImg source={paoLogo} />
+          </Animated.View>
         }
 
-        <StyledLinearGradient colors={['rgba(76,0,157,.25)', 'rgba(255,0,0,.3)']} end={[1, 1]} start={[.1, .8]}>
-          <HeaderView >
-            <AnimatedHeaderText ref={headerTextRef} font={theme.fonts.largeHeader.fontFamily}
-              style={{ textShadowRadius: 10, textShadowOffset: { width: -1, height: 1 }, textShadowColor: 'rgba(0, 0, 0, 0.75)', }}
-            >Pao System
+      <StyledLinearGradient colors={['rgba(76,0,157,.25)', 'rgba(255,0,0,.3)']} end={[1, 1]} start={[.1, .8]}>
+        <HeaderView >
+          <AnimatedHeaderText ref={headerTextRef} font={theme.fonts.largeHeader.fontFamily}
+            style={{ textShadowRadius: 10, textShadowOffset: { width: -1, height: 1 }, textShadowColor: 'rgba(0, 0, 0, 0.75)', }}
+          >Pao System
             </AnimatedHeaderText>
-          </HeaderView>
+        </HeaderView>
 
 
-          <View style={{ flex: 3.2, width: '100%',paddingHorizontal: 20, justifyContent: 'center' }}>
-            <RenderEnterComps navigation={navigation} />
-          </View>
+        <View style={{ flex: 3.2, width: '100%', paddingHorizontal: 20, justifyContent: 'center' }}>
+          <RenderEnterComps navigation={navigation} />
+        </View>
 
-        </StyledLinearGradient>
+      </StyledLinearGradient>
       </ImageBackground>
     </EnterMethodContext.Provider >
   )

@@ -1,6 +1,13 @@
 import { SIGN_IN_FAILED_MESG, SIGNED_IN, SET_LOADING, SIGNED_UP, SIGN_UP_FAILED_MESG, SIGN_IN_SUCCESS_MESG, SIGNED_OUT, SIGN_OUT_FAILED } from "./types"
 import { form_res_msg } from "../hooks/useUserAuthentication"
 
+export enum server_responses {
+  invalid_credentials = 'invalid credentials',
+  user_exists = 'user already exists',
+  signed_out = 'successfully signed out',
+  signed_out_with_err = 'signout failed. Token does not exist',
+}
+
 export const signUp = ({ username, password, email }) => async dispatch => {
   await dispatch({ type: SET_LOADING })
   const request = {
@@ -17,7 +24,7 @@ export const signUp = ({ username, password, email }) => async dispatch => {
   if (fetchedData.accessToken && fetchedData.refreshToken) {
     dispatch({ type: SIGNED_UP, payload: { accessToken: fetchedData.accessToken, refreshToken: fetchedData.refreshToken, username } })
     return form_res_msg.signed_up
-  } else if (fetchedData.message === 'user already exists') {
+  } else if (fetchedData.message === server_responses.user_exists) {
     return form_res_msg.username_exists
   }
 }
@@ -31,8 +38,6 @@ export const signIn = ({ username, password }) => async (dispatch) => {
     body: JSON.stringify({ password, username })
   })
   const fetchedData = await res.json()
-  //^ tokens or err message
-  console.log(fetchedData, 'fetchedData')
   if (fetchedData.accessToken && fetchedData.refreshToken) {
     dispatch({ type: SIGNED_IN, payload: { username, accessToken: fetchedData.accessToken, refreshToken: fetchedData.refreshToken } })
     return form_res_msg.signed_in
@@ -54,12 +59,12 @@ export const signOut = ({ refreshToken }) => async dispatch => { //? I know you 
   const res = await fetch('http://10.0.0.6:4001/auth/signout', request)
   const fetchedData = await res.json()
 
-  if (fetchedData.mesg === 'successfully loggedout') {
-    console.log('successfully loggedOut')
+  if (fetchedData.mesg === server_responses.signed_out) {
     dispatch({ type: SIGNED_OUT })
-  } else if (fetchedData.mesg === 'signinFailed. Token does not exist') {
-    console.log('failed to logout')
-    dispatch({ type: SIGN_OUT_FAILED })
+    return form_res_msg.signed_out
+  } else if (fetchedData.mesg === server_responses.signed_out_with_err) {
+    dispatch({ type: SIGNED_OUT })
+    return form_res_msg.signed_out
   }
 
 }

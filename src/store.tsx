@@ -3,17 +3,17 @@ import thunk from 'redux-thunk'
 import paoReducer from './reducer/paoReducer'
 import authReducer from './reducer/authReducer'
 import systemMesgReducer from './reducer/systemMesgReducer'
-import screenSettingsReducer from './reducer/screenSettingsReducer'
 import favListReducer from './reducer/favListReducer'
 import flashcardOptionsReducer from './reducer/flashcardOptionsReducer'
+import fabReducer from './reducer/fabReducer'
 
 const rootReducer = combineReducers({
   pao: paoReducer,
   auth: authReducer,
   systemMessages: systemMesgReducer,
-  screenSettings: screenSettingsReducer,
   favList: favListReducer,
-  flashcardOptions: flashcardOptionsReducer
+  flashcardOptions: flashcardOptionsReducer,
+  fabProperties: fabReducer
 })
 
 const initialState = {}

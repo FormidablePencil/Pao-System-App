@@ -14,7 +14,7 @@ export const PaotableScreen = ({ navigation }: any) => {
   return (
     <>
       <TableHeader />
-      <RenderPaoItems />
+      {/* <RenderPaoItems /> */}
     </>
   )
 }

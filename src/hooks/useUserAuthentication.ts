@@ -12,13 +12,14 @@ export enum form_res_msg {
   empty_password_and_email = 'password and email are empty',
   empty_password_and_username = 'username and password are empty',
   empty_email_and_username = 'username and email are empty',
-  invalid_credentials = 'incorrect username or passowrd',
-  //backend related
-  signed_in = 'signed in',
-  signed_up = 'signed up',
-  username_exists = 'username already exists',
   password_incorrect_format = 'password must be at least 6 characters long',
   email_incorrect_format = 'invalid email',
+  //backend related
+  invalid_credentials = 'incorrect username or passowrd',
+  signed_in = 'signed in',
+  signed_up = 'signed up',
+  signed_out = 'signed out',
+  username_exists = 'username already exists',
   email_exists = "there're already an account under that email",
 }
 

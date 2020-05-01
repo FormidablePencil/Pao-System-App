@@ -4,7 +4,6 @@ import PaoTableItem from './PaoTableItem'
 import { ItemInRow, Row, FirstItemInRow } from '../styles/paoTableStyles'
 import { DefaultTheme, Button } from 'react-native-paper'
 import useTextInputHandler, { Control } from '../hooks/useTextInputHandler'
-import { PaoAppContext } from '../routes/StackNavigator'
 import { useSelector } from 'react-redux'
 import { listMode } from '../constants/constants'
 import styled from 'styled-components'
@@ -23,7 +22,7 @@ const PaginationModeTable = ({
   setControlledInput: any
   tenPaoItemsArr: any
 }) => {
-  const { tabScreenOptions: { config: { editMode } } } = useContext(PaoAppContext)
+  const { tabScreenOptions: { config: { editMode } } } = useSelector((state: any) => state.fabProperties)
   const {
     saveControlledInputToReduxPaoList,
     onChangeTextHandler,

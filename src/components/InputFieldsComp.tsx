@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, StyleSheet, LayoutAnimation, Keyboard } from 'react-native'
 import styled from 'styled-components'
 import { Button, DefaultTheme, TextInput } from 'react-native-paper'
@@ -22,15 +22,15 @@ interface propertyTypes {
   theme: PaoThemeType
 }
 export type DefaultInputedValuesTypes = { email: string, username: string, password: string }
+export enum LoadingTypes { notLoading = 'not loading', loading = 'loading', success = 'successful', }
 
 const InputFieldsComp = ({
   enteringMethod,
   setEnteringMethod,
   theme,
 }: propertyTypes) => {
-  const { } = useSelector((state: any) => state.systemMessages)
   const { validate_inputs } = useUserAuthentication()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<LoadingTypes>(LoadingTypes.notLoading)
   const defaultInputedValues = { email: '', username: '', password: '' }
   const [inputedValues, setInputedValues] = useState<DefaultInputedValuesTypes>(defaultInputedValues)
   const [errorMsg, setErrorMsg] = useState<form_res_msg>(form_res_msg.no_err)
@@ -43,20 +43,19 @@ const InputFieldsComp = ({
   }
 
   const onPressHandler = async (action: onPress) => {
-    await Keyboard.dismiss()
     switch (action) {
       case onPress.goBack:
         setEnteringMethod(comps.enterOptions)
+        await Keyboard.dismiss()
         break
       case onPress.enter:
         if (errorMsg === form_res_msg.invalid_credentials) {
           error_text_anim.current.bounce()
           return
         }
-        setLoading(true)
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setLoading(LoadingTypes.loading)
         await validate_user()
-        setLoading(false)
-
         break
 
       default:
@@ -66,10 +65,13 @@ const InputFieldsComp = ({
 
   const validate_user = async () => {
     const response = await validate_inputs(inputedValues, enteringMethod)
-    if (response === form_res_msg.signed_in) {
-      navigation.navigate('TabNavigator', { screen: tabScreens.Flashcards })
-    } else if (response === form_res_msg.signed_up) {
-      navigation.navigate('TabNavigator', { screen: tabScreens.Flashcards })
+    if (response === form_res_msg.signed_in || response === form_res_msg.signed_up) {
+      await Keyboard.dismiss()
+      setLoading(LoadingTypes.success)
+      setTimeout(async () => {
+        await navigation.navigate('TabNavigator')
+        setLoading(LoadingTypes.notLoading)
+      }, 1250);
     } else {
       setErrorMsg(response)
     }
@@ -134,7 +136,8 @@ const InputFieldsComp = ({
           contentStyle={{ height: theme.btnHeight.large }}
           mode="contained"
           onPress={() => onPressHandler(onPress.enter)}
-          loading={loading}
+          loading={loading === LoadingTypes.loading ? true : false}
+          icon={loading === LoadingTypes.success && 'check'}
         >
           {comps[enteringMethod]}
         </StyledButton>

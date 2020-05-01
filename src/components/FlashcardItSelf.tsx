@@ -6,7 +6,6 @@ import { createAnimatableComponent } from 'react-native-animatable';
 // import CardStack from 'react-native-card-stack-swiper';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { PaoAppContext } from '../routes/StackNavigator'
 import { tabScreens } from '../constants/constants';
 import useAnimation from '../hooks/useAnimation';
 import { useSelector, useDispatch } from 'react-redux';
@@ -33,7 +32,7 @@ export interface ControlledInputsTypes {
 
 const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
   const { flashcardOptions, flashcardOptions: { flashcardItemDisplayedFront } } = useSelector((state: any) => state)
-  const { tabScreenOptions: { screen, config: { editMode } } } = useContext(PaoAppContext)
+  const { screen, config: { editMode } } = useSelector((state: any) => state.fabProperties)
   const [controlledInputs, setControlledInputs] = useState<ControlledInputsTypes>({
     data: [{ number: null, name: null, value: null }]
   })

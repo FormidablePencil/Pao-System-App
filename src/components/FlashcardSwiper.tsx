@@ -8,7 +8,6 @@ import Swiper from 'react-native-swiper'
 import { TabNavContext } from '../routes/TabNavigator';
 import { fabActions } from '../constants/constants';
 import sortPaoList from '../components/logic/sortPaoList'
-import { PaoAppContext } from '../routes/StackNavigator';
 import initialStatePao from '../reducer/paoReducer'
 import { LinearGradient } from 'expo-linear-gradient';
 import { LightenDarkenColor } from 'lighten-darken-color'; 

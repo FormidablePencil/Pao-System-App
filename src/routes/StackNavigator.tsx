@@ -10,43 +10,23 @@ import { withTheme } from 'react-native-paper';
 
 const Stack = createStackNavigator()
 //@ts-ignore
-export const PaoAppContext = createContext();
 
-const StackNavigator = ({theme}) => {
-
-  // const tokenRefreshing = useHandleTokenRefreshing()
-  //~ leave it here for testing out the proformance later on
-  const defaultScreenOptions = { // its here and not in tab navigator where it would make sense to keep because there's a proformance hit
-    fabVisibility: false,
-    screen: null,
-    config: { editMode: null, pagination: true },
-    fabActionsProperties: null,
-    mainFabProperties: null
-  }
-  const defaultArrangment = {
-    FlashcardsScreen: arrangmentOpt.ascending,
-    PaoTableScreen: arrangmentOpt.ascending
-  }
-  const [tabScreenOptions, setTabScreenOptions] = useState(defaultScreenOptions)
-  const [arrangment, setArrangment] = useState(defaultArrangment)
-
+const StackNavigator = () => {
+  //connect all the components that previously depended on the context in here to redux instead
+  // defaultScreenOptions
+  // PaoAppContext
 
   return (
-    <PaoAppContext.Provider value={{
-      tabScreenOptions, setTabScreenOptions,
-      arrangment, setArrangment
-    }}>
-      <StatusBar backgroundColor={theme.colors.primary} />
 
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
-          <Stack.Screen name='TabNavigator' component={TabNavigator} />
-          <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaoAppContext.Provider>
+    <NavigationContainer>
+      {/* <StatusBar backgroundColor={theme.olors.primary} /> */}
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
+        <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
+        <Stack.Screen name='TabNavigator' component={TabNavigator} />
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 
@@ -55,4 +35,4 @@ const StackNavigator = ({theme}) => {
 // react-native-card-stack-swiper
 // @react-navigation/material-bottom-tabs
 
-export default withTheme(StackNavigator)
+export default StackNavigator

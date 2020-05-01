@@ -31,7 +31,7 @@ const TabNavigator = ({ navigation }) => {
           <Tab.Screen name={tabScreens.Paotable} component={PaotableScreen} />
           <Tab.Screen name={tabScreens.Flashcards} component={FlashcardsScreen} />
         </Tab.Navigator>
-        <FabActionBtn navigation={navigation} />
+        {/* <FabActionBtn navigation={navigation} /> */}
       </SafeAreaView>
     </TabNavContext.Provider>
   )

@@ -1,75 +1,44 @@
 import React, { useEffect, useRef } from 'react'
 import { View, Text, Animated, Easing } from 'react-native'
 
-const useLogoAnimation = ({ showSpinningImg }) => {
-  const spinAnim: any = useRef(new Animated.Value(1)).current
-  const opacityAnim: any = useRef(new Animated.Value(1)).current
+const useLogoAnimation = () => {
+  const spinAnim: any = useRef(new Animated.Value(0)).current
   let interpolatingSpinAnim = useRef(new Animated.Value(0)).current
+  let interpolationOpacity = useRef(new Animated.Value(0)).current
 
-  const executeAnimationIn = () => {
-    //make these work concurrently
+  const execute_animation_in = () => {
     Animated.sequence([
-      Animated.parallel([
-        Animated.timing(spinAnim, { //how would I get rid of these stupid red squgalies? 
-          toValue: -1,
-          useNativeDriver: true,
-        }),
-        Animated.sequence([
-          Animated.timing(opacityAnim, {
-            toValue: .3,
-            duration: 2500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(opacityAnim, {
-            toValue: 1,
-            duration: 2500,
-            useNativeDriver: true,
-          }),
-        ])
-      ]),
-      Animated.parallel([
-        Animated.timing(spinAnim, { //how would I get rid of these stupid red squgalies? 
-          toValue: 1,
-          duration: 5000,
-          useNativeDriver: true,
-        }),
-        Animated.sequence([
-          Animated.timing(opacityAnim, {
-            toValue: .3,
-            duration: 2500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(opacityAnim, {
-            toValue: 1,
-            duration: 2500,
-            useNativeDriver: true,
-          }),
-        ])
-      ])
-    ]).start(() => showSpinningImg && setTimeout(() => { executeAnimationIn() }, 3000))
-  }//! we don't need this long animation sequence. We will simply use interpolation
+      Animated.timing(spinAnim, { //how would I get rid of these stupid red squgalies? 
+        toValue: 1,
+        easing: Easing.linear,
+        duration: 8000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(spinAnim, { //how would I get rid of these stupid red squgalies? 
+        toValue: 0,
+        duration: 0,
+        useNativeDriver: true,
+      })
+    ]).start(() => execute_animation_in())
+  }
+
 
   interpolatingSpinAnim = spinAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -1.57],
+    inputRange: [0, .50, 1],
+    outputRange: [0, 3, 0],
     // extrapolate: 'clamp',
   })
 
+  interpolationOpacity = spinAnim.interpolate({
+    inputRange: [0, .25, .5, .75, 1],
+    outputRange: [1, .2, 1, .2, 1],
+    // extrapolate: 'clamp',
+  })
   useEffect(() => {
-    // setTimeout(() => {
-    // console.log('@@')
-    console.log('####')
-    executeAnimationIn()
-    // }, 5000);
+    execute_animation_in()
   }, [])
-  useEffect(() => {
-    if (!showSpinningImg) {
-      //@ts-ignore
-      // spinAnim.stopAnimation(value => console.log(value))
-      // opacityAnim.stopAnimation(value => console.log('value'))
-    }
-  }, [showSpinningImg])
-  return { spinAnim, opacityAnim, interpolatingSpinAnim }
+
+  return { interpolatingSpinAnim, interpolationOpacity }
 }
 
 export default useLogoAnimation

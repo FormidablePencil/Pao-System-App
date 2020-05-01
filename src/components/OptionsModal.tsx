@@ -7,7 +7,6 @@ import SwitchSelector from "react-native-switch-selector";
 import styled from 'styled-components';
 import { DefaultTheme } from '@react-navigation/native';
 import { TabNavContext } from '../routes/TabNavigator'
-import { PaoAppContext } from '../routes/StackNavigator';
 import { useSelector, useDispatch } from 'react-redux';
 import { SET_AUTO_PLAY_DURATION, TOGGLE_AUTO_PLAY_DURATION, SAVED_FLASHCARD_SETTINGS_FROM_MODAL, UPDATE_FLASHCARD_ORDER } from '../actions/types';
 import { saveFlashcardSettings } from '../actions/flashcardSettingsActions'
@@ -17,7 +16,6 @@ const OptionsModal = () => {
   const { modalOpen, setModalOpen } = useContext(TabNavContext)
   const { flashcardItemDisplayedFront, autoPlayFlashcards } = useSelector((state: any) => state.flashcardOptions)
   const [loading, setLoading] = useState(false)
-  const { /* arrangment, setArrangment, */ tabScreenOptions: { screen } } = useContext(PaoAppContext)
   const [fontSize, setFontSize] = useState<number>() //to theme provider
   const dispatch = useDispatch()
   const [sliderValueautoPlayFlashcardsDuration, setSliderValueautoPlayFlashcardsDuration] = useState()

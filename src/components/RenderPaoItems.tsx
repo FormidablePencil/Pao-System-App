@@ -1,25 +1,14 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { FlatList, Image, KeyboardAvoidingView, TextInput, } from 'react-native'
 import { View, Text } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
-import { Button, DefaultTheme } from 'react-native-paper'
-import styled from 'styled-components'
-import { PaoAppContext } from '../routes/StackNavigator'
+import { useSelector } from 'react-redux'
 import Pagination from './Pagination'
-import { FirstItemInRow, Row, ItemInRow } from '../styles/paoTableStyles'
 import { ScrollView } from 'react-native-gesture-handler'
-import { PaoAction } from '../reducerTypes/paoTypes'
-import useHandleTablePaginationOption from '../hooks/useHandleTablePaginationOption'
-import PaoTableItem from './PaoTableItem'
 import PaginationModeTable from './PaginationModeTable'
-import ListModeTable from './ListModeTable'
-import useTextInputHandler, { Control } from '../hooks/useTextInputHandler'
 import { mergePaoArrays } from './logic/sortPaoList'
 
 const RenderPaoItems = () => {
   enum paginateDirection { previous, next }
-  const { tabScreenOptions: { config: { pagination } } } = useContext(PaoAppContext)
-  const { tabScreenOptions } = useContext(PaoAppContext)
+  const { tabScreenOptions: { config: { pagination } } } = useSelector((state: any) => state.fabProperties)
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }
   }) //~
