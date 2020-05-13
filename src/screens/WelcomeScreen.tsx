@@ -47,7 +47,7 @@ const WelcomeScreen = ({ navigation, theme }: WelcomeScreenTypes) => {
         flex: 1, height: SCREEN_HEIGHT, alignItems: "center", justifyContent: 'center'
       }} source={bgImg}>
 
-        {showSpinningImg &&
+        {/* {showSpinningImg &&
           <Animated.View style={{
             transform: [{ rotateY: interpolatingSpinAnim }],
             opacity: interpolationOpacity,
@@ -55,7 +55,7 @@ const WelcomeScreen = ({ navigation, theme }: WelcomeScreenTypes) => {
            }}>
             <AnimatedImg source={paoLogo} />
           </Animated.View>
-        }
+        } */}
 
       <StyledLinearGradient colors={['rgba(76,0,157,.25)', 'rgba(255,0,0,.3)']} end={[1, 1]} start={[.1, .8]}>
         <HeaderView >

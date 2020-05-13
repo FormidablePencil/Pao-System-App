@@ -8,7 +8,9 @@ import { mergePaoArrays } from './logic/sortPaoList'
 
 const RenderPaoItems = () => {
   enum paginateDirection { previous, next }
-  const { tabScreenOptions: { config: { pagination } } } = useSelector((state: any) => state.fabProperties)
+  const fabProps = useSelector((state: any) => state.fabProperties)
+  const pagination = fabProps.config.pagination
+
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }
   }) //~

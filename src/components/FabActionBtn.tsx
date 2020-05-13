@@ -25,6 +25,8 @@ interface CurrentFabPropsInterface {
 
 const FabActionBtn = ({ navigation }) => {
   // const { setTabScreenOptions, tabScreenOptions } = useContext(PaoAppContext)
+  const fabprop = useSelector((state: any) => state.fabProperties)
+
 
   const { setModalOpen } = useContext(TabNavContext)
   const dispatch = useDispatch()
@@ -111,24 +113,20 @@ const FabActionBtn = ({ navigation }) => {
         break;
     }
   }
-
-  // console.log(tabScreenOptions.mainFabProperties)
-  // console.log(tabScreenOptions.mainFabProperties.mode)
-  // console.log(fabModeOptions.menuOpen)
-  // console.log(fabOpt.menuOpen)
+// console.log(fabActions[fabprop.keyword]);
   return (
     <View style={{ position: 'absolute', height: '100%', width: '100%', bottom: 50 }}>
       <Provider>
         <Portal>
           {/* <Text>test123</Text> */}
-          {tabScreenOptions.mainFabProperties &&
+          {fabprop.fabVisibility &&
             <FAB.Group
               style={{ paddingBottom: 40 }} // later on, assertain of I could turn this into an aniamted component
               fabStyle={currentFabProps.mainFab.color && { backgroundColor: currentFabProps.mainFab.color }}
-              visible={tabScreenOptions.fabVisibility}
+              visible={fabprop.fabVisibility}
               open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
               icon={currentFabProps.mainFab.icon}
-              actions={fabActions[tabScreenOptions.keyword]}
+              actions={fabActions[fabprop.keyword]}
               onStateChange={() => { }}
               onPress={() => handleOnPressGeneral()} //@
               onPressBackground={() => handleOnPressGeneral()}

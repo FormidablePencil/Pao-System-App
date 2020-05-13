@@ -22,7 +22,7 @@ const PaginationModeTable = ({
   setControlledInput: any
   tenPaoItemsArr: any
 }) => {
-  const { tabScreenOptions: { config: { editMode } } } = useSelector((state: any) => state.fabProperties)
+  const { config: { editMode } } = useSelector((state: any) => state.fabProperties)
   const {
     saveControlledInputToReduxPaoList,
     onChangeTextHandler,

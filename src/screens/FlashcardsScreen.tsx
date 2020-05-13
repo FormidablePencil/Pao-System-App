@@ -5,6 +5,8 @@ import { globalStyles } from '../styles/global'
 // import FlashcardSwiper from '../components/FlashcardSwiper';
 import { IconButton } from 'react-native-paper';
 import styled from 'styled-components';
+import FlashcardSwiper from '../components/FlashcardSwiper';
+import OptionsModal from '../components/OptionsModal';
 // import { TabNavContext } from '../routes/TabNavigator'
 
 //@ts-ignore
@@ -14,10 +16,10 @@ export const FlashcardsScreen = () => {
 
   return (
     <>
-      {/* <OptionsModal /> */}
+      <OptionsModal />
       <View className="w-full h-full flex flex-row justify-center">
         <View className="relative" style={globalStyles.centerEverything}>
-          {/* <FlashcardSwiper /> */}
+          <FlashcardSwiper />
         </View>
       </View>
     </>

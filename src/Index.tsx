@@ -46,6 +46,7 @@ const Index = () => {
 
   return (
     <PaperProvider theme={PaoTheme}>
+      <StatusBar backgroundColor='#091213' />
       <StoreProvider store={store}>
         <ErrorBoundary>
           {appReady ?

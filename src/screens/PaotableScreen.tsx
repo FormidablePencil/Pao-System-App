@@ -9,12 +9,12 @@ import FabActionBtn from '../components/FabActionBtn'
 
 export const PaotableScreen = ({ navigation }: any) => {
   const { accessToken } = useSelector((state: any) => state.auth)
-  useSettingTabScreenOptions()
+  // useSettingTabScreenOptions()
 
   return (
     <>
       <TableHeader />
-      {/* <RenderPaoItems /> */}
+      <RenderPaoItems />
     </>
   )
 }

@@ -28,10 +28,10 @@ const TabNavigator = ({ navigation }) => {
             activeBackgroundColor: '#191D2E',
             inactiveBackgroundColor: '#191D2E'
           }}>
-          <Tab.Screen name={tabScreens.Paotable} component={PaotableScreen} />
           <Tab.Screen name={tabScreens.Flashcards} component={FlashcardsScreen} />
+          <Tab.Screen name={tabScreens.Paotable} component={PaotableScreen} />
         </Tab.Navigator>
-        {/* <FabActionBtn navigation={navigation} /> */}
+        <FabActionBtn navigation={navigation} />
       </SafeAreaView>
     </TabNavContext.Provider>
   )

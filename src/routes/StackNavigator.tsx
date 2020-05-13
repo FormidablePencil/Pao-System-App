@@ -22,9 +22,9 @@ const StackNavigator = () => {
       {/* <StatusBar backgroundColor={theme.olors.primary} /> */}
       <Stack.Navigator
         screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
-        <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
         <Stack.Screen name='TabNavigator' component={TabNavigator} />
+        <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
+        <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )

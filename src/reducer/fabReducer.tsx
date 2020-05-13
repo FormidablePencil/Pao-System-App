@@ -5,11 +5,12 @@ import { PAOTABLE_SCREEN_SETTINGS, FLASHCARDS_SCREEN_SETTINGS, TOGGLE_EDIT_MODE 
 
 
 const initialState = {
-  fabVisibility: false, //will still need these but hopefully it fab component won't rerender if only fabVisibility is selected
+  fabVisibility: true,
   screen: null,
   config: { editMode: null, pagination: true },
   fabActionsProperties: null,
-  mainFabProperties: null
+  mainFabProperties: null,
+  keyword: 'sharedFabActions'
 }
 
 export default (state = initialState, { type, payload }) => {
