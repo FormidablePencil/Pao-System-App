@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text } from 'react-native-tailwind'
 import styled from 'styled-components';
-import { Button, DefaultTheme } from 'react-native-paper';
+import { Button, DefaultTheme, IconButton } from 'react-native-paper';
 
 interface PaginationType {
   currentRenderItemsRange: any
@@ -32,31 +32,36 @@ const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange }: Pag
 
 
   return (
-    <Row style={{ backgroundColor: DefaultTheme.colors.accent }}>
+    <PaginationContainer style={{ backgroundColor: DefaultTheme.colors.accent }}>
+      <PaginationBtn icon='menu-left' size={35} color='white' onPress={() => renderItemsToCurrentPage(paginateDirection.previous)} mode="contained" />
       <Column>
         <Row>
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num: number) =>
+          {[0, 1, 2, 3, 4].map((num: number) =>
             <Button onPress={() => paginateTo(num)} key={num} compact={true}>
               <Text className='p-3'>{`${num}0`}</Text>
             </Button>
           )}
         </Row>
-        <Row style={{ justifyContent: 'space-around' }}>
-          <PaginationBtn onPress={() => renderItemsToCurrentPage(paginateDirection.previous)} mode="contained" >
-            previous
-          </PaginationBtn>
-          <PaginationBtn onPress={() => renderItemsToCurrentPage(paginateDirection.next)} mode="contained" >
-            Next
-      </PaginationBtn>
+        <Row>
+          {[5, 6, 7, 8, 9].map((num: number) =>
+            <Button onPress={() => paginateTo(num)} key={num} compact={true}>
+              <Text className='p-3'>{`${num}0`}</Text>
+            </Button>
+          )}
         </Row>
       </Column>
-    </Row>
+      <Row style={{ justifyContent: 'space-around' }}>
+        <PaginationBtn icon='menu-right' size={35} color='white' onPress={() => renderItemsToCurrentPage(paginateDirection.next)} mode="contained" />
+      </Row>
+    </PaginationContainer>
   )
 }
 
-const PaginationBtn = styled(Button)`
-  width: 100px;
-  /* height: 100%; */
+const PaginationBtn = styled(IconButton)`
+  border-radius: 3px;
+  background-color: rgba(27,27,27,.2);
+  elevation: 0;
+  margin: 0px;
 `;
 const Column = styled.View`
   flex-direction: column;
@@ -64,5 +69,11 @@ const Column = styled.View`
 const Row = styled.View`
   flex-direction: row;
 `;
+const PaginationContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  padding: 5px 0px 5px 25px;
+`;
+
 
 export default Pagination

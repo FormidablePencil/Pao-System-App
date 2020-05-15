@@ -22,16 +22,16 @@ const useTextInputHandler = ({
 
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }
-  })  //@
-  const paoList: any = useSelector((state: any) => state.pao)  //@
-
+  })
+  const paoList: any = useSelector((state: any) => state.pao)
 
   const saveControlledInputToReduxPaoList = async () => {
     let docExists: boolean | null = false
     paoList.forEach((document: any) => {
       if (document.number === controlledInput.number) {
         docExists = true
-        if (document[controlledInput.name] === controlledInput.value) {
+        const if_both_values_are_same = (document[controlledInput.name] === controlledInput.value)
+        if (if_both_values_are_same) {
           docExists = null
         }
       }
@@ -39,11 +39,10 @@ const useTextInputHandler = ({
     if (controlledInput.value && docExists !== null) {
       dispatch(updatePaoItem(controlledInput, docExists))
     }
-  } //@ move to PaginationMode & listMode (or have a useTextInputHandler)
-
+  }
   const onChangeTextHandler = ({ text, number, name }: any) => {
     setControlledInput({ ...controlledInput, value: text, number, name })
-  } //@ move to PaginationMode & listMode
+  }
 
   const returnValueDependingOnWeatherItemsAreSame = ({ index, name, mode }: { index: number, name: string, mode: any }) => {
     if (mode === listMode.pagination) {
@@ -51,7 +50,7 @@ const useTextInputHandler = ({
     } else if (mode === listMode.wholeList) {
       return func2({ index, name })
     }
-  } //@ move to PaginationMode
+  }
   const func1 = ({ index, name }: { index: number, name: string }) => {
     if (controlledInput.number === tenPaoItemsArr[index].number && controlledInput.name === name) {
       return controlledInput.value

@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import FlashcardItSelf from './FlashcardItSelf';
 import Swiper from 'react-native-swiper'
-import { TabNavContext } from '../routes/TabNavigator';
 import { fabActions } from '../constants/constants';
 import sortPaoList from '../components/logic/sortPaoList'
 import initialStatePao from '../reducer/paoReducer'

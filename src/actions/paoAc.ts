@@ -3,10 +3,14 @@ import { PaoAction } from '../reducerTypes/paoTypes'
 import { ControlledInputsTypes } from '../components/FlashcardItSelf'
 
 export const updatePaoItem = (controlledInput: any, docAlreadyExists: boolean) => (dispatch: any) => {
-  // if "there's a document by that number theen dispatch only the value that's changed to pao reducer"
+  // if "there's a document by that number then dispatch only the value that's changed to pao reducer"
   // else "new document and save it"
   if (docAlreadyExists === true) {
     dispatch({ type: UPDATE_PAO_LIST, payload: controlledInput })
+
+    //~ send a update request
+    //~ if failed then set current paolist to the last list the server responded with
+
   } else {
     let first: any
     let second: any
@@ -30,6 +34,10 @@ export const updatePaoItem = (controlledInput: any, docAlreadyExists: boolean) =
         [second]: null
       }
       dispatch({ type: ADD_TO_PAO_LIST, payload: document })
+
+      //~ send a create request
+      //~ if failed then set current paolist to the last list the server responded with
+
     }
   }
 }

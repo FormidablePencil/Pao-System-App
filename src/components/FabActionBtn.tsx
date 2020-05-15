@@ -5,12 +5,12 @@ import { fabProperties, fabModeOptions, fabActionOptions, fabOpt } from '../cons
 import { tabScreens } from '../constants/constants'
 import useFabFunctions from '../hooks/useFabFunctions'
 import { Text, View } from 'react-native'
-import { useNavigationState } from '@react-navigation/native'
+import { useNavigationState, useRoute, useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { TOGGLE_FAB_VISIBILITY, TOGGLE_CONFIGURATION_EDIT_MODE, UPDATE_MAIN_FAB_PROPERTIES, TOGGLE_EDIT_MODE } from '../actions/types'
-import { TabNavContext } from '../routes/TabNavigator'
-
-
+import { enumFabAction } from "../constants/fabConstants"
+import useSettingTabScreenOptions from '../hooks/useSettingTabScreenOptions'
+import { TabNavContext } from '../routes/StackNavigator'
 
 interface FabOptTypes {
   mode: number
@@ -23,26 +23,40 @@ interface CurrentFabPropsInterface {
   fabActions: any
 }
 
-const FabActionBtn = ({ navigation }) => {
-  // const { setTabScreenOptions, tabScreenOptions } = useContext(PaoAppContext)
-  const fabprop = useSelector((state: any) => state.fabProperties)
-
-
-  const { setModalOpen } = useContext(TabNavContext)
+const FabActionBtn = ({ whatFabProps, setModalOpen, editModeTrue, setEditModeTrue }) => {
+  const [showHints, setShowHints] = useState(false)
+  const navigation = useNavigation()
   const dispatch = useDispatch()
 
   const fabActions = {
-    paoTableFabActions: [],
-    flashcardFabActions: [{
-      style: { backgroundColor: fabProperties.editMode.color },
-      icon: fabProperties.editMode.icon.pencil,
-      label: fabProperties.editMode.mesg,
-      onPress: () => {
-        handleOnPressFabActions(fabActionOptions.editMode)
-      }
-    },],
+    paoTableFabActions: [
+      {
+        style: { backgroundColor: fabProperties.goToFlashcards.color },
+        icon: fabProperties.goToFlashcards.icon.card,
+        label: fabProperties.goToFlashcards.mesg,
+        onPress: () => {
+          handleOnPressFabActions(fabActionOptions.goToFlashcards)
+        }
+      },
+    ],
+    flashcardFabActions: [
+      {
+        style: { backgroundColor: fabProperties.goToPaoList.color },
+        icon: fabProperties.goToPaoList.icon.list,
+        label: fabProperties.goToPaoList.mesg,
+        onPress: () => {
+          handleOnPressFabActions(fabActionOptions.goToPaoList)
+        }
+      },
+    ],
     favListFabActions: [],
     sharedFabActions: [
+      // {
+      //   style: { backgroundColor: fabProperties.hint.color },
+      //   icon: fabProperties.hint.icon.letterH,
+      //   label: fabProperties.hint.mesg,
+      //   onPress: () => { setShowHints(prev => !prev) }
+      // },
       {
         style: { backgroundColor: fabProperties.editMode.color },
         icon: fabProperties.editMode.icon.pencil,
@@ -69,12 +83,6 @@ const FabActionBtn = ({ navigation }) => {
           handleOnPressGeneral()
         }
       },
-      {
-        style: { backgroundColor: fabProperties.hint.color },
-        icon: fabProperties.hint.icon.letterH,
-        label: fabProperties.hint.mesg,
-        onPress: () => { }
-      },
     ],
   }
 
@@ -95,7 +103,7 @@ const FabActionBtn = ({ navigation }) => {
         break;
       case fabOpt.editMode.mode:
         setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
-        dispatch({ type: TOGGLE_EDIT_MODE })
+        setEditModeTrue(false)
       default:
         break;
     }
@@ -106,33 +114,40 @@ const FabActionBtn = ({ navigation }) => {
     switch (whatFabAction) {
       case fabActionOptions.editMode:
         setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.editMode })
-        dispatch({ type: TOGGLE_EDIT_MODE })
+        // dispatch({ type: TOGGLE_EDIT_MODE })
+        setEditModeTrue(true)
+        break;
+
+      case fabActionOptions.goToPaoList:
+        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
+        navigation.navigate(tabScreens.Paotable)
+        break;
+
+      case fabActionOptions.goToFlashcards:
+        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
+        navigation.navigate(tabScreens.Flashcards)
         break;
 
       default:
         break;
     }
   }
-// console.log(fabActions[fabprop.keyword]);
+  // console.log(fabprop.keyword);
   return (
-    <View style={{ position: 'absolute', height: '100%', width: '100%', bottom: 50 }}>
+    <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
       <Provider>
         <Portal>
-          {/* <Text>test123</Text> */}
-          {fabprop.fabVisibility &&
-            <FAB.Group
-              style={{ paddingBottom: 40 }} // later on, assertain of I could turn this into an aniamted component
-              fabStyle={currentFabProps.mainFab.color && { backgroundColor: currentFabProps.mainFab.color }}
-              visible={fabprop.fabVisibility}
-              open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
-              icon={currentFabProps.mainFab.icon}
-              actions={fabActions[fabprop.keyword]}
-              onStateChange={() => { }}
-              onPress={() => handleOnPressGeneral()} //@
-              onPressBackground={() => handleOnPressGeneral()}
-            />
-          }
-
+          <FAB.Group
+            // style={{ paddingBottom: 40 }} // later on, assertain of I could turn this into an aniamted component
+            fabStyle={currentFabProps.mainFab.color && { backgroundColor: currentFabProps.mainFab.color }}
+            visible={true}
+            open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
+            icon={currentFabProps.mainFab.icon}
+            actions={[...fabActions.sharedFabActions, ...fabActions[whatFabProps]]}
+            onStateChange={() => { }}
+            onPress={() => handleOnPressGeneral()} //@
+            onPressBackground={() => handleOnPressGeneral()}
+          />
         </Portal>
       </Provider>
     </View>

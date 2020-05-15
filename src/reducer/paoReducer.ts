@@ -33,7 +33,7 @@ export default (state: PaoState = initialStatePao, { type, payload }: any) => {
       return state.list.filter((doc: any) => doc !== payload.deletedDocId)
 
     case UPDATE_SPECIFIC_PAO_COLLECION:
-      console.log(payload, 'payload from paoReducer')
+      // console.log(payload, 'payload from paoReducer')
       // return {...state, } //~ update the state with the payload, the submited controlled inputs
       return state
 

@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import PaginationModeTable from './PaginationModeTable'
 import { mergePaoArrays } from './logic/sortPaoList'
 
-const RenderPaoItems = () => {
+const RenderPaoItems = ({ editModeTrue }) => {
   enum paginateDirection { previous, next }
   const fabProps = useSelector((state: any) => state.fabProperties)
   const pagination = fabProps.config.pagination
@@ -44,7 +44,6 @@ const RenderPaoItems = () => {
     if (index % 2 == 1) return 'lightgrey'; else return 'white'
   }
 
-  // console.log(tabScreenOptions)
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -61,30 +60,19 @@ const RenderPaoItems = () => {
         ref={flatListRef}
         style={{ flex: 1, height: "100%" }}
       >
-        {pagination ?
-          <PaginationModeTable
-            tenPaoItemsArr={tenPaoItemsArr}
-            controlledInput={controlledInput}
-            setControlledInput={setControlledInput}
-            bgColorByIndex={bgColorByIndex}
-            heightOfScrollView={heightOfScrollView}
-          />
-          : null
-          // <ListModeTable
-          //   arr={arr}
-          //   bgColorByIndex={bgColorByIndex}
-          //   heightOfScrollView={heightOfScrollView}
-          //   controlledInput={controlledInput}
-          //   setControlledInput={setControlledInput}
-          // />
-        }
-      </ScrollView>
-      {pagination &&
-        <Pagination
-          currentRenderItemsRange={currentRenderItemsRange}
-          setCurrentRenderItemsRange={setCurrentRenderItemsRange}
+        <PaginationModeTable
+          editModeTrue={editModeTrue}
+          tenPaoItemsArr={tenPaoItemsArr}
+          controlledInput={controlledInput}
+          setControlledInput={setControlledInput}
+          bgColorByIndex={bgColorByIndex}
+          heightOfScrollView={heightOfScrollView}
         />
-      }
+      </ScrollView>
+      <Pagination
+        currentRenderItemsRange={currentRenderItemsRange}
+        setCurrentRenderItemsRange={setCurrentRenderItemsRange}
+      />
     </View>
   )
 }

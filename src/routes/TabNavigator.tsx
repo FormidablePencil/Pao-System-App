@@ -7,33 +7,21 @@ import { tabScreens } from '../constants/constants';
 import FabActionBtn from '../components/FabActionBtn';
 import FavScreen from '../screens/FavScreen';
 import { IconButton } from 'react-native-paper';
+import { createStackNavigator } from '@react-navigation/stack';
+import useSettingTabScreenOptions from '../hooks/useSettingTabScreenOptions';
 
 const Tab = createBottomTabNavigator()
+const Stack = createStackNavigator()
 
 //@ts-ignore
-export const TabNavContext = createContext()
 
 const TabNavigator = ({ navigation }) => {
-  const [modalOpen, setModalOpen] = useState(false) //@ keep
+  
 
   // autoPlayFlashcards, setautoPlayFlashcards,
   // flashcardItemDisplayedFront, setflashcardItemDisplayedFront
   return (
-    <TabNavContext.Provider value={{ modalOpen, setModalOpen, }}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <Tab.Navigator
-          initialRouteName={tabScreens.Paotable}
-          tabBarOptions={{
-            keyboardHidesTabBar: true,
-            activeBackgroundColor: '#191D2E',
-            inactiveBackgroundColor: '#191D2E'
-          }}>
-          <Tab.Screen name={tabScreens.Flashcards} component={FlashcardsScreen} />
-          <Tab.Screen name={tabScreens.Paotable} component={PaotableScreen} />
-        </Tab.Navigator>
-        <FabActionBtn navigation={navigation} />
-      </SafeAreaView>
-    </TabNavContext.Provider>
+    <></>
   )
 }
 

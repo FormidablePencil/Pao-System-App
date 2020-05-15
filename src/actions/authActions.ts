@@ -19,7 +19,7 @@ export const signUp = ({ username, password, email }) => async dispatch => {
   }
   const res = await fetch('http://10.0.0.6:4001/auth/signup', request)
   const fetchedData = await res.json()
-  console.log(fetchedData)
+  // console.log(fetchedData)
 
   if (fetchedData.accessToken && fetchedData.refreshToken) {
     dispatch({ type: SIGNED_UP, payload: { accessToken: fetchedData.accessToken, refreshToken: fetchedData.refreshToken, username } })
@@ -48,7 +48,7 @@ export const signIn = ({ username, password }) => async (dispatch) => {
 
 export const signOut = ({ refreshToken }) => async dispatch => { //? I know you don't pass in refreshToken to clear it from db upon loging out
   await dispatch({ type: SET_LOADING })
-  console.log(refreshToken)
+  // console.lo/g(refreshToken)
   const request = {
     method: 'delete',
     headers: {

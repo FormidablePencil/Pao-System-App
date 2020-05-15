@@ -1,19 +1,17 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { View, Text } from 'react-native-tailwind'
-import { Image, Modal, TouchableOpacity, TextInput, Slider, Animated } from 'react-native';
+import { Modal, Slider, Animated } from 'react-native';
 import { globalStyles } from '../styles/global'
-import { Button, Provider, Portal, Title } from 'react-native-paper'
+import { Button, Title } from 'react-native-paper'
 import SwitchSelector from "react-native-switch-selector";
 import styled from 'styled-components';
 import { DefaultTheme } from '@react-navigation/native';
-import { TabNavContext } from '../routes/TabNavigator'
 import { useSelector, useDispatch } from 'react-redux';
-import { SET_AUTO_PLAY_DURATION, TOGGLE_AUTO_PLAY_DURATION, SAVED_FLASHCARD_SETTINGS_FROM_MODAL, UPDATE_FLASHCARD_ORDER } from '../actions/types';
 import { saveFlashcardSettings } from '../actions/flashcardSettingsActions'
 import { FlashcardSettingsTypes, arrangmentOpt } from '../reducer/flashcardOptionsReducer';
+import { tabScreens } from '../constants/constants';
 
-const OptionsModal = () => {
-  const { modalOpen, setModalOpen } = useContext(TabNavContext)
+const OptionsModal = ({ currentScreen, setModalOpen, modalOpen }) => {
   const { flashcardItemDisplayedFront, autoPlayFlashcards } = useSelector((state: any) => state.flashcardOptions)
   const [loading, setLoading] = useState(false)
   const [fontSize, setFontSize] = useState<number>() //to theme provider
@@ -120,20 +118,24 @@ const OptionsModal = () => {
               <View className='flex-col '>
                 <View className="flex flex-col justify-center w-full">
 
-                  <Button onPress={() => { onPressHandler(onPress.toggleAutoPlay) }}>Auto play {flashcardSettings.autoPlayFlashcards.play ? 'on' : 'off'}</Button>
-                  <Text style={{ color: flashcardSettings.autoPlayFlashcards.play ? 'black' : 'lightgrey' }}>
-                    auto play duraton {Math.floor(sliderValueautoPlayFlashcardsDuration ? sliderValueautoPlayFlashcardsDuration : autoPlayFlashcards.duration)}
-                  </Text>
-                  <Slider
-                    disabled={!flashcardSettings.autoPlayFlashcards.play}
-                    value={autoPlayFlashcards.duration}
-                    onValueChange={(value) => setSliderValueautoPlayFlashcardsDuration(value)}
-                    style={{ width: 200, height: 40 }}
-                    minimumValue={2}
-                    maximumValue={20}
-                    minimumTrackTintColor="#FFFFFF"
-                    maximumTrackTintColor="#000000"
-                  />
+                  {currentScreen === tabScreens.Flashcards &&
+                    <>
+                      <Button onPress={() => { onPressHandler(onPress.toggleAutoPlay) }}>Auto play {flashcardSettings.autoPlayFlashcards.play ? 'on' : 'off'}</Button>
+                      <Text style={{ color: flashcardSettings.autoPlayFlashcards.play ? 'black' : 'lightgrey' }}>
+                        auto play duraton {Math.floor(sliderValueautoPlayFlashcardsDuration ? sliderValueautoPlayFlashcardsDuration : autoPlayFlashcards.duration)}
+                      </Text>
+                      <Slider
+                        disabled={!flashcardSettings.autoPlayFlashcards.play}
+                        value={autoPlayFlashcards.duration}
+                        onValueChange={(value) => setSliderValueautoPlayFlashcardsDuration(value)}
+                        style={{ width: 200, height: 40 }}
+                        minimumValue={2}
+                        maximumValue={20}
+                        minimumTrackTintColor="#FFFFFF"
+                        maximumTrackTintColor="#000000"
+                      />
+                    </>
+                  }
 
                   <Animated.Text style={{ fontSize: fontSize }}>Font Size</Animated.Text>
                   <Slider
@@ -146,37 +148,40 @@ const OptionsModal = () => {
                     maximumTrackTintColor="#000000"
                   />
 
-                  {switchSelectorsInfo.map((collection, index) => {
-                    const specificItem = flashcardSettings.flashcardItemDisplayedFront.filter(item => Object.keys(item)[0] === collection.name)[0]
-                    const toggle = Object.values(specificItem)[0]
-                    return (
-                      <View key={index}>
-                        <Title style={{ alignSelf: 'center' }}>{collection.name}</Title>
-                        <SwitchSelector
-                          paddingSwitch={10}
-                          // selectedTextStyle={{ height: 100 }}
-                          // textStyle={{ height: 100 }}
-                          height={21}
-                          style={{ width: "100%", height: 10 }}
-                          initial={toggle ? 0 : 1}
-                          onPress={whatSide => onPressHandler(onPress.switch, { name: Object.values(collection)[0], whatSide })}
-                          // textColor={DefaultTheme.colors.primary} //'#7a44cf'
-                          // selectedColor={'black'}
-                          buttonColor={DefaultTheme.colors.primary}
-                          borderColor={'#268776'}
-                          animationDuration={500}
-                          hasPadding
-                          fontSize={20}
-                          options={[
-                            { value: 'front', label: "front" },
-                            { value: 'back', label: "back" }
-                          ]}
-                        />
-                      </View>
-                    )
-                  })}
+                  {currentScreen === tabScreens.Flashcards &&
+                    <>
+                      {switchSelectorsInfo.map((collection, index) => {
+                        const specificItem = flashcardSettings.flashcardItemDisplayedFront.filter(item => Object.keys(item)[0] === collection.name)[0]
+                        const toggle = Object.values(specificItem)[0]
+                        return (
+                          <View key={index}>
+                            <Title style={{ alignSelf: 'center' }}>{collection.name}</Title>
+                            <SwitchSelector
+                              paddingSwitch={10}
+                              // selectedTextStyle={{ height: 100 }}
+                              // textStyle={{ height: 100 }}
+                              height={21}
+                              style={{ width: "100%", height: 10 }}
+                              initial={toggle ? 0 : 1}
+                              onPress={whatSide => onPressHandler(onPress.switch, { name: Object.values(collection)[0], whatSide })}
+                              // textColor={DefaultTheme.colors.primary} //'#7a44cf'
+                              // selectedColor={'black'}
+                              buttonColor={DefaultTheme.colors.primary}
+                              borderColor={'#268776'}
+                              animationDuration={500}
+                              hasPadding
+                              fontSize={20}
+                              options={[
+                                { value: 'front', label: "front" },
+                                { value: 'back', label: "back" }
+                              ]}
+                            />
+                          </View>
+                        )
+                      })}
+                    </>
+                  }
                 </View>
-
                 <View className='flex-col'>
                   <Title style={{ alignSelf: 'center' }}>Order: </Title>
                   {flashCardOrderBtnPayload.map((collection, index) =>

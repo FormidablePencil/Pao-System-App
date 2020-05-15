@@ -69,7 +69,7 @@ const InputFieldsComp = ({
       await Keyboard.dismiss()
       setLoading(LoadingTypes.success)
       setTimeout(async () => {
-        await navigation.navigate('TabNavigator')
+        await navigation.navigate(tabScreens.Flashcards)
         setLoading(LoadingTypes.notLoading)
       }, 1250);
     } else {

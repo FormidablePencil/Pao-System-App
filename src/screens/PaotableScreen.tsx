@@ -1,20 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TableHeader from '../components/TableHeader'
 import RenderPaoItems from '../components/RenderPaoItems'
 import { useSelector } from 'react-redux'
-import useSettingTabScreenOptions from '../hooks/useSettingTabScreenOptions'
 import FabActionBtn from '../components/FabActionBtn'
+import { enumFabAction } from '../constants/fabConstants'
+import OptionsModal from '../components/OptionsModal'
+import { tabScreens } from '../constants/constants'
 
 //~ everything has to work before CRUD with pao lists
 
-export const PaotableScreen = ({ navigation }: any) => {
+export const PaotableScreen = ({ navigation }) => {
   const { accessToken } = useSelector((state: any) => state.auth)
-  // useSettingTabScreenOptions()
+  const [modalOpen, setModalOpen] = useState(false)
+  const [editModeTrue, setEditModeTrue] = useState(false)
+  console.log(editModeTrue, 'editModeTrue');
 
   return (
     <>
+      <OptionsModal
+        setModalOpen={setModalOpen}
+        modalOpen={modalOpen}
+        currentScreen={tabScreens.Paotable}
+      />
       <TableHeader />
-      <RenderPaoItems />
+      <RenderPaoItems
+        editModeTrue={editModeTrue}
+      />
+      <FabActionBtn
+        editModeTrue={editModeTrue}
+        setEditModeTrue={setEditModeTrue}
+        setModalOpen={setModalOpen}
+        whatFabProps={enumFabAction.paoTableFabActions}
+      />
     </>
   )
 }

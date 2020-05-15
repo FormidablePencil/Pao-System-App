@@ -24,6 +24,17 @@ export const fabProperties = {
     mesg: 'account settings'
   },
 
+  goToFlashcards: {
+    color: '#61FF5B',
+    icon: { card: 'card-text-outline' },
+    mesg: 'study'
+  },
+  goToPaoList: {
+    color: '#61FF5B',
+    icon: { list: 'format-list-numbered' },
+    mesg: 'pao list'
+  },
+
 
   hint: {
     color: '#A96DFF',
@@ -83,6 +94,8 @@ export const fabProperties = {
 
 export enum enumFabAction {
   sharedFabActions = 'sharedFabActions',
+  paoTableFabActions = 'paoTableFabActions',
+  flashcardFabActions = 'flashcardFabActions'
 }
 
 export enum fabModeOptions {
@@ -93,6 +106,8 @@ export enum fabModeOptions {
 
 
 export enum fabActionOptions {
+  goToFlashcards,
+  goToPaoList,
   pagination,
   editMode,
   flashcardModeAscending,

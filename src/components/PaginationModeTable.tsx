@@ -15,14 +15,16 @@ const PaginationModeTable = ({
   controlledInput,
   setControlledInput,
   tenPaoItemsArr,
+  editModeTrue
 }: {
   bgColorByIndex: any
   heightOfScrollView: number | undefined
   controlledInput: Control
   setControlledInput: any
   tenPaoItemsArr: any
+  editModeTrue
 }) => {
-  const { config: { editMode } } = useSelector((state: any) => state.fabProperties)
+  // const { config: { editMode } } = useSelector((state: any) => state.fabProperties)
   const {
     saveControlledInputToReduxPaoList,
     onChangeTextHandler,
@@ -63,7 +65,7 @@ const PaginationModeTable = ({
                     tenPaoItemsArr={tenPaoItemsArr}
                     index={index}
                     name={name}
-                    paotableEditMode={editMode}
+                    paotableEditMode={editModeTrue}
                     saveControlledInputToReduxPaoList={saveControlledInputToReduxPaoList}
                     textInputValue={textInputValue}
                     onChangeTextHandler={onChangeTextHandler}

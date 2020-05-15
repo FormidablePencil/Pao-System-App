@@ -28,7 +28,7 @@ export enum swipeDirection {
 export enum tabScreens {
   Paotable = 'Paotable',
   Flashcards = 'Flashcards',
-  FavList ='FavList'
+  // FavList ='FavList'
 }
 
 export enum listMode {

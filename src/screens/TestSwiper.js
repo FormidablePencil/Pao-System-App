@@ -49,8 +49,8 @@ export default class Exemple extends Component {
   }
 
   Flash = (card, index) => {
-    console.log(card, '@@121')
-    console.log(index)
+    // console.log(card, '@@121')
+    // console.log(index)
     if (card) {
       return (
         <View style={{ ...styles.card, top: -30 }}>

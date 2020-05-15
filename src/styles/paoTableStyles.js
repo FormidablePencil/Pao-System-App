@@ -7,6 +7,7 @@ export const Row = styled.View`
   padding-horizontal: 15px;
 `
 export const FirstItemInRow = styled.Text`
+  width: 20px;
   align-self: center;
   text-align: center;
   justify-content: center;
