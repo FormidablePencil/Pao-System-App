@@ -1,18 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, LayoutAnimation, Keyboard } from 'react-native'
+import React, { useState, useRef } from 'react'
+import { View, StyleSheet, LayoutAnimation, Keyboard } from 'react-native'
 import styled from 'styled-components'
-import { Button, DefaultTheme, TextInput } from 'react-native-paper'
+import { Button, TextInput } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable';
 import { comps, tabScreens } from '../constants/constants';
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-import DynamicFormFields from '../../components/dynamic-form-fields/DynamicFormFields'
-import { useSelector, useDispatch } from 'react-redux';
-import { RESET_NOTIFY_MESG } from '../actions/types';
 import { withTheme } from 'react-native-paper'
 import { PaoThemeType } from '../styles/theming';
-import { inputErrMessages } from '../constants/constants'
-import { signIn, signUp } from '../actions/authActions';
 import useUserAuthentication, { form_res_msg } from '../hooks/useUserAuthentication';
 import { useNavigation } from '@react-navigation/native';
 

@@ -7,7 +7,7 @@ import SwitchSelector from "react-native-switch-selector";
 import styled from 'styled-components';
 import { DefaultTheme } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveFlashcardSettings } from '../actions/flashcardSettingsActions'
+// import { saveFlashcardSettings } from '../actions/flashcardSettingsActions'
 import { FlashcardSettingsTypes, arrangmentOpt } from '../reducer/flashcardOptionsReducer';
 import { tabScreens } from '../constants/constants';
 
@@ -64,7 +64,10 @@ const OptionsModal = ({ currentScreen, setModalOpen, modalOpen }) => {
             duration: sliderValueautoPlayFlashcardsDuration
           }
         })
-        await dispatch(saveFlashcardSettings(flashcardSettings))
+
+        ////~ the screen component will hold onto the settings
+        //  await dispatch(saveFlashcardSettings(flashcardSettings))  
+        
         setModalOpen(false)
         setLoading(false)
         break;

@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ChooseEnteringOption from './ChooseEnteringOption'
-import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { Text, KeyboardAvoidingView } from 'react-native'
-import { signUp, signIn } from '../actions/authActions'
-import useHandleSystemMesgAuth from '../hooks/useHandleSystemMesgAuth'
+import { KeyboardAvoidingView } from 'react-native'
 import InputFieldsComp from './InputFieldsComp';
 import { comps } from '../constants/constants';
-import { INVALID_CREDENTIALS_NOTIFY_MESG, INPUT_FIELDS_EMPTY_NOTIFY_MESG } from '../actions/types';
 
 const RenderEnterComps = () => {
   const [enteringMethod, setEnteringMethod] = useState(comps.enterOptions)

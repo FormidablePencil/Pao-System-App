@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Text, Animated, StyleSheet, Dimensions } from 'react-native'
 import { TextInput, withTheme } from 'react-native-paper'
 import styled from 'styled-components';
@@ -133,11 +133,6 @@ const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
               <>
                 {paoDisplayOrder.map((name: any, index) => {
                   const gotObjectsByName = flashcardItemDisplayedFront.filter(document => Object.keys(document)[0] === name)[0]
-                  // console.log(flashcardItemDisplayedFront)
-                  // console.log('flashcardItemDisplayedFront')
-                  // console.log(gotObjectsByName)
-                  // console.log(collection)
-                  // console.log('flashcardItemDisplayedFront')
                   const key = Object.keys(gotObjectsByName)[0]
                   const valuePair = Object.values(gotObjectsByName)[0]
                   if (valuePair === sidesDocument.symbol) {

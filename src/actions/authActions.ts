@@ -1,4 +1,4 @@
-import { SIGN_IN_FAILED_MESG, SIGNED_IN, SET_LOADING, SIGNED_UP, SIGN_UP_FAILED_MESG, SIGN_IN_SUCCESS_MESG, SIGNED_OUT, SIGN_OUT_FAILED } from "./types"
+import { SIGNED_IN, SET_LOADING, SIGNED_UP, SIGNED_OUT } from "./types"
 import { form_res_msg } from "../hooks/useUserAuthentication"
 
 export enum server_responses {

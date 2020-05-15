@@ -1,5 +1,4 @@
 import React from 'react'
-import { StyleSheet, Dimensions } from 'react-native'
 import styled from 'styled-components'
 import { Button, withTheme } from 'react-native-paper'
 

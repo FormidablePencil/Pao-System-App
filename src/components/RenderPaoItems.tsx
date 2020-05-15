@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext, useRef } from 'react'
-import { View, Text } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
+import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 import Pagination from './Pagination'
 import { ScrollView } from 'react-native-gesture-handler'

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { View, Text } from 'react-native-tailwind'
 import { TouchableOpacity } from 'react-native'
 import { globalStyles } from '../styles/global'
 import Icon2 from "react-native-vector-icons/FontAwesome5"

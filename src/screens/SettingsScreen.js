@@ -1,21 +1,14 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
 import { View, Text } from 'react-native-tailwind'
 import { Image } from 'react-native'
-import { StyledText } from '../styles/global'
-
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import BackgroundSvg from '../components/BackgroundSvg';
 import AccountSettings from '../components/AccountSettings'
 import profileImg from '../assets/mycat.jpg'
 import AppSettings from '../components/AppSettings'
 import AppInfo from '../components/AppInfo'
-import useSettingTabScreenOptions from '../hooks/useSettingTabScreenOptions'
-import { Button, IconButton } from 'react-native-paper'
-import { tabScreens } from '../constants/constants'
+import { IconButton } from 'react-native-paper'
 
 //~ I have to learn svg to get that border slanted effect on settings screen
-
 
 const ProfileScreen = ({ navigation }) => {
 

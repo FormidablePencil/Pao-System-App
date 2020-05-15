@@ -1,17 +1,11 @@
 import React, { useState, createContext } from 'react'
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import WelcomeScreen from '../screens/WelcomeScreen'
-import TabNavigator from './TabNavigator'
 import { createStackNavigator } from '@react-navigation/stack';
 import ProfileScreen from '../screens/SettingsScreen'
-import { arrangmentOpt } from '../reducer/flashcardOptionsReducer'
-import { StatusBar } from 'react-native';
-import { withTheme } from 'react-native-paper';
 import { tabScreens } from '../constants/constants';
 import FlashcardsScreen from '../screens/FlashcardsScreen';
 import PaotableScreen from '../screens/PaotableScreen';
-import useSettingTabScreenOptions from '../hooks/useSettingTabScreenOptions';
-import FabActionBtn from '../components/FabActionBtn';
 
 const Stack = createStackNavigator()
 //@ts-ignore

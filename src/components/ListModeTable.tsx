@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { View, Text, TextInput } from 'react-native'
+import React from 'react'
+import { TextInput } from 'react-native'
 import { ItemInRow, Row, FirstItemInRow } from '../styles/paoTableStyles'
 import { DefaultTheme } from 'react-native-paper'
 import { useSelector } from 'react-redux'

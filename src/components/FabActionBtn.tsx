@@ -1,16 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { Portal, Provider, FAB } from 'react-native-paper'
-// import { PaoAppContext } from '../routes/StackNavigator'
 import { fabProperties, fabModeOptions, fabActionOptions, fabOpt } from '../constants/fabConstants'
 import { tabScreens } from '../constants/constants'
-import useFabFunctions from '../hooks/useFabFunctions'
-import { Text, View } from 'react-native'
-import { useNavigationState, useRoute, useNavigation } from '@react-navigation/native'
-import { useDispatch, useSelector } from 'react-redux'
-import { TOGGLE_FAB_VISIBILITY, TOGGLE_CONFIGURATION_EDIT_MODE, UPDATE_MAIN_FAB_PROPERTIES, TOGGLE_EDIT_MODE } from '../actions/types'
-import { enumFabAction } from "../constants/fabConstants"
-import useSettingTabScreenOptions from '../hooks/useSettingTabScreenOptions'
-import { TabNavContext } from '../routes/StackNavigator'
+import { View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
 
 interface FabOptTypes {
   mode: number

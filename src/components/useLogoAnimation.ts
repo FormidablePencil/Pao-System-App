@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import { View, Text, Animated, Easing } from 'react-native'
+import { useEffect, useRef } from 'react'
+import { Animated, Easing } from 'react-native'
 
 const useLogoAnimation = () => {
   const spinAnim: any = useRef(new Animated.Value(0)).current

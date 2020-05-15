@@ -1,15 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { FAB, Colors } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import FlashcardItSelf from './FlashcardItSelf';
 import Swiper from 'react-native-swiper'
-import { fabActions } from '../constants/constants';
 import sortPaoList from '../components/logic/sortPaoList'
 import initialStatePao from '../reducer/paoReducer'
 import { LinearGradient } from 'expo-linear-gradient';
-import { LightenDarkenColor } from 'lighten-darken-color'; 
 
 const FlashcardSwiper = ({ }) => {
   const pao = useSelector((state: any) => state.pao)
