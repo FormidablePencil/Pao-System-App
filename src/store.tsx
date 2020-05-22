@@ -6,6 +6,7 @@ import systemMesgReducer from './reducer/systemMesgReducer'
 import favListReducer from './reducer/favListReducer'
 import flashcardOptionsReducer from './reducer/flashcardOptionsReducer'
 import fabReducer from './reducer/fabReducer'
+import paoListApprovedByServerReducer from './routes/paoListApprovedByServerReducer'
 
 const rootReducer = combineReducers({
   pao: paoReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   systemMessages: systemMesgReducer,
   favList: favListReducer,
   flashcardOptions: flashcardOptionsReducer,
-  fabProperties: fabReducer
+  fabProperties: fabReducer,
+  paoListApprovedByServer: paoListApprovedByServerReducer
 })
 
 const initialState = {}

@@ -1,13 +1,21 @@
-import { UPDATE_PAO_LIST, ADD_TO_PAO_LIST, UPDATE_SPECIFIC_PAO_COLLECION } from './types'
+import { UPDATE_PAO_LIST, ADD_TO_PAO_LIST, UPDATE_SPECIFIC_PAO_COLLECION, FAILED_SERVER_CRUD_REQUEST } from './types'
 import { PaoAction } from '../reducerTypes/paoTypes'
 import { ControlledInputsTypes } from '../components/FlashcardItSelf'
 
-export const updatePaoItem = (controlledInput: any, docAlreadyExists: boolean) => (dispatch: any) => {
+export const updatePaoItem = (controlledInput: any, docAlreadyExists: boolean, paoListApprovedByServer) => async (dispatch: any) => {
   // if "there's a document by that number then dispatch only the value that's changed to pao reducer"
   // else "new document and save it"
   if (docAlreadyExists === true) {
     dispatch({ type: UPDATE_PAO_LIST, payload: controlledInput })
 
+    const request = {
+      // method:
+    }
+    const res = await fetch('', request)
+    const fetchedData = res.json()
+    if (fetchedData.message === 'saved') {
+
+    } else dispatch({ type: FAILED_SERVER_CRUD_REQUEST, paylaod: paoListApprovedByServer })
     //~ send a update request
     //~ if failed then set current paolist to the last list the server responded with
 

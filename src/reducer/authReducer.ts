@@ -18,7 +18,7 @@ export default (state: authState = initialState, { type, payload }: any) => {
       return initialState
 
     case REFRESHED_TOKENS:
-      return { ...state, ...payload.refreshToken as {} }
+      return { ...state, accessToken: payload }
 
     default:
       return state

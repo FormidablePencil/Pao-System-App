@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { FAB, Colors } from 'react-native-paper';
+import { FAB, Colors, useTheme } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import FlashcardItSelf from './FlashcardItSelf';
@@ -14,6 +14,8 @@ const FlashcardSwiper = ({ }) => {
   const { flashcardOptions } = useSelector((state: any) => state)
   const { autoPlayFlashcards: { play, duration } } = useSelector((state: any) => state.flashcardOptions)
   const { retreivedPaoDataFromDb } = useSelector((state: any) => state.systemMessages)
+  const theme: PaoThemeType = useTheme()
+
 
   const [flashcardOrderAssortment, setFlashcardOrderAssortment] = useState(null)
   useEffect(() => {
@@ -25,12 +27,14 @@ const FlashcardSwiper = ({ }) => {
   }, [flashcardOptions])
 
   //! hook up:
-  
+
   // order for both screens
 
   return (
     <Container style={{ ...styles2.slide1 }}>
-      <LinearGradient colors={[Colors.purpleA700, Colors.pink500]} end={[.75, .2]} start={[.01, .75]}>
+      <LinearGradient
+        colors={[theme.colors.linearGradientBgColors.first, theme.colors.linearGradientBgColors.second]}
+        end={[.75, .2]} start={[.01, .75]}>
         <Swiper
           showsButtons={true}
           autoplay={play}

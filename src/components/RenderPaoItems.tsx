@@ -41,13 +41,12 @@ const RenderPaoItems = ({ editModeTrue }) => {
 
 
   const bgColorByIndex = (index: number) => {
-    if (index % 2 == 1) return 'lightgrey'; else return 'white'
+    if (index % 2 == 1) return '#F2F9FF'; else return '#DAEEFF' //~ colors
   }
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
-
         keyboardDismissMode={'none'}
         blurOnSubmit={false}
         keyboardShouldPersistTaps={'always'}

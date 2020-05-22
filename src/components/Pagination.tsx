@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text } from 'react-native-tailwind'
 import styled from 'styled-components';
-import { Button, DefaultTheme, IconButton } from 'react-native-paper';
+import { Button, DefaultTheme, IconButton, useTheme, Text } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
+import { PaoThemeType } from '../styles/theming';
+import { View } from 'react-native';
 
 interface PaginationType {
   currentRenderItemsRange: any
@@ -9,6 +11,7 @@ interface PaginationType {
 }
 
 const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange }: PaginationType) => {
+  const theme: PaoThemeType = useTheme()
   enum paginateDirection {
     next,
     previous
@@ -29,34 +32,41 @@ const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange }: Pag
     }
   } //table pagination option
 
-
-
   return (
-    <PaginationContainer style={{ backgroundColor: DefaultTheme.colors.accent }}>
-      <PaginationBtn icon='menu-left' size={35} color='white' onPress={() => renderItemsToCurrentPage(paginateDirection.previous)} mode="contained" />
-      <Column>
-        <Row>
-          {[0, 1, 2, 3, 4].map((num: number) =>
-            <Button onPress={() => paginateTo(num)} key={num} compact={true}>
-              <Text className='p-3'>{`${num}0`}</Text>
-            </Button>
-          )}
+    <LinearGradient
+      colors={[theme.colors.linearGradientBgColors.first, theme.colors.linearGradientBgColors.second]}
+      start={[.8, 0.8]}
+    >
+      <PaginationContainer>
+
+        <PaginationBtn icon='menu-left' size={35} color='white' onPress={() => renderItemsToCurrentPage(paginateDirection.previous)} mode="contained" />
+        <Column>
+          <Row>
+            {[0, 1, 2, 3, 4].map((num: number) =>
+              <Button onPress={() => paginateTo(num)} key={num} compact={true}>
+                  <PaginationBtnText>{`${num}0`}</PaginationBtnText>
+              </Button>
+            )}
+          </Row>
+          <Row>
+            {[5, 6, 7, 8, 9].map((num: number) =>
+              <Button onPress={() => paginateTo(num)} key={num} compact={true}>
+                <PaginationBtnText>{`${num}0`}</PaginationBtnText>
+              </Button>
+            )}
+          </Row>
+        </Column>
+        <Row style={{ justifyContent: 'space-around' }}>
+          <PaginationBtn icon='menu-right' size={35} color='white' onPress={() => renderItemsToCurrentPage(paginateDirection.next)} mode="contained" />
         </Row>
-        <Row>
-          {[5, 6, 7, 8, 9].map((num: number) =>
-            <Button onPress={() => paginateTo(num)} key={num} compact={true}>
-              <Text className='p-3'>{`${num}0`}</Text>
-            </Button>
-          )}
-        </Row>
-      </Column>
-      <Row style={{ justifyContent: 'space-around' }}>
-        <PaginationBtn icon='menu-right' size={35} color='white' onPress={() => renderItemsToCurrentPage(paginateDirection.next)} mode="contained" />
-      </Row>
-    </PaginationContainer>
+      </PaginationContainer>
+    </LinearGradient>
   )
 }
 
+const PaginationBtnText = styled(Text)`
+  color: white;
+`;
 const PaginationBtn = styled(IconButton)`
   border-radius: 3px;
   background-color: rgba(27,27,27,.2);

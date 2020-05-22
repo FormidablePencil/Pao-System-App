@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text } from 'react-native-tailwind'
-import { Image } from 'react-native'
+import { Image, Animated, Slider } from 'react-native'
 import BackgroundSvg from '../components/BackgroundSvg';
 import AccountSettings from '../components/AccountSettings'
 import profileImg from '../assets/mycat.jpg'
@@ -14,20 +14,13 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <>
-      <IconButton
-        icon='keyboard-backspace'
-        size={25}
-        style={{ alignSelf: 'flex-start' }}
-        onPress={() => navigation.goBack()}
-      />
       <View className="relative flex justify-around items-center h-full bg-blue-lightest">
         <BackgroundSvg />
         <View className="w-4/5 flex flex-row justify-around items-center">
           <AccountSettings />
-
           <Image source={profileImg} style={{ height: 200, width: 200, borderRadius: 100, }} />
         </View>
-        <AppSettings />
+        {/* <AppSettings /> */}
         <View className="w-4/5 flex flex-row justify-around items-center">
           <AppInfo navigation={navigation} />
           <Image source={require('./../assets/playing-cards-png-11-original.png')} style={{ height: 125, width: 125 }} />

@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState, useRef } from 'react'
-import { View, Text, TextInput } from 'react-native'
-import PaoTableItem from './PaoTableItem'
+import React from 'react'
 import { ItemInRow, Row, FirstItemInRow } from '../styles/paoTableStyles'
-import { DefaultTheme, Button } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import useTextInputHandler, { Control } from '../hooks/useTextInputHandler'
-import { useSelector } from 'react-redux'
 import { listMode } from '../constants/constants'
 import styled from 'styled-components'
 import PaoTextInput from './PaoTextInput'
+import { PaoThemeType } from '../styles/theming'
 
 const PaginationModeTable = ({
   bgColorByIndex,
@@ -34,7 +32,8 @@ const PaginationModeTable = ({
     setControlledInput,
     tenPaoItemsArr,
   })
-
+  const theme: PaoThemeType = useTheme()
+  
   return (
     <>
       {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((index: number) => {
@@ -45,19 +44,21 @@ const PaginationModeTable = ({
           <Row
             key={index}
             style={{ backgroundColor: bgColor, height: heightOfScrollView }}>
-            <FirstItemInRow>
+            <FirstItemInRow
+              color={theme.colors.text}
+            >
               {tenPaoItemsArr[index].number}
             </FirstItemInRow>
             {['person', 'action', 'object'].map((name: string) => {
 
               const textInputValue = returnValueDependingOnWeatherItemsAreSame({ index, name, mode: listMode.pagination })
               // console.log(textInputValue)
-              let btnBgColor
-              let textColor
-              if (textInputValue) textColor = DefaultTheme.colors.accent
+              // let btnBgColor
+              // let textColor
+              // if (textInputValue) textColor = theme.colors.text
 
-              let selected = false
-              if (selected) btnBgColor = 'teal'
+              // let selected = false
+              // if (selected) btnBgColor = 'red'
 
               return (
                 <ItemInRow key={name}>
@@ -69,8 +70,8 @@ const PaginationModeTable = ({
                     saveControlledInputToReduxPaoList={saveControlledInputToReduxPaoList}
                     textInputValue={textInputValue}
                     onChangeTextHandler={onChangeTextHandler}
-                    btnBgColor={btnBgColor}
-                    textColor={textColor}
+                    // btnBgColor={btnBgColor}
+                    // textColor={textColor}
                   />
                 </ItemInRow>
               )

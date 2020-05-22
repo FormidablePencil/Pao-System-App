@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View } from 'react-native-tailwind';
 import { globalStyles } from '../styles/global'
 import { IconButton } from 'react-native-paper';
@@ -8,19 +8,25 @@ import OptionsModal from '../components/OptionsModal';
 import FabActionBtn from '../components/FabActionBtn';
 import { enumFabAction } from '../constants/fabConstants';
 import { tabScreens } from '../constants/constants';
+import { TabNavContext } from '../routes/StackNavigator';
 
 export const FlashcardsScreen = () => {
+  const { showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)
   const [modalOpen, setModalOpen] = useState(false)
   const [editModeTrue, setEditModeTrue] = useState(false)
+
   // console.log(editModeTrue, 'editModeTrue');
+  useEffect(() => {
+    if (modalOpen) setShowNavigationIcons(prev => false)
+  }, [modalOpen])
 
   return (
     <>
-      <OptionsModal
+      {/* <OptionsModal
         setModalOpen={setModalOpen}
         modalOpen={modalOpen}
         currentScreen={tabScreens.Flashcards}
-      />
+      /> */}
       <View className="w-full h-full flex flex-row justify-center">
         <View className="relative" style={globalStyles.centerEverything}>
           <FlashcardSwiper />

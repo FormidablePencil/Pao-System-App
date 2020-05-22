@@ -1,10 +1,20 @@
-import React, { useState } from 'react'
-import { Portal, Provider, FAB } from 'react-native-paper'
+import React, { useState, useEffect, useContext, useRef } from 'react'
+import { Portal, Provider, FAB, useTheme, TouchableRipple, Button } from 'react-native-paper'
 import { fabProperties, fabModeOptions, fabActionOptions, fabOpt } from '../constants/fabConstants'
 import { tabScreens } from '../constants/constants'
-import { View } from 'react-native'
+import { View, TouchableOpacity, LayoutAnimation, Animated, Text } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { PaoThemeType } from '../styles/theming'
+import { AntDesign } from '@expo/vector-icons';
+import styled from 'styled-components'
+import * as Animatable from 'react-native-animatable';
+import { TabNavContext } from '../routes/StackNavigator'
+import useCheckAmountOfPaoFilled from '../hooks/useCheckAmountOfPaoFilled'
+import { createNativeWrapper } from 'react-native-gesture-handler'
+import OptionsModal from './OptionsModal'
+import { FlashcardSettingsTypes } from '../reducer/flashcardOptionsReducer'
+
 
 interface FabOptTypes {
   mode: number
@@ -18,16 +28,63 @@ interface CurrentFabPropsInterface {
 }
 
 const FabActionBtn = ({ whatFabProps, setModalOpen, editModeTrue, setEditModeTrue }) => {
-  const [showHints, setShowHints] = useState(false)
+  const { showHints, setShowHints, showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)
   const navigation = useNavigation()
   const dispatch = useDispatch()
+  const theme: PaoThemeType = useTheme()
+  const actionBtnsFadeAnim = useRef(new Animated.Value(1)).current
+  const [paoDocumentsFilled, setPaoDocumentsFilled] = useState(null)
+
+
+  //~ settings for flashcard screen
+  const [loading, setLoading] = useState(false)
+  const [flashcardSettings, setFlashcardSettings] = useState<FlashcardSettingsTypes>({
+    flashcardItemDisplayedFront: [
+      { number: true },
+      { person: false },
+      { action: true },
+      { object: false },
+    ],
+    autoPlayFlashcards: { play: false, duration: 5 },
+    flashcardOrder: null
+  })
+  const currentScreen = tabScreens.Flashcards
+  //~ settings for flashcard screen
+
+
+  console.log(showNavigationIcons);
+  // useEffect(() => {
+  //   if (modalOpen) setShowNavigationIcons(prev => false)
+  // }, [modalOpen])
+
+  useCheckAmountOfPaoFilled({ setPaoDocumentsFilled })
+
+  const onPressHintToggleHintMsgs = () => {
+    setShowHints(prev => !prev)
+    if (showHints) {
+      // Animated.timing(actionBtnsFadeAnim, { //~ this needs to be placed in the souce code of react-native-paper
+      //   toValue: 0,
+      //   duration: 2000
+      // }).start()
+    } else {
+      actionBtnsFadeAnim.setValue(0)
+      LayoutAnimation.configureNext({
+        duration: 200,
+        create: {
+          springDamping: 200,
+          type: LayoutAnimation.Types.spring,
+          property: LayoutAnimation.Properties.scaleXY,
+        },
+      })
+    }
+  }
 
   const fabActions = {
     paoTableFabActions: [
       {
-        style: { backgroundColor: fabProperties.goToFlashcards.color },
+        style: { backgroundColor: theme.colors.fabActionColors[3] },
         icon: fabProperties.goToFlashcards.icon.card,
-        label: fabProperties.goToFlashcards.mesg,
+        label: showHints ? fabProperties.goToFlashcards.mesg : null,
         onPress: () => {
           handleOnPressFabActions(fabActionOptions.goToFlashcards)
         }
@@ -35,9 +92,18 @@ const FabActionBtn = ({ whatFabProps, setModalOpen, editModeTrue, setEditModeTru
     ],
     flashcardFabActions: [
       {
-        style: { backgroundColor: fabProperties.goToPaoList.color },
+        style: { backgroundColor: theme.colors.fabActionColors[2] },
+        icon: fabProperties.settingOptions.icon.settings,
+        label: showHints ? fabProperties.settingOptions.mesg : null,
+        onPress: () => {
+          setModalOpen()
+          handleOnPressGeneral()
+        }
+      },
+      {
+        style: { backgroundColor: theme.colors.fabActionColors[3] },
         icon: fabProperties.goToPaoList.icon.list,
-        label: fabProperties.goToPaoList.mesg,
+        label: showHints ? fabProperties.goToPaoList.mesg : null,
         onPress: () => {
           handleOnPressFabActions(fabActionOptions.goToPaoList)
         }
@@ -45,35 +111,20 @@ const FabActionBtn = ({ whatFabProps, setModalOpen, editModeTrue, setEditModeTru
     ],
     favListFabActions: [],
     sharedFabActions: [
-      // {
-      //   style: { backgroundColor: fabProperties.hint.color },
-      //   icon: fabProperties.hint.icon.letterH,
-      //   label: fabProperties.hint.mesg,
-      //   onPress: () => { setShowHints(prev => !prev) }
-      // },
       {
-        style: { backgroundColor: fabProperties.editMode.color },
+        style: { backgroundColor: theme.colors.fabActionColors[0] },
         icon: fabProperties.editMode.icon.pencil,
-        label: fabProperties.editMode.mesg,
+        label: showHints ? fabProperties.editMode.mesg : null,
         onPress: () => {
           handleOnPressFabActions(fabActionOptions.editMode)
         }
       },
       {
-        style: { backgroundColor: fabProperties.accountSettings.color },
+        style: { backgroundColor: theme.colors.fabActionColors[1] },
         icon: fabProperties.accountSettings.icon.accountSettings,
-        label: fabProperties.accountSettings.mesg,
+        label: showHints ? fabProperties.accountSettings.mesg : null,
         onPress: () => {
           navigation.navigate('ProfileScreen')
-          handleOnPressGeneral()
-        }
-      },
-      {
-        style: { backgroundColor: fabProperties.settingOptions.color },
-        icon: fabProperties.settingOptions.icon.settings,
-        label: fabProperties.settingOptions.mesg,
-        onPress: () => {
-          setModalOpen()
           handleOnPressGeneral()
         }
       },
@@ -86,25 +137,28 @@ const FabActionBtn = ({ whatFabProps, setModalOpen, editModeTrue, setEditModeTru
     // fabActions: 'sharedFabActions',
   })
 
-
-  const handleOnPressGeneral = () => { //to redux
+  const handleOnPressGeneral = () => {
     switch (currentFabProps.mainFab.mode) {
       case fabOpt.menuOpen.mode:
         setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
+        setShowNavigationIcons(true)
         break;
       case fabOpt.standby.mode:
         setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen })
+        setShowNavigationIcons(false)
+
         break;
       case fabOpt.editMode.mode:
         setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
         setEditModeTrue(false)
+        setShowNavigationIcons(true)
       default:
         break;
     }
 
   }
 
-  const handleOnPressFabActions = (whatFabAction) => { // to redux
+  const handleOnPressFabActions = (whatFabAction) => {
     switch (whatFabAction) {
       case fabActionOptions.editMode:
         setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.editMode })
@@ -126,14 +180,49 @@ const FabActionBtn = ({ whatFabProps, setModalOpen, editModeTrue, setEditModeTru
         break;
     }
   }
-  // console.log(fabprop.keyword);
+
   return (
     <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
       <Provider>
         <Portal>
+          <Portal>
+            {currentFabProps.mainFab.mode === fabModeOptions.menuOpen &&
+              <>
+                {/* <AnimatableBtn
+                  animation='bounceIn'
+                  iteration='infinate'
+                  onPress={() => onPressHintToggleHintMsgs()}
+                  name={showHints ? 'closecircle' : 'questioncircle'} size={40} color={'#F6F823'} /> */}
+                <Animatable.View
+                  animation='bounceIn'
+                  style={{ margin: 8, alignItems: 'center', }}>
+                  <Text style={{ color: 'white', fontFamily: 'MontserratMed' }}>Filled: {paoDocumentsFilled}/100</Text>
+                  <TouchableRipple onPress={() => console.log('sd')} style={{ marginHorizontal: 10, paddingHorizontal: 10, backgroundColor: theme.colors.accent, borderRadius: 15, padding: 5, elevation: 10 }}>
+                    <>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ color: 'black', textAlign: 'center', fontFamily: 'MontserratReg' }}>
+                          Go to unfilled</Text>
+                        <View>
+                          <AntDesign style={{ marginHorizontal: 3 }} size={10} name='arrowright' />
+                        </View>
+                      </View>
+                    </>
+                  </TouchableRipple>
+                </Animatable.View>
+                <OptionsModal
+                  currentScreen={currentScreen}
+                  flashcardSettings={flashcardSettings}
+                  setFlashcardSettings={setFlashcardSettings}
+                  loading={loading}
+                  setLoading={setLoading}
+                  setModalOpen={setModalOpen}
+                  // modalOpen={modalOpen}
+                   />
+              </>
+            }
+          </Portal>
           <FAB.Group
-            // style={{ paddingBottom: 40 }} // later on, assertain of I could turn this into an aniamted component
-            fabStyle={currentFabProps.mainFab.color && { backgroundColor: currentFabProps.mainFab.color }}
+            fabStyle={{ backgroundColor: theme.colors.accent }}
             visible={true}
             open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
             icon={currentFabProps.mainFab.icon}
@@ -148,5 +237,12 @@ const FabActionBtn = ({ whatFabProps, setModalOpen, editModeTrue, setEditModeTru
   )
 }
 
+const AntDesignStyled = styled<any>(AntDesign)`
+  position:absolute;
+  right: 20px;
+  top: 10px;
+  /* opacity: ${({ styledOpacity }) => styledOpacity ?? 1}; */
+`;
+const AnimatableBtn = Animatable.createAnimatableComponent(AntDesignStyled)
 
 export default FabActionBtn

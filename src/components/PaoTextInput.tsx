@@ -3,7 +3,8 @@ import { View, Text } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import { DefaultTheme } from '@react-navigation/native'
 import { StyledText } from '../styles/global'
-import { Button } from 'react-native-paper'
+import { Button, useTheme } from 'react-native-paper'
+import { PaoThemeType } from '../styles/theming'
 
 interface InputTypes {
   tenPaoItemsArr: any
@@ -23,6 +24,7 @@ const PaoTextInput = ({
   textInputValue,
   onChangeTextHandler,
 }: InputTypes) => {
+  const theme: PaoThemeType = useTheme()
 
   interface Btn {
     number: number
@@ -30,13 +32,15 @@ const PaoTextInput = ({
     show: boolean
   }
 
+  const onBlurHandler = () => saveControlledInputToReduxPaoList()
+
   return (
     <TextInput
       editable={paotableEditMode}
-      onBlur={() => saveControlledInputToReduxPaoList()}
+      onBlur={() => onBlurHandler()}
       placeholder={name}
-      placeholderTextColor={'grey'}
-      style={{ backgroundColor: 'transparent', alignSelf: 'center', height: '100%', color: DefaultTheme.colors.primary }}
+      placeholderTextColor={'rgba(36,138,135,.4)'}
+      style={{ backgroundColor: 'transparent', alignSelf: 'center', height: '100%', color: theme.colors.text }}
       value={textInputValue}
       onChangeText={text => onChangeTextHandler({ text, number: tenPaoItemsArr[index].number, name })}
     />

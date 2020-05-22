@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import TableHeader from '../components/TableHeader'
 import RenderPaoItems from '../components/RenderPaoItems'
 import { useSelector } from 'react-redux'
@@ -6,6 +6,8 @@ import FabActionBtn from '../components/FabActionBtn'
 import { enumFabAction } from '../constants/fabConstants'
 import OptionsModal from '../components/OptionsModal'
 import { tabScreens } from '../constants/constants'
+import { Keyboard } from 'react-native'
+import { TabNavContext } from '../routes/StackNavigator'
 
 //~ everything has to work before CRUD with pao lists
 
@@ -13,16 +15,27 @@ export const PaotableScreen = ({ navigation }) => {
   const { accessToken } = useSelector((state: any) => state.auth)
   const [modalOpen, setModalOpen] = useState(false)
   const [editModeTrue, setEditModeTrue] = useState(false)
-  console.log(editModeTrue, 'editModeTrue');
+  const [keyboardPresent, setKeyboardPresent] = useState(false)
 
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', () => setKeyboardPresent(true))
+    Keyboard.addListener('keyboardDidHide', () => setKeyboardPresent(false))
+
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', () => { })
+      Keyboard.removeListener('keyboardDidHide', () => { })
+    }
+  })
   return (
     <>
-      <OptionsModal
+      {/* <OptionsModal
         setModalOpen={setModalOpen}
         modalOpen={modalOpen}
         currentScreen={tabScreens.Paotable}
-      />
-      <TableHeader />
+      /> */}
+      {!keyboardPresent &&
+        <TableHeader />
+      }
       <RenderPaoItems
         editModeTrue={editModeTrue}
       />

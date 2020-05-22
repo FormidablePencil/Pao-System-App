@@ -2,8 +2,11 @@ import React from 'react'
 import { View, Text } from 'react-native-tailwind'
 import Svg, { Circle, Rect, Polygon, Defs, RadialGradient, Stop } from 'react-native-svg';
 import { Constants } from 'expo';
+import { useTheme } from 'react-native-paper';
 
 const BackgroundSvg = () => {
+  const theme = useTheme()
+  
   return (
     <View className="absolute w-full h-full">
       <Svg height="1000" width="1000">
@@ -18,8 +21,8 @@ const BackgroundSvg = () => {
             fy="75"
             gradientUnits="userSpaceOnUse"
           >
-            <Stop offset="0" stopColor="#41E2FF" stopOpacity="1" />
-            <Stop offset="1" stopColor="#16627F" stopOpacity="1" />
+            <Stop offset="0" stopColor={theme.colors.linearGradientBgColors.first} stopOpacity="1" />
+            <Stop offset="1" stopColor={theme.colors.linearGradientBgColors.second} stopOpacity="1" />
           </RadialGradient>
         </Defs>
         <Polygon

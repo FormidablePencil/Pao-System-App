@@ -13,38 +13,38 @@ export const fabProperties = {
   },
 
   settingOptions: {
-    color: '#61FF5B',
+    // color: '#61FF5B',
     icon: { settings: 'settings' },
     mesg: 'settings'
   },
 
   accountSettings: {
-    color: '#61FF5B',
+    // color: '#61FF5B',
     icon: { accountSettings: 'account' },
     mesg: 'account settings'
   },
 
   goToFlashcards: {
-    color: '#61FF5B',
+    // color: '#61FF5B',
     icon: { card: 'card-text-outline' },
     mesg: 'study'
   },
   goToPaoList: {
-    color: '#61FF5B',
+    // color: '#61FF5B',
     icon: { list: 'format-list-numbered' },
     mesg: 'pao list'
   },
 
 
   hint: {
-    color: '#A96DFF',
+    // color: '#A96DFF',
     icon: { letterH: 'alpha-h' },
     mesg: 'show hint messagees',
     mesgOpposite: 'hide hint messagees'
   },
 
   listMode: {
-    color: '#A96DFF',
+    // color: '#A96DFF',
     pagination: {
       icon: {
         book: 'book-open-page-variant'
@@ -61,7 +61,7 @@ export const fabProperties = {
 
 
   editMode: {
-    color: '#FFE542',
+    // color: '#FFE542',
     icon: {
       pencil: 'square-edit-outline'
     },
@@ -116,7 +116,7 @@ export enum fabActionOptions {
 }
 
 export const fabOpt = {
-  standby: { mode: fabModeOptions.standby, icon: fabProperties.mainBtn.menu.icon.menu, color: null },
+  standby: { mode: fabModeOptions.standby, icon: fabProperties.mainBtn.menu.icon.menu, color: '#768AED' },
   menuOpen: { mode: fabModeOptions.menuOpen, icon: fabProperties.mainBtn.menuOpen.icon.cards, color: null },
   editMode: { mode: fabModeOptions.editing, icon: fabProperties.mainBtn.edit.icon.pencil, color: fabProperties.editMode.color }
 }

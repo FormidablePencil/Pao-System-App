@@ -1,4 +1,4 @@
-import { SIGNED_IN, SET_LOADING, SIGNED_UP, SIGNED_OUT } from "./types"
+import { SIGNED_IN, SET_LOADING, SIGNED_UP, SIGNED_OUT, REFRESHED_TOKENS } from "./types"
 import { form_res_msg } from "../hooks/useUserAuthentication"
 
 export enum server_responses {
@@ -6,6 +6,12 @@ export enum server_responses {
   user_exists = 'user already exists',
   signed_out = 'successfully signed out',
   signed_out_with_err = 'signout failed. Token does not exist',
+  successfully_refreshed_token = 'returned fresh new tokens',
+}
+
+export enum auth_responses {
+  successfully_refreshed_token,
+  failed_to_refreshed_token,
 }
 
 export const signUp = ({ username, password, email }) => async dispatch => {
@@ -69,21 +75,24 @@ export const signOut = ({ refreshToken }) => async dispatch => { //? I know you 
 
 }
 
-// export const refreshAccessToken = () => async (dispatch: any) => {
-//   const res = await fetch('http://10.0.0.6:4001/auth/token', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({ "token": "eyJhbGciOiJIUzI1NiJ9.c29tZXRoaW5n.nUvhqEQYVA46RgwetwGWYOWoFEnxkwllc3uvqu9BB_A" })
-//   })
-//   const fetchedData = await res.json()
-//   if (fetchedData 'returned fresh new tokens') {
-//     dispatch({ action: REFRESHED_TOKENS, payload: '' })
-//   } else {
-//     dispatch({ action: FAILED_TO_REFRESH_TOKENS, payload: '' })
-//   }
-// }
+export const refreshAccessToken = ({ refreshToken }) => async (dispatch: any) => {
+  const request = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ token: refreshToken })
+  }
+  const res = await fetch('http://10.0.0.6:4001/auth/token', request)
+  const fetchedData = await res.json()
+  console.log(fetchedData, 'refreshed token')
+  if (fetchedData.message = server_responses.successfully_refreshed_token) {
+    dispatch({ action: REFRESHED_TOKENS, payload: fetchedData.accessToken })
+    return server_responses.successfully_refreshed_token
+  } else {
+    return auth_responses.failed_to_refreshed_token
+  }
+}
 
 // export const deleteAccount = (username: string, password: string, token: string) => async (dispatch: any) => {
 //   const res = await fetch('http://10.0.0.6:8000/deleteaccount', {

@@ -4,11 +4,12 @@ export const Row = styled.View`
   flex: 1;
   flex-direction: row;
   justify-content: space-evenly;
-  padding-horizontal: 15px;
+  padding: 0px 15px;
 `
 export const FirstItemInRow = styled.Text`
-  width: 20px;
   align-self: center;
+  color: ${({ color }) => color ?? 'white'};
+  width: 20px;
   text-align: center;
   justify-content: center;
 `;
@@ -22,6 +23,6 @@ export const ItemInRow = styled.View`
 `;
 export const StyledTextInRowItem = styled.Text`
   text-align: center;
-  color: white;
+  color: ${({ color }) => color ?? 'white'};
   font-size: 20px;
 `

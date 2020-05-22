@@ -1,11 +1,16 @@
 import React, { useState, createContext } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useNavigation, useRoute } from '@react-navigation/native'
 import WelcomeScreen from '../screens/WelcomeScreen'
 import { createStackNavigator } from '@react-navigation/stack';
 import ProfileScreen from '../screens/SettingsScreen'
 import { tabScreens } from '../constants/constants';
 import FlashcardsScreen from '../screens/FlashcardsScreen';
 import PaotableScreen from '../screens/PaotableScreen';
+import { AntDesign } from '@expo/vector-icons';
+import { Image } from 'react-native';
+import { TouchableRipple } from 'react-native-paper';
+import styled from 'styled-components';
+import playingCards from './../assets/playing-cards-png-11-original.png'
 
 const Stack = createStackNavigator()
 //@ts-ignore
@@ -13,29 +18,93 @@ export const TabNavContext = createContext()
 
 const StackNavigator = () => {
   //connect all the components that previously depended on the context in here to redux instead
-  // defaultScreenOptions
-  // PaoAppContext
-  const [modalOpen, setModalOpen] = useState(false) //@ keep
-  // useSettingTabScreenOptions()
-
-
+  const [modalOpen, setModalOpen] = useState(false)
+  const [showHints, setShowHints] = useState(false)
+  const [showNavigationIcons, setShowNavigationIcons] = useState(false)
+  console.log(showNavigationIcons);
 
   return (
-    <TabNavContext.Provider value={{ modalOpen, setModalOpen, }}>
+    <TabNavContext.Provider value={{
+      modalOpen, setModalOpen,
+      showHints, setShowHints,
+      showNavigationIcons, setShowNavigationIcons
+    }}>
       <NavigationContainer>
         {/* <StatusBar backgroundColor={theme.olors.primary} /> */}
         <Stack.Navigator
           initialRouteName={tabScreens.Paotable}
-          screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
-          <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
-          <Stack.Screen name={tabScreens.Flashcards} component={FlashcardsScreen} />
-          <Stack.Screen name={tabScreens.Paotable} component={PaotableScreen} />
+          screenOptions={{}}>
+          <Stack.Screen
+            name='ProfileScreen' component={ProfileScreen} />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name='WelcomeScreen' component={WelcomeScreen} />
+          <Stack.Screen
+            options={{
+              headerTransparent: true,
+              title: null,
+              headerLeft: props => <NavigateToPaoTable showNavigationIcons={showNavigationIcons} />,
+              headerRight: props => <NavigateToFlashcards showNavigationIcons={showNavigationIcons} />,
+            }}
+            name={tabScreens.Paotable} component={PaotableScreen} />
+          <Stack.Screen
+            options={{
+              headerTransparent: true,
+              title: null,
+              headerLeft: props => <NavigateToPaoTable showNavigationIcons={showNavigationIcons} />,
+              headerRight: props => <NavigateToFlashcards showNavigationIcons={showNavigationIcons} />,
+            }}
+            name={tabScreens.Flashcards} component={FlashcardsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </TabNavContext.Provider>
   )
 }
+
+const NavigateToPaoTable = ({ showNavigationIcons }) => {
+  const navigation = useNavigation()
+  const route = useRoute()
+  return ( //spin animation!
+    <>
+      {showNavigationIcons &&
+        <NavigationBtn left onPress={() => navigation.navigate(tabScreens.Paotable)} style={{}}>
+          {route.name === tabScreens.Flashcards ?
+            <AntDesign size={20} style={{ marginHorizontal: 15, color: 'white', transform: [{ scaleX: -1 }] }} name='arrowright' />
+            :
+            <Image style={{ resizeMode: 'contain', height: 20, width: 20, marginHorizontal: 15, }} source={playingCards} />
+          }
+        </NavigationBtn>
+      }
+    </>
+  )
+}
+
+const NavigateToFlashcards = ({ showNavigationIcons }) => {
+  const navigation = useNavigation()
+  const route = useRoute()
+  return (
+    <>
+      {showNavigationIcons &&
+        <NavigationBtn onPress={() => navigation.navigate(tabScreens.Flashcards)} style={{}} >
+          {route.name === tabScreens.Paotable ?
+            <AntDesign size={20} style={{ marginHorizontal: 15, color: 'white' }} name='arrowright' />
+            :
+            <Image style={{ resizeMode: 'contain', height: 20, width: 20, marginHorizontal: 15, }} source={playingCards} />
+          }
+        </NavigationBtn>
+      }
+    </>
+  )
+}
+
+const NavigationBtn = styled<any>(TouchableRipple)`
+  background-color: rgba(3,19,40,.5); margin-top: 5; padding: 10px 0px;
+  border-bottom-left-radius: ${({ left }) => left ? 0 : 20}px;
+  border-top-left-radius: ${({ left }) => left ? 0 : 20}px;
+  border-top-right-radius: ${({ left }) => left ? 20 : 0}px;
+  border-bottom-right-radius: ${({ left }) => left ? 20 : 0}px;
+  align-items: center; justify-content: center;
+`;
 
 //~react-native-swipe-gestures
 //~react-native-deck-swiper
