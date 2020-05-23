@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { ItemInRow, Row, FirstItemInRow } from '../styles/paoTableStyles'
-import { useTheme } from 'react-native-paper'
+import { useTheme, Button } from 'react-native-paper'
 import useTextInputHandler, { Control } from '../hooks/useTextInputHandler'
 import { listMode } from '../constants/constants'
 import styled from 'styled-components'
 import PaoTextInput from './PaoTextInput'
 import { PaoThemeType } from '../styles/theming'
+import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText } from '../hooks/usePrimaryControlledColor'
 
 const PaginationModeTable = ({
   bgColorByIndex,
@@ -13,14 +14,21 @@ const PaginationModeTable = ({
   controlledInput,
   setControlledInput,
   tenPaoItemsArr,
-  editModeTrue
+  editModeTrue,
+  prevTextInput,
+  nextTextInput,
+  currentlyFocusedTextInput,
+  setCurrentlyFocusedTextInput,
 }: {
-  bgColorByIndex: any
   heightOfScrollView: number | undefined
   controlledInput: Control
   setControlledInput: any
   tenPaoItemsArr: any
   editModeTrue
+  prevTextInput
+  nextTextInput
+  currentlyFocusedTextInput
+  setCurrentlyFocusedTextInput
 }) => {
   // const { config: { editMode } } = useSelector((state: any) => state.fabProperties)
   const {
@@ -33,19 +41,23 @@ const PaginationModeTable = ({
     tenPaoItemsArr,
   })
   const theme: PaoThemeType = useTheme()
-  
+
   return (
     <>
       {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((index: number) => {
 
-        const bgColor = bgColorByIndex(index)
+        const bgColor = index % 2 == 1 ?
+          usePrimaryControlledColor(WhereToColor.rowEven)
+          : usePrimaryControlledColor(WhereToColor.rowOdd)
+
+        const paoNumText = distinguishingTextColorFromRestOfText().color ?? theme.colors.text
 
         return (
           <Row
             key={index}
             style={{ backgroundColor: bgColor, height: heightOfScrollView }}>
             <FirstItemInRow
-              color={theme.colors.text}
+              color={paoNumText}
             >
               {tenPaoItemsArr[index].number}
             </FirstItemInRow>
@@ -54,8 +66,8 @@ const PaginationModeTable = ({
               const textInputValue = returnValueDependingOnWeatherItemsAreSame({ index, name, mode: listMode.pagination })
               // console.log(textInputValue)
               // let btnBgColor
-              // let textColor
-              // if (textInputValue) textColor = theme.colors.text
+              // let textControlledColor
+              // if (textInputValue) textControlledColor = theme.colors.text
 
               // let selected = false
               // if (selected) btnBgColor = 'red'
@@ -63,6 +75,10 @@ const PaginationModeTable = ({
               return (
                 <ItemInRow key={name}>
                   <PaoTextInput
+                    currentlyFocusedTextInput={currentlyFocusedTextInput}
+                    setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
+                    prevTextInput={prevTextInput}
+                    nextTextInput={nextTextInput}
                     tenPaoItemsArr={tenPaoItemsArr}
                     index={index}
                     name={name}
@@ -70,8 +86,8 @@ const PaginationModeTable = ({
                     saveControlledInputToReduxPaoList={saveControlledInputToReduxPaoList}
                     textInputValue={textInputValue}
                     onChangeTextHandler={onChangeTextHandler}
-                    // btnBgColor={btnBgColor}
-                    // textColor={textColor}
+                  // btnBgColor={btnBgColor}
+                  // textControlledColor={textControlledColor}
                   />
                 </ItemInRow>
               )

@@ -34,7 +34,6 @@ export const fetchPao = ({ accessToken }: { accessToken: string }) => async (dis
   const res = await fetch('http://10.0.0.6:8000/lists', request)
   const paoList = await res.json()
 
-  console.log(paoList.pao.list)
   if (paoList.pao.list) {
     dispatch({ type: FETCHED_PAOLIST, payload: paoList.pao.list }) //~ plug paoList to payload
   } else {

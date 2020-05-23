@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import styled from 'styled-components';
 import { FAB, Colors, useTheme } from 'react-native-paper';
 import { useSelector } from 'react-redux';
@@ -8,8 +8,12 @@ import Swiper from 'react-native-swiper'
 import sortPaoList from '../components/logic/sortPaoList'
 import initialStatePao from '../reducer/paoReducer'
 import { LinearGradient } from 'expo-linear-gradient';
+import { PaoThemeType } from '../styles/theming';
+import { ControlledThemeContext } from '../routes/StackNavigator';
+import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
 
 const FlashcardSwiper = ({ }) => {
+  const { controlledThemeColor } = useContext(ControlledThemeContext)
   const pao = useSelector((state: any) => state.pao)
   const { flashcardOptions } = useSelector((state: any) => state)
   const { autoPlayFlashcards: { play, duration } } = useSelector((state: any) => state.flashcardOptions)
@@ -33,16 +37,16 @@ const FlashcardSwiper = ({ }) => {
   return (
     <Container style={{ ...styles2.slide1 }}>
       <LinearGradient
-        colors={[theme.colors.linearGradientBgColors.first, theme.colors.linearGradientBgColors.second]}
+        colors={[usePrimaryControlledColor(WhereToColor.flashcardBackground), usePrimaryControlledColor(WhereToColor.flashcardBackground)]}
         end={[.75, .2]} start={[.01, .75]}>
         <Swiper
-          showsButtons={true}
+          // showsButtons={true}
           autoplay={play}
           autoplayTimeout={duration} //~ make this a setting
-          showsPagination={true}
+          showsPagination={false}
           loop={true}
-        // loadMinimal={true}
-        // loadMinimalSize={1}
+          loadMinimal={true}
+          loadMinimalSize={20}
         >
           {flashcardOrderAssortment ? flashcardOrderAssortment.map((collection: any, index: number) => {
             return (

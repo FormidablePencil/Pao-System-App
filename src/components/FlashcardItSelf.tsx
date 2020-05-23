@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { Text, Animated, StyleSheet, Dimensions } from 'react-native'
-import { TextInput, withTheme } from 'react-native-paper'
+import { TextInput, Text, Animated, StyleSheet, Dimensions } from 'react-native'
+import { withTheme } from 'react-native-paper'
 import styled from 'styled-components';
 import { createAnimatableComponent } from 'react-native-animatable';
 // import CardStack from 'react-native-card-stack-swiper';
@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveControlledInputsToPao } from '../actions/paoAc';
 import { usePrevious } from '../hooks/usePrevious'
 import { PaoThemeType } from '../styles/theming';
+import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -32,13 +33,12 @@ export interface ControlledInputsTypes {
 
 const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
   const { flashcardOptions, flashcardOptions: { flashcardItemDisplayedFront } } = useSelector((state: any) => state)
-  const { screen, config: { editMode } } = useSelector((state: any) => state.fabProperties)
+  const { config, config: { editMode } } = useSelector((state: any) => state.fabProperties)
   const [controlledInputs, setControlledInputs] = useState<ControlledInputsTypes>({
     data: [{ number: null, name: null, value: null }]
   })
   const [frontSideCurrentlyDisplayed, setFrontSideCurrentlyDisplayed] = useState(true)
   const dispatch = useDispatch()
-
 
   let frontInterpolation: any = useRef(new Animated.Value(0)).current
   let backInterpolation: any = useRef(new Animated.Value(0)).current
@@ -119,16 +119,17 @@ const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
   const handleOnBlur = () => {
     dispatch(saveControlledInputsToPao(controlledInputs))
   }
+  
   return (
     <>
       {sides.map((sidesDocument: any) =>
         <>
           <AnimatedFlashcard
             key={sidesDocument.side}
-            style={{ opacity: sidesDocument.opacity, transform: [{ rotateY: sidesDocument.interpolation }] }}>
+            style={{ opacity: sidesDocument.opacity, transform: [{ rotateY: sidesDocument.interpolation }]}}>
             <TouchableWithoutFeedback
-              style={{ ...styles.cardDimensions, width: SCREEN_WIDTH / 1.5, height: SCREEN_HEIGHT / 1.8 }}
-              onPress={editMode && tabScreens.Flashcards === screen ? cardFliperOnPressPropDisabled : cardFliperOnPressProp}
+              style={{ ...styles.cardDimensions, width: SCREEN_WIDTH / 1.5, height: SCREEN_HEIGHT / 1.8, backgroundColor: usePrimaryControlledColor(WhereToColor.flashcardItself) }}
+              onPress={editMode ? cardFliperOnPressPropDisabled : cardFliperOnPressProp}
             >
               <>
                 {paoDisplayOrder.map((name: any, index) => {
@@ -138,17 +139,17 @@ const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
                   if (valuePair === sidesDocument.symbol) {
                     return (
                       <Wrapper key={index}>
-                        <Text style={{ color: theme.colors.primary }}>{key}</Text>
+                        <Text style={{ color: theme.colors.primary, width: '100%' }}>{key}</Text>
                         <TextInputWrapper>
                           <TextInput
                             style={styles.textInput}
-                            disabled={editMode && tabScreens.Flashcards === screen ? false : true}
+                            editable={editMode ? true : false}
                             placeholder={'blank'}
                             value={collection[key] ? `${collection[key]}` : null}
                             // onChangeText={(value) => onChangeHandler({ number, name, value })}
                             onBlur={() => handleOnBlur()}
                           />
-                          {editMode &&
+                          {!editMode &&
                             <MaterialCommunityIcons size={15} style={{ borderBottomColor: theme.colors.primary, position: 'absolute', right: -6, top: -3 }} name='pencil' color='lightgrey' />
                           }
                         </TextInputWrapper>
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center', alignItems: "center", borderRadius: 10, backgroundColor: 'white'
   },
   textInput: {
-    height: 25, fontSize: 20, backgroundColor: 'transparent', alignSelf: 'flex-end'
+    height: 40, fontSize: 30, backgroundColor: 'transparent'
   }
 
 })

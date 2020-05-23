@@ -8,7 +8,7 @@ import OptionsModal from '../components/OptionsModal';
 import FabActionBtn from '../components/FabActionBtn';
 import { enumFabAction } from '../constants/fabConstants';
 import { tabScreens } from '../constants/constants';
-import { TabNavContext } from '../routes/StackNavigator';
+import { TabNavContext, ControlledThemeContext } from '../routes/StackNavigator';
 
 export const FlashcardsScreen = () => {
   const { showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)
@@ -33,6 +33,7 @@ export const FlashcardsScreen = () => {
         </View>
       </View>
       <FabActionBtn
+        currentScreen={tabScreens.Flashcards}
         editModeTrue={editModeTrue}
         setEditModeTrue={setEditModeTrue}
         setModalOpen={setModalOpen}

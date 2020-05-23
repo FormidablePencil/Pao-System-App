@@ -53,7 +53,7 @@ const ListModeTable = ({
                     editable={pagination}
                     // onBlur={() => saveControlledInputToReduxPaoList()}
                     placeholder={name}
-                    placeholderTextColor={'grey'}
+                    placeholdertextControlledColor={'grey'}
                     style={{ backgroundColor: 'transparent', alignSelf: 'center', height: '100%', color: DefaultTheme.colors.primary }}
                   value={textInputValue}
                   // onChangeText={text => onChangeTextHandler({ text, number: paoList[index].number, name })}

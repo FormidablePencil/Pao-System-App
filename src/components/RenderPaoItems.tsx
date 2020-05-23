@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
-import Pagination from './Pagination'
+import Pagination, { paginateDirection } from './Pagination'
 import { ScrollView } from 'react-native-gesture-handler'
 import PaginationModeTable from './PaginationModeTable'
 import { mergePaoArrays } from './logic/sortPaoList'
 
 const RenderPaoItems = ({ editModeTrue }) => {
-  enum paginateDirection { previous, next }
   const fabProps = useSelector((state: any) => state.fabProperties)
   const pagination = fabProps.config.pagination
 
@@ -23,6 +22,15 @@ const RenderPaoItems = ({ editModeTrue }) => {
   const [currentRenderItemsRange, setCurrentRenderItemsRange] = useState(0) //@
   const paoList: any = useSelector((state: any) => state.pao)  //@
   const [flatlistItems, setFlatlistItems] = useState(arr) //@ !!!
+
+  const [currentlyFocusedTextInput, setCurrentlyFocusedTextInput] = useState({ index: null, name: null })
+  const prevTextInput = useRef(null)
+  const nextTextInput = useRef(null)
+
+  const navigateTextInputs = (direction) => {
+    if (direction === paginateDirection.next) nextTextInput.current.focus()
+    else if (direction === paginateDirection.previous) prevTextInput.current.focus();
+  }
 
   useEffect(() => {
     const newFlatListItem = mergePaoArrays(paoList, flatlistItems)
@@ -40,9 +48,7 @@ const RenderPaoItems = ({ editModeTrue }) => {
   }, [currentRenderItemsRange, flatlistItems]) //pagination option  //@ !!!
 
 
-  const bgColorByIndex = (index: number) => {
-    if (index % 2 == 1) return '#F2F9FF'; else return '#DAEEFF' //~ colors
-  }
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -60,15 +66,19 @@ const RenderPaoItems = ({ editModeTrue }) => {
         style={{ flex: 1, height: "100%" }}
       >
         <PaginationModeTable
+          prevTextInput={prevTextInput}
+          nextTextInput={nextTextInput}
+          currentlyFocusedTextInput={currentlyFocusedTextInput}
+          setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
           editModeTrue={editModeTrue}
           tenPaoItemsArr={tenPaoItemsArr}
           controlledInput={controlledInput}
           setControlledInput={setControlledInput}
-          bgColorByIndex={bgColorByIndex}
           heightOfScrollView={heightOfScrollView}
         />
       </ScrollView>
       <Pagination
+        navigateTextInputs={navigateTextInputs}
         currentRenderItemsRange={currentRenderItemsRange}
         setCurrentRenderItemsRange={setCurrentRenderItemsRange}
       />

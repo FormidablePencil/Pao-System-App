@@ -14,13 +14,17 @@ import { capitalizeFirstCharFunc } from './logic/logic';
 import * as Animatable from 'react-native-animatable';
 
 
-const OptionsModal = ({ setModalOpen, modalOpen, setFlashcardSettings, flashcardSettings, setLoading, loading, currentScreen }) => {
+const OptionsModal = ({
+  sliderValueautoPlayFlashcardsDuration, setSliderValueautoPlayFlashcardsDuration,
+  setModalOpen, modalOpen,
+  setFlashcardSettings, flashcardSettings,
+  setLoading, loading,
+  currentScreen }) => {
   const { flashcardItemDisplayedFront, autoPlayFlashcards } = useSelector((state: any) => state.flashcardOptions)
   const theme = useTheme()
   const [fontSize, setFontSize] = useState<number>() //to theme provider
   const dispatch = useDispatch()
-  const [sliderValueautoPlayFlashcardsDuration, setSliderValueautoPlayFlashcardsDuration] = useState()
-  
+
   //~ text size, show pao hits, autoPlayFlashcards and it's timeout duration, ascending, descending and /* random option
 
   const switchSelectorsInfo: any = [
@@ -43,7 +47,6 @@ const OptionsModal = ({ setModalOpen, modalOpen, setFlashcardSettings, flashcard
     switch
   }
 
-  console.log(flashcardSettings);
   const onPressHandler = async (action: any, payload?: any) => {
     switch (action) {
       case onPress.setOrder:
@@ -152,7 +155,7 @@ const OptionsModal = ({ setModalOpen, modalOpen, setFlashcardSettings, flashcard
                         // style={{ width: "100%", height: 10 }}
                         initial={toggle ? 0 : 1}
                         onPress={whatSide => onPressHandler(onPress.switch, { name: Object.values(collection)[0], whatSide })}
-                        textColor={theme.colors.primary} //'#7a44cf'
+                        textControlledColor={theme.colors.primary} //'#7a44cf'
                         // selectedColor={'black'}
                         buttonColor={theme.colors.primary}
                         borderColor={'#268776'}

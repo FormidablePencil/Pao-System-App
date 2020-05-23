@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, Text } from 'react-native-tailwind'
 import Svg, { Circle, Rect, Polygon, Defs, RadialGradient, Stop } from 'react-native-svg';
 import { Constants } from 'expo';
 import { useTheme } from 'react-native-paper';
+import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
+import { ControlledThemeContext } from '../routes/StackNavigator';
 
 const BackgroundSvg = () => {
   const theme = useTheme()
-  
+  const { controlledThemeColor } = useContext(ControlledThemeContext)
+
   return (
     <View className="absolute w-full h-full">
       <Svg height="1000" width="1000">
@@ -21,8 +24,12 @@ const BackgroundSvg = () => {
             fy="75"
             gradientUnits="userSpaceOnUse"
           >
-            <Stop offset="0" stopColor={theme.colors.linearGradientBgColors.first} stopOpacity="1" />
-            <Stop offset="1" stopColor={theme.colors.linearGradientBgColors.second} stopOpacity="1" />
+            <Stop offset="0" stopColor={
+              usePrimaryControlledColor(WhereToColor.profileBottomHalf2)
+            } stopOpacity="1" />
+            <Stop offset="1" stopColor={
+              usePrimaryControlledColor(WhereToColor.profileBottomHalf1)
+            } stopOpacity="1" />
           </RadialGradient>
         </Defs>
         <Polygon

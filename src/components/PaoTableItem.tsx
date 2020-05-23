@@ -26,7 +26,7 @@ const PaoTableItem = ({
         editable={paotableEditMode}
         onBlur={() => saveControlledInputToReduxPaoList()}
         placeholder={name}
-        placeholderTextColor={'#7BF8FF'}
+        placeholdertextControlledColor={'#7BF8FF'}
         style={{ backgroundColor: 'transparent', alignSelf: 'center', height: '100%', color: DefaultTheme.colors.primary }}
         value={textInputValue}
         onChangeText={text => onChangeTextHandler({ text, number: tenPaoItemsArr[index].number, name })}

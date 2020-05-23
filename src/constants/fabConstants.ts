@@ -1,3 +1,4 @@
+import {PaoTheme} from '../styles/theming'
 
 export const fabProperties = {
   mainBtn: {
@@ -10,6 +11,9 @@ export const fabProperties = {
     edit: {
       icon: { pencil: 'square-edit-outline' }
     },
+    flashcardChangingSettings: {
+      icon: { settings: 'content-save' }
+    }
   },
 
   settingOptions: {
@@ -101,7 +105,8 @@ export enum enumFabAction {
 export enum fabModeOptions {
   standby,
   menuOpen,
-  editing
+  editing,
+  flashcardChangingSettings
 }
 
 
@@ -117,6 +122,7 @@ export enum fabActionOptions {
 
 export const fabOpt = {
   standby: { mode: fabModeOptions.standby, icon: fabProperties.mainBtn.menu.icon.menu, color: '#768AED' },
-  menuOpen: { mode: fabModeOptions.menuOpen, icon: fabProperties.mainBtn.menuOpen.icon.cards, color: null },
-  editMode: { mode: fabModeOptions.editing, icon: fabProperties.mainBtn.edit.icon.pencil, color: fabProperties.editMode.color }
+  menuOpen: { mode: fabModeOptions.menuOpen, icon: fabProperties.mainBtn.menuOpen.icon.cards, color: PaoTheme.colors.primary },
+  editMode: { mode: fabModeOptions.editing, icon: fabProperties.mainBtn.edit.icon.pencil, color: fabProperties.editMode.color },
+  flashcardChangingSettings: { mode: fabModeOptions.menuOpen, icon: fabProperties.mainBtn.flashcardChangingSettings.icon.settings, color: fabProperties.editMode.color }
 }

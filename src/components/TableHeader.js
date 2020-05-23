@@ -4,13 +4,14 @@ import { Image } from 'react-native'
 import playingCards from './../assets/playing-cards-png-11-original.png'
 import { Row, FirstItemInRowImage, ItemInRow, StyledTextInRowItem } from '../styles/paoTableStyles'
 import { useTheme } from 'react-native-paper'
+import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
 
 const TableHeader = () => {
   const theme = useTheme()
   return (
     <LinearGradient
       start={[.8, 0.8]}
-      colors={[theme.colors.linearGradientBgColors.first, theme.colors.linearGradientBgColors.second]}
+      colors={[usePrimaryControlledColor(WhereToColor.tableHeader), usePrimaryControlledColor(WhereToColor.tableHeader2)]}
       style={{ height: 60 }}>
       <Row>
         <FirstItemInRowImage>

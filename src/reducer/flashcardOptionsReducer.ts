@@ -37,7 +37,7 @@ export default (state = initialState, { type, payload }) => {
   switch (type) {
 
     case UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE:
-      return { ...state, flashcardItemDisplayedFront: payload }
+      return payload
 
     case SET_AUTO_PLAY_DURATION:
       return {

@@ -22,20 +22,20 @@ export const PaoTheme: PaoThemeType = {
   roundness: 15,
   colors: {
     ...DefaultTheme.colors,
-    text: '#1271F5',
-    primary: '#2A9CFF',
-    accent: '#48DFFF',
+    text: 'rgba(18,113,245,1.0)',
+    primary: '#9979FF',
+    accent: 'rgba(72,223,255,1.0)',
     fabActionColors: {
-      0: '#99B1F8',
-      1: '#5AB2ED',
-      2: '#92C8ED',
-      3: '#8DE7ED',
-      4: '#28F2EB',
-      5: '#61FFFA',
+      0: 'rgba(153,177,248,1.0)',
+      1: 'rgba(90,178,237,1.0)',
+      2: 'rgba(146,200,237,1.0)',
+      3: 'rgba(141,231,237,1.0)',
+      4: 'rgba(40,242,235,1.0)',
+      5: 'rgba(97,255,250,1.0)',
     },
     linearGradientBgColors: {
-      first: '#4880FF',
-      second: '#9061FF',
+      first: 'rgba(72,128,255,1.0)',
+      second: 'rgba(144,97,255,1.0)',
     }
   },
   fonts: {

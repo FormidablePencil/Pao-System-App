@@ -7,7 +7,7 @@ import { tabScreens } from '../constants/constants';
 import FlashcardsScreen from '../screens/FlashcardsScreen';
 import PaotableScreen from '../screens/PaotableScreen';
 import { AntDesign } from '@expo/vector-icons';
-import { Image } from 'react-native';
+import { Image, Animated } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 import styled from 'styled-components';
 import playingCards from './../assets/playing-cards-png-11-original.png'
@@ -15,13 +15,15 @@ import playingCards from './../assets/playing-cards-png-11-original.png'
 const Stack = createStackNavigator()
 //@ts-ignore
 export const TabNavContext = createContext()
+//@ts-ignore
+export const ControlledThemeContext = createContext()
 
 const StackNavigator = () => {
   //connect all the components that previously depended on the context in here to redux instead
   const [modalOpen, setModalOpen] = useState(false)
   const [showHints, setShowHints] = useState(false)
   const [showNavigationIcons, setShowNavigationIcons] = useState(false)
-  console.log(showNavigationIcons);
+  const [controlledThemeColor, setControlledThemeColor] = useState(1)
 
   return (
     <TabNavContext.Provider value={{
@@ -29,34 +31,38 @@ const StackNavigator = () => {
       showHints, setShowHints,
       showNavigationIcons, setShowNavigationIcons
     }}>
-      <NavigationContainer>
-        {/* <StatusBar backgroundColor={theme.olors.primary} /> */}
-        <Stack.Navigator
-          initialRouteName={tabScreens.Paotable}
-          screenOptions={{}}>
-          <Stack.Screen
-            name='ProfileScreen' component={ProfileScreen} />
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name='WelcomeScreen' component={WelcomeScreen} />
-          <Stack.Screen
-            options={{
-              headerTransparent: true,
-              title: null,
-              headerLeft: props => <NavigateToPaoTable showNavigationIcons={showNavigationIcons} />,
-              headerRight: props => <NavigateToFlashcards showNavigationIcons={showNavigationIcons} />,
-            }}
-            name={tabScreens.Paotable} component={PaotableScreen} />
-          <Stack.Screen
-            options={{
-              headerTransparent: true,
-              title: null,
-              headerLeft: props => <NavigateToPaoTable showNavigationIcons={showNavigationIcons} />,
-              headerRight: props => <NavigateToFlashcards showNavigationIcons={showNavigationIcons} />,
-            }}
-            name={tabScreens.Flashcards} component={FlashcardsScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ControlledThemeContext.Provider value={{
+        controlledThemeColor, setControlledThemeColor,
+      }}>
+        <NavigationContainer>
+          {/* <StatusBar backgroundColor={theme.olors.primary} /> */}
+          <Stack.Navigator
+            initialRouteName={tabScreens.Paotable}
+            screenOptions={{}}>
+            <Stack.Screen options={{ headerShown: false }}
+              name='ProfileScreen' component={ProfileScreen} />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name='WelcomeScreen' component={WelcomeScreen} />
+            <Stack.Screen
+              options={{
+                headerTransparent: true,
+                title: null,
+                headerLeft: props => <NavigateToPaoTable showNavigationIcons={showNavigationIcons} />,
+                headerRight: props => <NavigateToFlashcards showNavigationIcons={showNavigationIcons} />,
+              }}
+              name={tabScreens.Paotable} component={PaotableScreen} />
+            <Stack.Screen
+              options={{
+                headerTransparent: true,
+                title: null,
+                headerLeft: props => <NavigateToPaoTable showNavigationIcons={showNavigationIcons} />,
+                headerRight: props => <NavigateToFlashcards showNavigationIcons={showNavigationIcons} />,
+              }}
+              name={tabScreens.Flashcards} component={FlashcardsScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ControlledThemeContext.Provider>
     </TabNavContext.Provider>
   )
 }

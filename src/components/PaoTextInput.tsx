@@ -1,20 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { View, Text } from 'react-native'
+import React, { useContext } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
-import { DefaultTheme } from '@react-navigation/native'
-import { StyledText } from '../styles/global'
-import { Button, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import { PaoThemeType } from '../styles/theming'
+import { textControlledColor, placeholderControlledColor } from '../hooks/usePrimaryControlledColor'
+import { ControlledThemeContext } from '../routes/StackNavigator'
+import { LayoutAnimation } from 'react-native'
 
-interface InputTypes {
-  tenPaoItemsArr: any
-  index: any
-  name: any
-  paotableEditMode: any
-  saveControlledInputToReduxPaoList: any
-  textInputValue: any
-  onChangeTextHandler: any
-}
 const PaoTextInput = ({
   tenPaoItemsArr,
   index,
@@ -23,8 +14,14 @@ const PaoTextInput = ({
   saveControlledInputToReduxPaoList,
   textInputValue,
   onChangeTextHandler,
-}: InputTypes) => {
+  prevTextInput,
+  nextTextInput,
+  currentlyFocusedTextInput,
+  setCurrentlyFocusedTextInput
+}) => {
   const theme: PaoThemeType = useTheme()
+  const { controlledThemeColor } = useContext(ControlledThemeContext)
+  console.log(controlledThemeColor);
 
   interface Btn {
     number: number
@@ -32,18 +29,55 @@ const PaoTextInput = ({
     show: boolean
   }
 
-  const onBlurHandler = () => saveControlledInputToReduxPaoList()
+  const onBlurHandler = () => {
+    saveControlledInputToReduxPaoList()
+  }
+  const textColor = controlledThemeColor ? textControlledColor().color : theme.colors.text
+  const placeholderColor = placeholderControlledColor().color
+
+  const assignRef = (input) => {
+    switch (true) {
+      case currentlyFocusedTextInput.name === 'person':
+        /* */if (name === 'person' && currentlyFocusedTextInput.index === index) return
+        else if (name === 'action' && currentlyFocusedTextInput.index === index) nextTextInput.current = input
+        else if (name === 'object' && currentlyFocusedTextInput.index === index + 1) prevTextInput.current = input
+
+        break;
+      case currentlyFocusedTextInput.name === 'action':
+        /* */if (name === 'person' && currentlyFocusedTextInput.index === index) prevTextInput.current = input
+        else if (name === 'action' && currentlyFocusedTextInput.index === index) return
+        else if (name === 'object' && currentlyFocusedTextInput.index === index) nextTextInput.current = input
+
+        break;
+      case currentlyFocusedTextInput.name === 'object':
+        /* */if (name === 'person' && currentlyFocusedTextInput.index === index - 1) nextTextInput.current = input
+        else if (name === 'action' && currentlyFocusedTextInput.index === index) prevTextInput.current = input
+        else if (name === 'object' && currentlyFocusedTextInput.index === index) return
+
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  const onFocusHandler = () => setCurrentlyFocusedTextInput({ index, name })
 
   return (
-    <TextInput
-      editable={paotableEditMode}
-      onBlur={() => onBlurHandler()}
-      placeholder={name}
-      placeholderTextColor={'rgba(36,138,135,.4)'}
-      style={{ backgroundColor: 'transparent', alignSelf: 'center', height: '100%', color: theme.colors.text }}
-      value={textInputValue}
-      onChangeText={text => onChangeTextHandler({ text, number: tenPaoItemsArr[index].number, name })}
-    />
+    <>
+      <TextInput
+        onFocus={() => onFocusHandler()}
+        blurOnSubmit={false}
+        ref={(input) => { assignRef(input) }}
+        editable={paotableEditMode}
+        onBlur={() => onBlurHandler()}
+        placeholder={name}
+        placeholderTextColor={placeholderColor}
+        style={{ backgroundColor: 'transparent', alignSelf: 'center', height: '100%', color: textColor }}
+        value={textInputValue}
+        onChangeText={text => onChangeTextHandler({ text, number: tenPaoItemsArr[index].number, name })}
+      />
+    </>
   )
 }
 
