@@ -16,6 +16,7 @@ export const PaotableScreen = ({ navigation }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [editModeTrue, setEditModeTrue] = useState(false)
   const [keyboardPresent, setKeyboardPresent] = useState(false)
+  const [goToUnfilledTrigger, setGoToUnfilledTrigger] = useState(false)
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => {
@@ -34,6 +35,7 @@ export const PaotableScreen = ({ navigation }) => {
   })
 
   const bgColor = controlledThemeColor > .5 ? 'black' : 'white'
+
   return (
     <PaoTableScreenContext.Provider value={{ keyboardPresent, editModeTrue }}>
       <View style={{ backgroundColor: bgColor, flex: 1 }}>
@@ -41,9 +43,12 @@ export const PaotableScreen = ({ navigation }) => {
           <TableHeader />
         }
         <RenderPaoItems
+          goToUnfilledTrigger={goToUnfilledTrigger}
+          setGoToUnfilledTrigger={setGoToUnfilledTrigger}
           editModeTrue={editModeTrue}
         />
         <FabActionBtn
+          setGoToUnfilledTrigger={setGoToUnfilledTrigger}
           currentScreen={tabScreens.Paotable}
           editModeTrue={editModeTrue}
           setEditModeTrue={setEditModeTrue}

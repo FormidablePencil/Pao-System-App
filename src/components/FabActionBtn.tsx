@@ -31,7 +31,7 @@ interface CurrentFabPropsInterface {
   fabActions: any
 }
 
-const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue, setEditModeTrue }) => {
+const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue, setEditModeTrue, setGoToUnfilledTrigger }) => {
   const { showHints, setShowHints, showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)
   const navigation = useNavigation()
   const dispatch = useDispatch()
@@ -39,60 +39,11 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
   const actionBtnsFadeAnim = useRef(new Animated.Value(1)).current
   const [paoDocumentsFilled, setPaoDocumentsFilled] = useState(null)
 
-
-
   useCheckAmountOfPaoFilled({ setPaoDocumentsFilled })
 
-  const onPressHintToggleHintMsgs = () => {
-    setShowHints(prev => !prev)
-    if (showHints) {
-      // Animated.timing(actionBtnsFadeAnim, { //~ this needs to be placed in the souce code of react-native-paper
-      //   toValue: 0,
-      //   duration: 2000
-      // }).start()
-    } else {
-      actionBtnsFadeAnim.setValue(0)
-      LayoutAnimation.configureNext({
-        duration: 200,
-        create: {
-          springDamping: 200,
-          type: LayoutAnimation.Types.spring,
-          property: LayoutAnimation.Properties.scaleXY,
-        },
-      })
-    }
-  }
-
   const fabActions = {
-    paoTableFabActions: [
-      // {
-      //   style: { backgroundColor: theme.colors.fabActionColors[3] },
-      //   icon: fabProperties.goToFlashcards.icon.card,
-      //   label: showHints ? fabProperties.goToFlashcards.mesg : null,
-      //   onPress: () => {
-      //     handleOnPressFabActions(fabActionOptions.goToFlashcards)
-      //   }
-      // },
-    ],
-    flashcardFabActions: [
-      // {
-      //   style: { backgroundColor: theme.colors.fabActionColors[2] },
-      //   icon: fabProperties.settingOptions.icon.settings,
-      //   label: showHints ? fabProperties.settingOptions.mesg : null,
-      //   onPress: () => {
-      //     setModalOpen()
-      //     handleOnPressGeneral()
-      //   }
-      // },
-      // {
-      //   style: { backgroundColor: theme.colors.fabActionColors[3] },
-      //   icon: fabProperties.goToPaoList.icon.list,
-      //   label: showHints ? fabProperties.goToPaoList.mesg : null,
-      //   onPress: () => {
-      //     handleOnPressFabActions(fabActionOptions.goToPaoList)
-      //   }
-      // },
-    ],
+    paoTableFabActions: [],
+    flashcardFabActions: [],
     favListFabActions: [],
     sharedFabActions: [
       {
@@ -116,10 +67,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
   }
 
 
-  const [currentFabProps, setCurrentFabProps] = useState({
-    mainFab: fabOpt.standby,
-    // fabActions: 'sharedFabActions',
-  })
+  const [currentFabProps, setCurrentFabProps] = useState({ mainFab: fabOpt.standby })
 
   //~ settings for flashcard screen
   const [loading, setLoading] = useState(false)
@@ -134,15 +82,6 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     autoPlayFlashcards: { play: false, duration: 5 },
     flashcardOrder: arrangmentOpt.ascending
   })
-
-  // const prevFlashcardSettings = usePrevious(flashcardSettings)
-  // useEffect(() => {
-  // if (currentScreen === tabScreens.Flashcards && flashcardSettings !== prevFlashcardSettings) {
-  //   setCurrentFabProps({ mainFab: fabOpt.flashcardChangingSettings })
-  // }
-  // }, [flashcardSettings])
-  //~ settings for flashcard screen
-
 
   const handleOnPressGeneral = async () => {
     if (currentFabProps.mainFab.icon === fabProperties.mainBtn.flashcardChangingSettings.icon.settings) {
@@ -186,24 +125,15 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
       case fabActionOptions.editMode:
         if (currentScreen === tabScreens.Flashcards) dispatch({ type: TOGGLE_EDIT_MODE })
         setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.editMode })
-        // dispatch({ type: TOGGLE_EDIT_MODE })
         setEditModeTrue(true)
         break;
-
-      // case fabActionOptions.goToPaoList:
-      //   setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
-      //   navigation.navigate(tabScreens.Paotable)
-      //   break;
-
-      // case fabActionOptions.goToFlashcards:
-      //   setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
-      //   navigation.navigate(tabScreens.Flashcards)
-      //   break;
 
       default:
         break;
     }
   }
+
+  const onPressHandler = () => setGoToUnfilledTrigger(true)
 
   const controlledColor = usePrimaryControlledColor(WhereToColor.primaryColor, theme.colors.primary)
 
@@ -217,27 +147,24 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
           <Portal>
             {currentFabProps.mainFab.mode === fabModeOptions.menuOpen &&
               <>
-                {/* <AnimatableBtn
-                  animation='bounceIn'
-                  iteration='infinate'
-                  onPress={() => onPressHintToggleHintMsgs()}
-                  name={showHints ? 'closecircle' : 'questioncircle'} size={40} color={'#F6F823'} /> */}
-                <View style={[currentFabProps.mainFab.mode !== fabModeOptions.menuOpen && { height: '50%' }, { alignItems: "center", justifyContent: 'flex-end' }]}>
+                <View style={[currentFabProps.mainFab.mode === fabModeOptions.menuOpen && { height: '50%' }, { alignItems: "center", justifyContent: 'flex-end' }]}>
                   <Animatable.View
                     animation='bounceIn'
                     style={{ margin: 8, alignItems: 'center', }}>
                     <Text style={{ color: 'white', fontFamily: 'MontserratMed' }}>Filled: {paoDocumentsFilled}/100</Text>
-                    <TouchableRipple onPress={() => console.log('sd')} style={{ marginHorizontal: 10, paddingHorizontal: 10, backgroundColor: theme.colors.accent, borderRadius: 15, padding: 5, elevation: 10 }}>
-                      <>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          <Text style={{ color: 'black', textAlign: 'center', fontFamily: 'MontserratReg' }}>
-                            Go to unfilled</Text>
-                          <View>
-                            <AntDesign style={{ marginHorizontal: 3 }} size={10} name='arrowright' />
+                    {paoDocumentsFilled !== 100 &&
+                      <TouchableRipple onPress={() => onPressHandler()} style={{ marginHorizontal: 10, paddingHorizontal: 10, backgroundColor: theme.colors.accent, borderRadius: 15, padding: 5, elevation: 10 }}>
+                        <>
+                          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Text style={{ color: 'black', textAlign: 'center', fontFamily: 'MontserratReg' }}>
+                              Go to unfilled</Text>
+                            <View>
+                              <AntDesign style={{ marginHorizontal: 3 }} size={10} name='arrowright' />
+                            </View>
                           </View>
-                        </View>
-                      </>
-                    </TouchableRipple>
+                        </>
+                      </TouchableRipple>
+                    }
                   </Animatable.View>
                 </View>
 
@@ -251,7 +178,6 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
                     loading={loading}
                     setLoading={setLoading}
                     setModalOpen={setModalOpen}
-                  // modalOpen={modalOpen}
                   />
                 }
               </>
@@ -278,7 +204,6 @@ const AntDesignStyled = styled<any>(AntDesign)`
   position:absolute;
   right: 20px;
   top: 10px;
-  /* opacity: ${({ styledOpacity }) => styledOpacity ?? 1}; */
 `;
 const AnimatableBtn = Animatable.createAnimatableComponent(AntDesignStyled)
 

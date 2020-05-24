@@ -21,6 +21,7 @@ const PaginationModeTable = ({
   setCurrentlyFocusedTextInput,
   firstOfTableTextInput,
   lastOfTableTextInput,
+  firstUnfilledTextInput,
 }: {
   heightOfScrollView: number | undefined
   controlledInput: Control
@@ -33,8 +34,8 @@ const PaginationModeTable = ({
   setCurrentlyFocusedTextInput
   firstOfTableTextInput
   lastOfTableTextInput
+  firstUnfilledTextInput
 }) => {
-  // const { config: { editMode } } = useSelector((state: any) => state.fabProperties)
   const {
     saveControlledInputToReduxPaoList,
     onChangeTextHandler,
@@ -69,17 +70,11 @@ const PaginationModeTable = ({
             {['person', 'action', 'object'].map((name: string) => {
 
               const textInputValue = returnValueDependingOnWeatherItemsAreSame({ index, name, mode: listMode.pagination })
-              // console.log(textInputValue)
-              // let btnBgColor
-              // let textControlledColor
-              // if (textInputValue) textControlledColor = theme.colors.text
-
-              // let selected = false
-              // if (selected) btnBgColor = 'red'
 
               return (
                 <ItemInRow key={name}>
                   <PaoTextInput
+                    firstUnfilledTextInput={firstUnfilledTextInput}
                     firstOfTableTextInput={firstOfTableTextInput}
                     lastOfTableTextInput={lastOfTableTextInput}
                     currentlyFocusedTextInput={currentlyFocusedTextInput}
@@ -93,8 +88,6 @@ const PaginationModeTable = ({
                     saveControlledInputToReduxPaoList={saveControlledInputToReduxPaoList}
                     textInputValue={textInputValue}
                     onChangeTextHandler={onChangeTextHandler}
-                  // btnBgColor={btnBgColor}
-                  // textControlledColor={textControlledColor}
                   />
                 </ItemInRow>
               )

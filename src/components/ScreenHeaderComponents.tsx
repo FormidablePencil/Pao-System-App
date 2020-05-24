@@ -18,7 +18,6 @@ const NavigateToPaoTable = ({ tableReady, showNavigationIcons }) => {
 
   const onPressHandler = () => navigation.navigate(tabScreens.Paotable)
 
-  console.log(tableReady)
   return ( //spin animation!
     <>
       {tableReady && showNavigationIcons &&

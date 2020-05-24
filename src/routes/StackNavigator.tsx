@@ -12,8 +12,10 @@ import { SAVE_CONTROLLED_THEME_COLOR, RESET_CONTROLLED_THEME_COLOR } from '../ac
 const Stack = createStackNavigator()
 //@ts-ignore
 export const TabNavContext = createContext()
-//@ts-ignore
-export const ControlledThemeContext = createContext()
+
+export const ControlledThemeContext = createContext({
+  tableReady: false
+})
 
 const StackNavigator = () => {
   //connect all the components that previously depended on the context in here to redux instead

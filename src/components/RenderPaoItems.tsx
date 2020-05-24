@@ -7,7 +7,7 @@ import PaginationModeTable from './PaginationModeTable'
 import { mergePaoArrays } from './logic/sortPaoList'
 import { TabNavContext } from '../routes/StackNavigator'
 
-const RenderPaoItems = ({ editModeTrue }) => {
+const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
   const fabProps = useSelector((state: any) => state.fabProperties)
   const pagination = fabProps.config.pagination
   const { tableReady, setTableReady } = useContext(TabNavContext)
@@ -30,8 +30,8 @@ const RenderPaoItems = ({ editModeTrue }) => {
   const nextTextInput = useRef(null)
   const firstOfTableTextInput = useRef(null)
   const lastOfTableTextInput = useRef(null)
+  const [firstUnfilledTextInput, setFirstUnfilledTextInput] = useState({ number: null, name: null })
 
-  console.log(tenPaoItemsArr.filter(doc => doc.number === 99[0]));
   const navigateTextInputs = (direction) => {
     if (direction === paginateDirection.next) nextTextInput.current.focus()
     else if (direction === paginateDirection.previous) prevTextInput.current.focus()
@@ -43,10 +43,35 @@ const RenderPaoItems = ({ editModeTrue }) => {
     }
   }
 
+  const findUnfilled = () => {
+    let foundUnfilled = { number: null, name: null }
+    flatlistItems.forEach(doc => {
+      ['person', 'action', 'object'].forEach(name => {
+        if (foundUnfilled.number !== null) return
+        if (!doc[name]) foundUnfilled.number = doc.number; foundUnfilled.name = name;
+      })
+    })
+    goToUnfilled(foundUnfilled)
+  }
+
+  const goToUnfilled = async ({ number, name }) => {
+    await navigateToUnfillledTable({ number, name })
+    setFirstUnfilledTextInput({ number, name })
+  }
+
+  const navigateToUnfillledTable = ({ number, name }) => {
+    const amountOfDigits = number.toString().length
+    const firstDigitStr = number.toString()[number.toString().length - 1]
+    const firstDigitNum = parseInt(firstDigitStr)
+    if (amountOfDigits === 2) setCurrentRenderItemsRange(firstDigitNum)
+    else if (amountOfDigits === 1) setCurrentRenderItemsRange(0)
+  }
+
+
   useEffect(() => {
     const newFlatListItem = mergePaoArrays(paoList, flatlistItems)
     setFlatlistItems(newFlatListItem)
-  }, [paoList]) //pagination option  //@
+  }, [paoList])
 
   useEffect(() => {
     (() => {
@@ -56,8 +81,14 @@ const RenderPaoItems = ({ editModeTrue }) => {
       }
       setTenPaoItemsArr(tenValuesOfArr)
     })()
-  }, [currentRenderItemsRange, flatlistItems]) //pagination option  //@ !!!
+  }, [currentRenderItemsRange, flatlistItems])
 
+  useEffect(() => {
+    if (goToUnfilledTrigger) {
+      setGoToUnfilledTrigger(prev => !prev)
+      findUnfilled()
+    }
+  }, [goToUnfilledTrigger])
 
 
 
@@ -80,6 +111,7 @@ const RenderPaoItems = ({ editModeTrue }) => {
       >
         {tableReady &&
           <PaginationModeTable
+            firstUnfilledTextInput={firstUnfilledTextInput}
             firstOfTableTextInput={firstOfTableTextInput}
             lastOfTableTextInput={lastOfTableTextInput}
             prevTextInput={prevTextInput}
