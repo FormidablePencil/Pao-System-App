@@ -119,16 +119,22 @@ const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
   const handleOnBlur = () => {
     dispatch(saveControlledInputsToPao(controlledInputs))
   }
-  
+
+  const bgColor = usePrimaryControlledColor(WhereToColor.flashcardItself)
   return (
     <>
       {sides.map((sidesDocument: any) =>
         <>
           <AnimatedFlashcard
             key={sidesDocument.side}
-            style={{ opacity: sidesDocument.opacity, transform: [{ rotateY: sidesDocument.interpolation }]}}>
+            style={{ opacity: sidesDocument.opacity, transform: [{ rotateY: sidesDocument.interpolation }] }}>
             <TouchableWithoutFeedback
-              style={{ ...styles.cardDimensions, width: SCREEN_WIDTH / 1.5, height: SCREEN_HEIGHT / 1.8, backgroundColor: usePrimaryControlledColor(WhereToColor.flashcardItself) }}
+              style={{
+                ...styles.cardDimensions,
+                width: SCREEN_WIDTH / 1.5,
+                height: SCREEN_HEIGHT / 1.8,
+                backgroundColor: bgColor
+              }}
               onPress={editMode ? cardFliperOnPressPropDisabled : cardFliperOnPressProp}
             >
               <>

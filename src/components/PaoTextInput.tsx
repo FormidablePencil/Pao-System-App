@@ -3,8 +3,9 @@ import { TextInput } from 'react-native-gesture-handler'
 import { useTheme } from 'react-native-paper'
 import { PaoThemeType } from '../styles/theming'
 import { textControlledColor, placeholderControlledColor } from '../hooks/usePrimaryControlledColor'
-import { ControlledThemeContext } from '../routes/StackNavigator'
+import { TabNavContext } from '../routes/StackNavigator'
 import { LayoutAnimation } from 'react-native'
+import { useSelector } from 'react-redux'
 
 const PaoTextInput = ({
   tenPaoItemsArr,
@@ -17,11 +18,12 @@ const PaoTextInput = ({
   prevTextInput,
   nextTextInput,
   currentlyFocusedTextInput,
-  setCurrentlyFocusedTextInput
+  setCurrentlyFocusedTextInput,
+  firstOfTableTextInput,
+  lastOfTableTextInput,
 }) => {
   const theme: PaoThemeType = useTheme()
-  const { controlledThemeColor } = useContext(ControlledThemeContext)
-  console.log(controlledThemeColor);
+  const { controlledThemeColor } = useSelector((state: any) => state)
 
   interface Btn {
     number: number
@@ -32,10 +34,14 @@ const PaoTextInput = ({
   const onBlurHandler = () => {
     saveControlledInputToReduxPaoList()
   }
-  const textColor = controlledThemeColor ? textControlledColor().color : theme.colors.text
+  const controlledTextColor = textControlledColor().color
+  const textColor = controlledThemeColor ? controlledTextColor : theme.colors.text
   const placeholderColor = placeholderControlledColor().color
+  // console.log(placeholderColor);
 
   const assignRef = (input) => {
+    if (name === 'person' && index === 0) firstOfTableTextInput.current = input
+    if (name === 'object' && index === 9) lastOfTableTextInput.current = input
     switch (true) {
       case currentlyFocusedTextInput.name === 'person':
         /* */if (name === 'person' && currentlyFocusedTextInput.index === index) return

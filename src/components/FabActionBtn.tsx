@@ -135,12 +135,12 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     flashcardOrder: arrangmentOpt.ascending
   })
 
-  const prevFlashcardSettings = usePrevious(flashcardSettings)
-  useEffect(() => {
-    if (flashcardSettings !== prevFlashcardSettings) {
-      setCurrentFabProps({ mainFab: fabOpt.flashcardChangingSettings })
-    }
-  }, [flashcardSettings])
+  // const prevFlashcardSettings = usePrevious(flashcardSettings)
+  // useEffect(() => {
+  // if (currentScreen === tabScreens.Flashcards && flashcardSettings !== prevFlashcardSettings) {
+  //   setCurrentFabProps({ mainFab: fabOpt.flashcardChangingSettings })
+  // }
+  // }, [flashcardSettings])
   //~ settings for flashcard screen
 
 
@@ -205,6 +205,11 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     }
   }
 
+  const controlledColor = usePrimaryControlledColor(WhereToColor.primaryColor, theme.colors.primary)
+
+  const mainFabBackgroundColor = currentFabProps.mainFab.mode === fabModeOptions.editing ?
+    currentFabProps.mainFab.color : controlledColor
+
   return (
     <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
       <Provider>
@@ -253,7 +258,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
             }
           </Portal>
           <FAB.Group
-            fabStyle={{ backgroundColor: usePrimaryControlledColor(WhereToColor.primaryColor, theme.colors.primary) }}
+            fabStyle={{ backgroundColor: mainFabBackgroundColor }}
             visible={true}
             color='white'
             open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}

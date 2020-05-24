@@ -6,7 +6,7 @@ import { PAOTABLE_SCREEN_SETTINGS, FLASHCARDS_SCREEN_SETTINGS, TOGGLE_EDIT_MODE 
 const initialState = {
   fabVisibility: true,
   screen: null,
-  config: { editMode: null, pagination: true },
+  config: { editMode: false, pagination: true },
   fabActionsProperties: null,
   mainFabProperties: null,
   keyword: enumFabAction.paoTableFabActions
@@ -17,6 +17,7 @@ export default (state = initialState, { type, payload }) => {
 
     case TOGGLE_EDIT_MODE:
       return { ...state, config: { ...state.config, editMode: !state.config.editMode } }
+      return state
 
     // case PAOTABLE_SCREEN_SETTINGS:
     //   return ({

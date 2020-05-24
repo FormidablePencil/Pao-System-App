@@ -1,16 +1,13 @@
 import React, { useState, createContext } from 'react'
-import { NavigationContainer, useNavigation, useRoute } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import WelcomeScreen from '../screens/WelcomeScreen'
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, TransitionSpecs, CardStyleInterpolators } from '@react-navigation/stack';
 import ProfileScreen from '../screens/SettingsScreen'
 import { tabScreens } from '../constants/constants';
 import FlashcardsScreen from '../screens/FlashcardsScreen';
+import NavigateToPaoTable, { NavigateToFlashcards } from '../components/ScreenHeaderComponents';
 import PaotableScreen from '../screens/PaotableScreen';
-import { AntDesign } from '@expo/vector-icons';
-import { Image, Animated } from 'react-native';
-import { TouchableRipple } from 'react-native-paper';
-import styled from 'styled-components';
-import playingCards from './../assets/playing-cards-png-11-original.png'
+import { SAVE_CONTROLLED_THEME_COLOR, RESET_CONTROLLED_THEME_COLOR } from '../actions/types';
 
 const Stack = createStackNavigator()
 //@ts-ignore
@@ -22,24 +19,39 @@ const StackNavigator = () => {
   //connect all the components that previously depended on the context in here to redux instead
   const [modalOpen, setModalOpen] = useState(false)
   const [showHints, setShowHints] = useState(false)
-  const [showNavigationIcons, setShowNavigationIcons] = useState(false)
-  const [controlledThemeColor, setControlledThemeColor] = useState(1)
+  const [showNavigationIcons, setShowNavigationIcons] = useState(true)
+  const [tableReady, setTableReady] = useState(false)
+  // const [controlledThemeColor, setControlledThemeColor] = useState(null)
+  
+  const config = {
+    animation: 'spring',
+    config: {
+      stiffness: 1000,
+      damping: 500,
+      mass: 3,
+      overshootClamping: true,
+      restDisplacementThreshold: 0.01,
+      restSpeedThreshold: 0.01,
+    },
+  };
 
   return (
     <TabNavContext.Provider value={{
       modalOpen, setModalOpen,
       showHints, setShowHints,
-      showNavigationIcons, setShowNavigationIcons
+      showNavigationIcons, setShowNavigationIcons,
+      tableReady, setTableReady,
     }}>
-      <ControlledThemeContext.Provider value={{
-        controlledThemeColor, setControlledThemeColor,
-      }}>
+      {/* <ControlledThemeContext.Provider value={{
+      }}> */}
         <NavigationContainer>
           {/* <StatusBar backgroundColor={theme.olors.primary} /> */}
           <Stack.Navigator
             initialRouteName={tabScreens.Paotable}
             screenOptions={{}}>
-            <Stack.Screen options={{ headerShown: false }}
+            <Stack.Screen options={{
+              headerShown: false,
+            }}
               name='ProfileScreen' component={ProfileScreen} />
             <Stack.Screen
               options={{ headerShown: false }}
@@ -48,69 +60,25 @@ const StackNavigator = () => {
               options={{
                 headerTransparent: true,
                 title: null,
-                headerLeft: props => <NavigateToPaoTable showNavigationIcons={showNavigationIcons} />,
-                headerRight: props => <NavigateToFlashcards showNavigationIcons={showNavigationIcons} />,
+                headerLeft: props => <NavigateToPaoTable tableReady={tableReady} showNavigationIcons={showNavigationIcons} />,
+                headerRight: props => <NavigateToFlashcards tableReady={tableReady} showNavigationIcons={showNavigationIcons} />,
               }}
               name={tabScreens.Paotable} component={PaotableScreen} />
             <Stack.Screen
               options={{
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
                 headerTransparent: true,
                 title: null,
-                headerLeft: props => <NavigateToPaoTable showNavigationIcons={showNavigationIcons} />,
-                headerRight: props => <NavigateToFlashcards showNavigationIcons={showNavigationIcons} />,
+                headerLeft: props => <NavigateToPaoTable tableReady={tableReady} showNavigationIcons={showNavigationIcons} />,
+                headerRight: props => <NavigateToFlashcards tableReady={tableReady} showNavigationIcons={showNavigationIcons} />,
               }}
               name={tabScreens.Flashcards} component={FlashcardsScreen} />
           </Stack.Navigator>
         </NavigationContainer>
-      </ControlledThemeContext.Provider>
+      {/* </ControlledThemeContext.Provider> */}
     </TabNavContext.Provider>
   )
 }
-
-const NavigateToPaoTable = ({ showNavigationIcons }) => {
-  const navigation = useNavigation()
-  const route = useRoute()
-  return ( //spin animation!
-    <>
-      {showNavigationIcons &&
-        <NavigationBtn left onPress={() => navigation.navigate(tabScreens.Paotable)} style={{}}>
-          {route.name === tabScreens.Flashcards ?
-            <AntDesign size={20} style={{ marginHorizontal: 15, color: 'white', transform: [{ scaleX: -1 }] }} name='arrowright' />
-            :
-            <Image style={{ resizeMode: 'contain', height: 20, width: 20, marginHorizontal: 15, }} source={playingCards} />
-          }
-        </NavigationBtn>
-      }
-    </>
-  )
-}
-
-const NavigateToFlashcards = ({ showNavigationIcons }) => {
-  const navigation = useNavigation()
-  const route = useRoute()
-  return (
-    <>
-      {showNavigationIcons &&
-        <NavigationBtn onPress={() => navigation.navigate(tabScreens.Flashcards)} style={{}} >
-          {route.name === tabScreens.Paotable ?
-            <AntDesign size={20} style={{ marginHorizontal: 15, color: 'white' }} name='arrowright' />
-            :
-            <Image style={{ resizeMode: 'contain', height: 20, width: 20, marginHorizontal: 15, }} source={playingCards} />
-          }
-        </NavigationBtn>
-      }
-    </>
-  )
-}
-
-const NavigationBtn = styled<any>(TouchableRipple)`
-  background-color: rgba(3,19,40,.5); margin-top: 5; padding: 10px 0px;
-  border-bottom-left-radius: ${({ left }) => left ? 0 : 20}px;
-  border-top-left-radius: ${({ left }) => left ? 0 : 20}px;
-  border-top-right-radius: ${({ left }) => left ? 20 : 0}px;
-  border-bottom-right-radius: ${({ left }) => left ? 20 : 0}px;
-  align-items: center; justify-content: center;
-`;
 
 //~react-native-swipe-gestures
 //~react-native-deck-swiper

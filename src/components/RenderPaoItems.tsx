@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { View } from 'react-native'
+import React, { useState, useEffect, useRef, useContext } from 'react'
+import { View, LayoutAnimation } from 'react-native'
 import { useSelector } from 'react-redux'
 import Pagination, { paginateDirection } from './Pagination'
 import { ScrollView } from 'react-native-gesture-handler'
 import PaginationModeTable from './PaginationModeTable'
 import { mergePaoArrays } from './logic/sortPaoList'
+import { TabNavContext } from '../routes/StackNavigator'
 
 const RenderPaoItems = ({ editModeTrue }) => {
   const fabProps = useSelector((state: any) => state.fabProperties)
   const pagination = fabProps.config.pagination
+  const { tableReady, setTableReady } = useContext(TabNavContext)
 
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }
@@ -26,10 +28,19 @@ const RenderPaoItems = ({ editModeTrue }) => {
   const [currentlyFocusedTextInput, setCurrentlyFocusedTextInput] = useState({ index: null, name: null })
   const prevTextInput = useRef(null)
   const nextTextInput = useRef(null)
+  const firstOfTableTextInput = useRef(null)
+  const lastOfTableTextInput = useRef(null)
 
+  console.log(tenPaoItemsArr.filter(doc => doc.number === 99[0]));
   const navigateTextInputs = (direction) => {
     if (direction === paginateDirection.next) nextTextInput.current.focus()
-    else if (direction === paginateDirection.previous) prevTextInput.current.focus();
+    else if (direction === paginateDirection.previous) prevTextInput.current.focus()
+    else if (direction === paginateDirection.lastOfTable) {
+      if (!tenPaoItemsArr.filter(doc => doc.number === 0)[0]) lastOfTableTextInput.current.focus()
+    }
+    else if (direction === paginateDirection.firstOfTable) {
+      if (!tenPaoItemsArr.filter(doc => doc.number === 99)[0]) firstOfTableTextInput.current.focus()
+    }
   }
 
   useEffect(() => {
@@ -60,24 +71,31 @@ const RenderPaoItems = ({ editModeTrue }) => {
           const { height } = event.nativeEvent.layout
           if (!heightOfScrollView) {
             setheightOfScrollView(height / 10)
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+            setTableReady(true)
           }
         }}
         ref={flatListRef}
         style={{ flex: 1, height: "100%" }}
       >
-        <PaginationModeTable
-          prevTextInput={prevTextInput}
-          nextTextInput={nextTextInput}
-          currentlyFocusedTextInput={currentlyFocusedTextInput}
-          setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
-          editModeTrue={editModeTrue}
-          tenPaoItemsArr={tenPaoItemsArr}
-          controlledInput={controlledInput}
-          setControlledInput={setControlledInput}
-          heightOfScrollView={heightOfScrollView}
-        />
+        {tableReady &&
+          <PaginationModeTable
+            firstOfTableTextInput={firstOfTableTextInput}
+            lastOfTableTextInput={lastOfTableTextInput}
+            prevTextInput={prevTextInput}
+            nextTextInput={nextTextInput}
+            currentlyFocusedTextInput={currentlyFocusedTextInput}
+            setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
+            editModeTrue={editModeTrue}
+            tenPaoItemsArr={tenPaoItemsArr}
+            controlledInput={controlledInput}
+            setControlledInput={setControlledInput}
+            heightOfScrollView={heightOfScrollView}
+          />
+        }
       </ScrollView>
       <Pagination
+        currentlyFocusedTextInput={currentlyFocusedTextInput}
         navigateTextInputs={navigateTextInputs}
         currentRenderItemsRange={currentRenderItemsRange}
         setCurrentRenderItemsRange={setCurrentRenderItemsRange}

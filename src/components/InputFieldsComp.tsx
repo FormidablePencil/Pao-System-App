@@ -80,7 +80,9 @@ const InputFieldsComp = ({
 
   return (
     <View>
-      <Animatable.Text ref={error_text_anim} animation={errorMsg !== form_res_msg.no_err && 'bounce'} duration={1000} style={styles.errorMessage}>{errorMsg !== form_res_msg.no_err && errorMsg}</Animatable.Text>
+      <Animatable.Text
+       ref={error_text_anim}
+        animation={errorMsg !== form_res_msg.no_err && 'bounce'} duration={1000} style={styles.errorMessage}>{errorMsg !== form_res_msg.no_err && errorMsg}</Animatable.Text>
 
       <StyledTextInput
         multiline={false}

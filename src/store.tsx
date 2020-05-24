@@ -7,6 +7,7 @@ import favListReducer from './reducer/favListReducer'
 import flashcardOptionsReducer from './reducer/flashcardOptionsReducer'
 import fabReducer from './reducer/fabReducer'
 import paoListApprovedByServerReducer from './routes/paoListApprovedByServerReducer'
+import controlledThemeColorReducer from './reducer/controlledThemeColorReducer'
 
 const rootReducer = combineReducers({
   pao: paoReducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   favList: favListReducer,
   flashcardOptions: flashcardOptionsReducer,
   fabProperties: fabReducer,
-  paoListApprovedByServer: paoListApprovedByServerReducer
+  paoListApprovedByServer: paoListApprovedByServerReducer,
+  controlledThemeColor: controlledThemeColorReducer,
 })
 
 const initialState = {}

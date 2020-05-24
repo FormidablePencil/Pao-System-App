@@ -19,6 +19,8 @@ const PaginationModeTable = ({
   nextTextInput,
   currentlyFocusedTextInput,
   setCurrentlyFocusedTextInput,
+  firstOfTableTextInput,
+  lastOfTableTextInput,
 }: {
   heightOfScrollView: number | undefined
   controlledInput: Control
@@ -29,6 +31,8 @@ const PaginationModeTable = ({
   nextTextInput
   currentlyFocusedTextInput
   setCurrentlyFocusedTextInput
+  firstOfTableTextInput
+  lastOfTableTextInput
 }) => {
   // const { config: { editMode } } = useSelector((state: any) => state.fabProperties)
   const {
@@ -52,14 +56,15 @@ const PaginationModeTable = ({
 
         const paoNumText = distinguishingTextColorFromRestOfText().color ?? theme.colors.text
 
+        const paoNumbers = tenPaoItemsArr[index].number >= 0 && tenPaoItemsArr[index].number <= 9 ?
+          `0${tenPaoItemsArr[index].number}` : tenPaoItemsArr[index].number
+
         return (
           <Row
             key={index}
             style={{ backgroundColor: bgColor, height: heightOfScrollView }}>
-            <FirstItemInRow
-              color={paoNumText}
-            >
-              {tenPaoItemsArr[index].number}
+            <FirstItemInRow color={paoNumText}>
+              {paoNumbers}
             </FirstItemInRow>
             {['person', 'action', 'object'].map((name: string) => {
 
@@ -75,6 +80,8 @@ const PaginationModeTable = ({
               return (
                 <ItemInRow key={name}>
                   <PaoTextInput
+                    firstOfTableTextInput={firstOfTableTextInput}
+                    lastOfTableTextInput={lastOfTableTextInput}
                     currentlyFocusedTextInput={currentlyFocusedTextInput}
                     setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
                     prevTextInput={prevTextInput}

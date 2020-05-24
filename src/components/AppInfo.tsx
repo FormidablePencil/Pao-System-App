@@ -6,12 +6,14 @@ import useHandleSystemMesgAuth from '../hooks/useHandleSystemMesgAuth'
 import { LayoutAnimation, Animated, Slider, View, Text } from 'react-native'
 import styled from 'styled-components'
 import { PaoThemeType } from '../styles/theming'
-import { ControlledThemeContext } from '../routes/StackNavigator'
+import { TabNavContext } from '../routes/StackNavigator'
 import { textControlledColor } from '../hooks/usePrimaryControlledColor';
+import { SAVE_CONTROLLED_THEME_COLOR } from '../actions/types'
 
 
 const AppInfo = ({ navigation }: any) => {
-  const { controlledThemeColor, setControlledThemeColor } = useContext(ControlledThemeContext)
+  // const { controlledThemeColor, setControlledThemeColor } = useContext(TabNavContext)
+  const { controlledThemeColor } = useSelector((state: any) => state)
   const dispatch = useDispatch()
   const theme: PaoThemeType = useTheme()
   const { refreshToken } = useSelector((state: any) => state.auth)
@@ -34,11 +36,14 @@ const AppInfo = ({ navigation }: any) => {
     dispatch(signOut({ refreshToken }))
   }
 
-  const sliderOnValueChangeHandler = (value) => setControlledThemeColor(value)
+  // const sliderOnValueChangeHandler = (value) => setControlledThemeColor(value)
+  const sliderOnValueChangeHandler = (value) => dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: value })
+
   // console.log(controlledThemeColor);
   const sliderOnResponderEndHandler = () => setThemeControllerValue(controlledThemeColor => !controlledThemeColor)
   const switchOnValueChangeHander = () => {
-    setControlledThemeColor(prev => prev === null ? 155 : null)
+    if (controlledThemeColor) dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: 155 })
+    // setControlledThemeColor(prev => prev === null ? 155 : null)
   }
 
   return (

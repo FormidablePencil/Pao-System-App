@@ -59,7 +59,9 @@ const WelcomeScreen = ({ navigation, theme }: WelcomeScreenTypes) => {
 
       <StyledLinearGradient colors={['rgba(76,0,157,.25)', 'rgba(255,0,0,.3)']} end={[1, 1]} start={[.1, .8]}>
         <HeaderView >
-          <AnimatedHeaderText ref={headerTextRef} font={theme.fonts.largeHeader.fontFamily}
+          <AnimatedHeaderText
+           ref={headerTextRef}
+            font={theme.fonts.largeHeader.fontFamily}
             style={{ textShadowRadius: 10, textShadowOffset: { width: -1, height: 1 }, textShadowColor: 'rgba(0, 0, 0, 0.75)', }}
           >Pao System
             </AnimatedHeaderText>

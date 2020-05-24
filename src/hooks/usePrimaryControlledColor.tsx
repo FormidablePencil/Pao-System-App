@@ -1,20 +1,21 @@
 import { useContext } from "react"
 import { ControlledThemeContext } from "../routes/StackNavigator"
 import { PaoTheme } from "../styles/theming"
+import { useSelector } from "react-redux"
 
 export const textControlledColor = () => textColorFormula(210, 30)
-export const textControlledColorPagination = () => textColorFormula(180, 180)
+export const textControlledColorPagination = () => textColorFormula(180, 180).color ?? { color: 'rgba(255,255,255,.4)' }
 
 export const placeholderControlledColor = () => textColorFormula(220, 30)
 export const distinguishingTextColorFromRestOfText = () => textColorFormula(255, 30)
 
 const textColorFormula = (firstNum: number, secondNum: number) => {
-  const { controlledThemeColor } = useContext(ControlledThemeContext)
+  const { controlledThemeColor } = useSelector((state: any) => state)
   if (controlledThemeColor > .5) {
     return { color: `rgba(${firstNum},${firstNum},${firstNum},1.0)` }
-  } else if (controlledThemeColor <= .5) {
+  } else if (controlledThemeColor !== null && controlledThemeColor <= .5) {
     return { color: `rgba(${secondNum},${secondNum},${secondNum},1.0)` }
-  } else return
+  } else return { color: null }
 }
 
 export enum WhereToColor {
@@ -34,10 +35,12 @@ export enum WhereToColor {
   accentColor,
   paginationBtns,
   paginationSideBtn,
+  screenHeaderBack,
+  flashcardBackground2,
 }
 const defaultRgb = (dynamicValue) => Math.floor(255 - 255 * dynamicValue)
 const usePrimaryControlledColor = (where?: WhereToColor, color?: string) => {
-  const { controlledThemeColor } = useContext(ControlledThemeContext)
+  const controlledThemeColor = useSelector((state: any) => state.controlledThemeColor)
 
   let rgb
   let opacity = 1
@@ -67,6 +70,7 @@ const usePrimaryControlledColor = (where?: WhereToColor, color?: string) => {
       break
 
 
+    case WhereToColor.flashcardBackground2:
     case WhereToColor.pagination2:
     case WhereToColor.tableHeader2:
     case WhereToColor.profileBottomHalf1:
@@ -112,27 +116,35 @@ const usePrimaryControlledColor = (where?: WhereToColor, color?: string) => {
     case WhereToColor.paginationBtns:
     case WhereToColor.accentColor:
     case WhereToColor.primaryColor:
-      rgb = primaryControllerColorFormula({
-        controlledThemeColor,
-        first: 100,
-        second: 150,
-        third: 100,
-        fourth: color,
-        _default: 255
-      })
+      if (controlledThemeColor) {
+        rgb = primaryControllerColorFormula({
+          controlledThemeColor,
+          first: 150,
+          second: 150,
+          third: 100,
+          fourth: color,
+          _default: 255
+        })
+      } else return color
       // opacity = .8
       break;
 
+    case WhereToColor.screenHeaderBack:
     case WhereToColor.paginationSideBtn:
-      rgb = primaryControllerColorFormula({
-        controlledThemeColor,
-        first: 100,
-        second: 150,
-        third: 100,
-        fourth: color,
-        _default: 255
-      })
-      opacity = .5
+      if (controlledThemeColor) {
+        rgb = primaryControllerColorFormula({
+          controlledThemeColor,
+          first: 150,
+          second: 150,
+          third: 100,
+          fourth: color,
+          _default: 255
+        })
+        opacity = .5
+      } else {
+        rgb = 255
+        opacity = .13
+      }
       break
 
     default:

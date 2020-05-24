@@ -7,7 +7,7 @@ import profileImg from '../assets/mycat.jpg'
 import AppSettings from '../components/AppSettings'
 import AppInfo from '../components/AppInfo'
 import { IconButton, Appbar } from 'react-native-paper'
-import { ControlledThemeContext } from '../routes/StackNavigator';
+import { TabNavContext } from '../routes/StackNavigator';
 import usePrimaryControlledColor, { WhereToColor, textControlledColor } from '../hooks/usePrimaryControlledColor';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -17,7 +17,7 @@ import { useSelector } from 'react-redux';
 //~ I have to learn svg to get that border slanted effect on settings screen
 
 const ProfileScreen = ({ navigation }) => {
-  const { controlledThemeColor } = useContext(ControlledThemeContext)
+  const { controlledThemeColor } = useSelector((state: any) => state)
   const { username } = useSelector((state: any) => state.auth)
 
   return (

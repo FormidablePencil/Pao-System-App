@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import styled from 'styled-components';
 import { Button, DefaultTheme, IconButton, useTheme, Text } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -6,26 +6,26 @@ import { PaoThemeType } from '../styles/theming';
 import { Animated } from 'react-native';
 import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText, textControlledColor, textControlledColorPagination } from '../hooks/usePrimaryControlledColor';
 import { PaoTableScreenContext } from '../screens/PaotableScreen'
+import { useSelector } from 'react-redux';
 
 interface PaginationType {
   currentRenderItemsRange
   setCurrentRenderItemsRange
   navigateTextInputs
+  currentlyFocusedTextInput
 }
 export enum paginateDirection {
   previous,
-  next
+  next,
+  firstOfTable, // had to add these variables that don't make sematical/contextual sense
+  lastOfTable,
 }
 
-const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange, navigateTextInputs }: PaginationType) => {
-  const { keyboardPresent, animateWhenKeyboard } = useContext(PaoTableScreenContext)
+const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange, navigateTextInputs, currentlyFocusedTextInput }: PaginationType) => {
+  const { keyboardPresent, editModeTrue } = useContext(PaoTableScreenContext)
   const theme: PaoThemeType = useTheme()
-  
-  // const interpolatePaginBtnColor = animateWhenKeyboard.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: ['rgba(153,121,255,1.0)', 'rgba(255,247,151,1.0)']
-  // })
-  
+
+
   const paginateTo = (num: number) => {
     const newNum = num * 10
     setCurrentRenderItemsRange(newNum)
@@ -33,7 +33,7 @@ const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange, navig
 
   const renderItemsToCurrentPage = (selected: number) => {
     if (selected === paginateDirection.next) {
-      setCurrentRenderItemsRange((prevState: any) => prevState + 10)
+      setCurrentRenderItemsRange((prevState: any) => prevState < 89 ? prevState + 10 : prevState)
     } else if (selected === paginateDirection.previous) {
       if (currentRenderItemsRange <= 0) return
       setCurrentRenderItemsRange((prevState: any) => prevState - 10)
@@ -41,16 +41,33 @@ const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange, navig
   } //table pagination option
 
   const paginationBtnOnPressHandler = (direction) => {
+    let atTheBeginningOrEndOfTable = false
+    if (currentlyFocusedTextInput.index === 0 &&
+      currentlyFocusedTextInput.name === 'person' &&
+      direction === paginateDirection.previous ||
+      currentlyFocusedTextInput.index === 9 &&
+      currentlyFocusedTextInput.name === 'object' &&
+      direction === paginateDirection.next
+    ) atTheBeginningOrEndOfTable = true
+    //Todo - focus in on the first/last (depending on where your at) of the table when navigated there
+    //~ idea: pass a type and handle it in paoTextInputs accordingly
     if (direction === paginateDirection.previous) {
-      if (keyboardPresent) navigateTextInputs(paginateDirection.previous)
+      if (atTheBeginningOrEndOfTable) {
+        renderItemsToCurrentPage(paginateDirection.previous)
+        navigateTextInputs(paginateDirection.lastOfTable)
+      } else if (keyboardPresent) navigateTextInputs(paginateDirection.previous)
       else renderItemsToCurrentPage(paginateDirection.previous)
     } else if (direction === paginateDirection.next) {
-      if (keyboardPresent) navigateTextInputs(paginateDirection.next)
+      if (atTheBeginningOrEndOfTable) {
+        renderItemsToCurrentPage(paginateDirection.next)
+        navigateTextInputs(paginateDirection.firstOfTable)
+      } else if (keyboardPresent) navigateTextInputs(paginateDirection.next)
       else renderItemsToCurrentPage(paginateDirection.next)
     }
   }
 
-  const paginationBtnColor = keyboardPresent ? '#9979FF' : usePrimaryControlledColor(WhereToColor.paginationSideBtn)
+  const controlledPgColor = usePrimaryControlledColor(WhereToColor.paginationSideBtn)
+  const paginationBtnColor = editModeTrue ? theme.colors.accent : controlledPgColor
 
 
   return (
@@ -70,15 +87,15 @@ const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange, navig
           mode="contained" />
         <Column>
           <Row>
-            {[0, 1, 2, 3, 4].map((num) => <PaginationBtnComponent num={num} currentRenderItemsRange={currentRenderItemsRange} paginateTo={paginateTo} theme={theme} />)}
+            {[0, 1, 2, 3, 4].map((num) => <PaginationBtnComponent key={num} num={num} currentRenderItemsRange={currentRenderItemsRange} paginateTo={paginateTo} theme={theme} />)}
           </Row>
           <Row>
-            {[5, 6, 7, 8, 9].map((num) => <PaginationBtnComponent num={num} currentRenderItemsRange={currentRenderItemsRange} paginateTo={paginateTo} theme={theme} />)}
+            {[5, 6, 7, 8, 9].map((num) => <PaginationBtnComponent key={num} num={num} currentRenderItemsRange={currentRenderItemsRange} paginateTo={paginateTo} theme={theme} />)}
           </Row>
         </Column>
         <Row style={{ justifyContent: 'space-around' }}>
-          <PaginationBtn
-            style={{ backgroundColor: usePrimaryControlledColor(WhereToColor.paginationSideBtn) }}
+          <PaginationBtnAnimated
+            style={{ backgroundColor: paginationBtnColor }}
             icon='menu-right'
             size={35}
             color='white'
@@ -110,7 +127,8 @@ const PaginationBtn = styled(IconButton)`
   elevation: 0;
   margin: 0px;
 `;
-const PaginationBtnAnimated = Animated.createAnimatedComponent(PaginationBtn)
+const PaginationBtnAnimated = Animated.createAnimatedComponent(PaginationBtn)/* this is what show that 'functions cannot be given refs.' warning */
+
 
 const Column = styled.View`
   flex-direction: column;

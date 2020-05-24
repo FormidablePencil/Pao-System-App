@@ -5,10 +5,11 @@ import { Constants } from 'expo';
 import { useTheme } from 'react-native-paper';
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
 import { ControlledThemeContext } from '../routes/StackNavigator';
+import { useSelector } from 'react-redux';
 
 const BackgroundSvg = () => {
   const theme = useTheme()
-  const { controlledThemeColor } = useContext(ControlledThemeContext)
+  const { controlledThemeColor } = useSelector(state => state)
 
   return (
     <View className="absolute w-full h-full">

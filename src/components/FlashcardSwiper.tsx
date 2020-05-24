@@ -9,11 +9,10 @@ import sortPaoList from '../components/logic/sortPaoList'
 import initialStatePao from '../reducer/paoReducer'
 import { LinearGradient } from 'expo-linear-gradient';
 import { PaoThemeType } from '../styles/theming';
-import { ControlledThemeContext } from '../routes/StackNavigator';
+import { TabNavContext } from '../routes/StackNavigator';
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
 
 const FlashcardSwiper = ({ }) => {
-  const { controlledThemeColor } = useContext(ControlledThemeContext)
   const pao = useSelector((state: any) => state.pao)
   const { flashcardOptions } = useSelector((state: any) => state)
   const { autoPlayFlashcards: { play, duration } } = useSelector((state: any) => state.flashcardOptions)
@@ -30,14 +29,14 @@ const FlashcardSwiper = ({ }) => {
     } else setFlashcardOrderAssortment(null)
   }, [flashcardOptions])
 
-  //! hook up:
-
-  // order for both screens
-
+  const bgColor = [
+    usePrimaryControlledColor(WhereToColor.flashcardBackground),
+    usePrimaryControlledColor(WhereToColor.flashcardBackground2)
+  ]
   return (
     <Container style={{ ...styles2.slide1 }}>
       <LinearGradient
-        colors={[usePrimaryControlledColor(WhereToColor.flashcardBackground), usePrimaryControlledColor(WhereToColor.flashcardBackground)]}
+        colors={bgColor}
         end={[.75, .2]} start={[.01, .75]}>
         <Swiper
           // showsButtons={true}

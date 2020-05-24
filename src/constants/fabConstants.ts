@@ -65,7 +65,7 @@ export const fabProperties = {
 
 
   editMode: {
-    // color: '#FFE542',
+    color: PaoTheme.colors.accent,
     icon: {
       pencil: 'square-edit-outline'
     },
