@@ -7,13 +7,14 @@ import styled from 'styled-components'
 import PaoTextInput from './PaoTextInput'
 import { PaoThemeType } from '../styles/theming'
 import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText } from '../hooks/usePrimaryControlledColor'
+import { ScrollView, FlatList } from 'react-native'
 
 const PaginationModeTable = ({
   bgColorByIndex,
   heightOfScrollView,
   controlledInput,
   setControlledInput,
-  tenPaoItemsArr,
+  tableData,
   editModeTrue,
   prevTextInput,
   nextTextInput,
@@ -22,11 +23,12 @@ const PaginationModeTable = ({
   firstOfTableTextInput,
   lastOfTableTextInput,
   firstUnfilledTextInput,
+  setFirstUnfilledTextInput,
 }: {
   heightOfScrollView: number | undefined
   controlledInput: Control
   setControlledInput: any
-  tenPaoItemsArr: any
+  tableData: any
   editModeTrue
   prevTextInput
   nextTextInput
@@ -34,8 +36,10 @@ const PaginationModeTable = ({
   setCurrentlyFocusedTextInput
   firstOfTableTextInput
   lastOfTableTextInput
-  firstUnfilledTextInput
+  firstUnfilledTextInput,
+  setFirstUnfilledTextInput
 }) => {
+// console.log(tableData, 'tableDatatableData');
   const {
     saveControlledInputToReduxPaoList,
     onChangeTextHandler,
@@ -43,59 +47,72 @@ const PaginationModeTable = ({
   } = useTextInputHandler({
     controlledInput,
     setControlledInput,
-    tenPaoItemsArr,
+    tableData,
   })
   const theme: PaoThemeType = useTheme()
+  const rowEvenBgColor = usePrimaryControlledColor(WhereToColor.rowEven)
+  const rowOddBgColor = usePrimaryControlledColor(WhereToColor.rowOdd)
+  const textColor = distinguishingTextColorFromRestOfText().color
 
   return (
     <>
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((index: number) => {
+      {/* <ScrollView keyboardShouldPersistTaps={'always'} style={{ height: 30 }}> */}
+      {/* {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((index: number) => { */}
+      <FlatList
+        data={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+        
+        renderItem={({ item }) => {
+          const index = item
+          const bgColor = index % 2 == 1 ? rowEvenBgColor : rowOddBgColor
 
-        const bgColor = index % 2 == 1 ?
-          usePrimaryControlledColor(WhereToColor.rowEven)
-          : usePrimaryControlledColor(WhereToColor.rowOdd)
+          const paoNumText = textColor ?? theme.colors.text
 
-        const paoNumText = distinguishingTextColorFromRestOfText().color ?? theme.colors.text
+          const paoNumbers = tableData[index].number >= 0 && tableData[index].number <= 9 ?
+            `0${tableData[index].number}` : tableData[index].number
+          return (
 
-        const paoNumbers = tenPaoItemsArr[index].number >= 0 && tenPaoItemsArr[index].number <= 9 ?
-          `0${tenPaoItemsArr[index].number}` : tenPaoItemsArr[index].number
+            <Row
+              key={item}
+              style={{ backgroundColor: bgColor, height: heightOfScrollView }}
+              >
+              <FirstItemInRow color={paoNumText}>
+                {paoNumbers}
+              </FirstItemInRow>
+              {['person', 'action', 'object'].map((name: string) => {
 
-        return (
-          <Row
-            key={index}
-            style={{ backgroundColor: bgColor, height: heightOfScrollView }}>
-            <FirstItemInRow color={paoNumText}>
-              {paoNumbers}
-            </FirstItemInRow>
-            {['person', 'action', 'object'].map((name: string) => {
+                const textInputValue = returnValueDependingOnWeatherItemsAreSame({ index, name, mode: listMode.pagination })
 
-              const textInputValue = returnValueDependingOnWeatherItemsAreSame({ index, name, mode: listMode.pagination })
-
-              return (
-                <ItemInRow key={name}>
-                  <PaoTextInput
-                    firstUnfilledTextInput={firstUnfilledTextInput}
-                    firstOfTableTextInput={firstOfTableTextInput}
-                    lastOfTableTextInput={lastOfTableTextInput}
-                    currentlyFocusedTextInput={currentlyFocusedTextInput}
-                    setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
-                    prevTextInput={prevTextInput}
-                    nextTextInput={nextTextInput}
-                    tenPaoItemsArr={tenPaoItemsArr}
-                    index={index}
-                    name={name}
-                    paotableEditMode={editModeTrue}
-                    saveControlledInputToReduxPaoList={saveControlledInputToReduxPaoList}
-                    textInputValue={textInputValue}
-                    onChangeTextHandler={onChangeTextHandler}
-                  />
-                </ItemInRow>
-              )
-            }
-            )}
-          </Row>
-        )
-      })}
+                return (
+                  <ItemInRow key={name}>
+                    <PaoTextInput
+                      setFirstUnfilledTextInput={setFirstUnfilledTextInput}
+                      firstUnfilledTextInput={firstUnfilledTextInput}
+                      firstOfTableTextInput={firstOfTableTextInput}
+                      lastOfTableTextInput={lastOfTableTextInput}
+                      currentlyFocusedTextInput={currentlyFocusedTextInput}
+                      setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
+                      prevTextInput={prevTextInput}
+                      nextTextInput={nextTextInput}
+                      tableData={tableData}
+                      index={index}
+                      name={name}
+                      paotableEditMode={editModeTrue}
+                      saveControlledInputToReduxPaoList={saveControlledInputToReduxPaoList}
+                      textInputValue={textInputValue}
+                      onChangeTextHandler={onChangeTextHandler}
+                    />
+                  </ItemInRow>
+                )
+              }
+              )}
+            </Row>
+          )
+        }}
+      />
+      {/* // } */}
+      {/* ) */}
+      {/* } */}
+      {/* </ScrollView> */}
     </>
   )
 }

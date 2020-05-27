@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { YellowBox, Platform, UIManager, StatusBar } from 'react-native';
+import { YellowBox, Platform, UIManager, StatusBar, BackHandler } from 'react-native';
 import { View, Text } from 'react-native-tailwind';
 import * as Font from 'expo-font';
 import ErrorBoundary from 'react-error-boundary';
@@ -17,8 +17,11 @@ const store = configureStore()
 
 const Index = () => {
   const [appReady, setAppReady] = useState(false)
-  YellowBox.ignoreWarnings(['Require cycle', 'Warning: "RootErrorBoundary"'])
-
+  YellowBox.ignoreWarnings([
+    'Require cycle',
+    'Warning: "RootErrorBoundary"',
+    'Warning: Function components cannot be given refs',
+  ])
 
   if (Platform.OS === 'android') {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -46,7 +49,7 @@ const Index = () => {
 
   return (
     <PaperProvider theme={PaoTheme}>
-      <StatusBar backgroundColor='#091213' />
+      <StatusBar translucent={true} backgroundColor={'transparent'}  />
       <StoreProvider store={store}>
         <ErrorBoundary>
           {appReady ?

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, LayoutAnimation } from 'react-native'
+import { View, LayoutAnimation, Text } from 'react-native'
 import { useSelector } from 'react-redux'
 import Pagination, { paginateDirection } from './Pagination'
-import { ScrollView } from 'react-native-gesture-handler'
 import PaginationModeTable from './PaginationModeTable'
 import { mergePaoArrays } from './logic/sortPaoList'
 import { TabNavContext } from '../routes/StackNavigator'
+import Swiper from 'react-native-swiper'
 
 const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
   const fabProps = useSelector((state: any) => state.fabProperties)
@@ -14,9 +14,9 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
 
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }
-  }) //~
+  })
 
-  const [tenPaoItemsArr, setTenPaoItemsArr]: any = useState(arr) //~ 
+  const [tenPaoItemsArr, setTenPaoItemsArr]: any = useState([null, null, null,])
   const [controlledInput, setControlledInput] = useState<Control>({ number: null, name: null, value: null }) //~ 
   const [heightOfScrollView, setheightOfScrollView] = useState<number>()
   const flatListRef = useRef(null)
@@ -24,6 +24,7 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
   const [currentRenderItemsRange, setCurrentRenderItemsRange] = useState(0) //@
   const paoList: any = useSelector((state: any) => state.pao)  //@
   const [flatlistItems, setFlatlistItems] = useState(arr) //@ !!!
+  const [listSortedInTens, setListSortedInTens] = useState([])
 
   const [currentlyFocusedTextInput, setCurrentlyFocusedTextInput] = useState({ index: null, name: null })
   const prevTextInput = useRef(null)
@@ -53,7 +54,6 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
     })
     goToUnfilled(foundUnfilled)
   }
-
   const goToUnfilled = async ({ number, name }) => {
     await navigateToUnfillledTable({ number, name })
     setFirstUnfilledTextInput({ number, name })
@@ -73,15 +73,23 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
     setFlatlistItems(newFlatListItem)
   }, [paoList])
 
-  useEffect(() => {
-    (() => {
-      let tenValuesOfArr: any = []
-      for (let i = currentRenderItemsRange; i < currentRenderItemsRange + 10; i++) {
-        tenValuesOfArr.push(flatlistItems[i])
-      }
-      setTenPaoItemsArr(tenValuesOfArr)
-    })()
-  }, [currentRenderItemsRange, flatlistItems])
+  // console.log(currentRenderItemsRange);
+  // useEffect(() => {
+  //   (() => {
+  //     let arrOfTables = []
+  //     const tables = [10, 20, 30]
+  //     const arr = tables.forEach((tableStart, index) => {
+  //       let tenValuesOfArr = []
+  //       let tableIndex = tables[index - 1]
+  //       if (!tableIndex) tableIndex = 0
+  //       for (let i = currentRenderItemsRange + tableIndex; i < currentRenderItemsRange + tableStart; i++) {
+  //         tenValuesOfArr.push(flatlistItems[i])
+  //       }
+  //       arrOfTables.push(tenValuesOfArr)
+  //     });
+  //     setTenPaoItemsArr(arrOfTables)
+  //   })()
+  // }, [currentRenderItemsRange, flatlistItems])
 
   useEffect(() => {
     if (goToUnfilledTrigger) {
@@ -91,10 +99,27 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
   }, [goToUnfilledTrigger])
 
 
+  const oraganizeListInTens = () => {
+    let tables = []
+    const s = [9, 19, 29, 39, 49, 59, 69, 79, 89, 99].map(endOfPaoTable => {
+      const begginingOfPaoTable = endOfPaoTable - 9
+      let table = []
+      for (let i = begginingOfPaoTable; i <= endOfPaoTable; i++) {
+        table.push(flatlistItems[i])
+      }
+      tables.push(table)
+    })
+    setListSortedInTens(tables)
+  }
+
+  useEffect(() => {
+    oraganizeListInTens()
+  }, [flatlistItems])
+  console.log(currentRenderItemsRange);
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView
+      <View
         keyboardDismissMode={'none'}
         blurOnSubmit={false}
         keyboardShouldPersistTaps={'always'}
@@ -103,36 +128,75 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
           if (!heightOfScrollView) {
             setheightOfScrollView(height / 10)
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-            setTableReady(true)
+            if (setTableReady !== null) setTableReady(true)
           }
         }}
         ref={flatListRef}
-        style={{ flex: 1, height: "100%" }}
+        style={{ flex: 1, height: "80%" }}
       >
         {tableReady &&
-          <PaginationModeTable
-            firstUnfilledTextInput={firstUnfilledTextInput}
-            firstOfTableTextInput={firstOfTableTextInput}
-            lastOfTableTextInput={lastOfTableTextInput}
-            prevTextInput={prevTextInput}
-            nextTextInput={nextTextInput}
-            currentlyFocusedTextInput={currentlyFocusedTextInput}
-            setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
-            editModeTrue={editModeTrue}
-            tenPaoItemsArr={tenPaoItemsArr}
-            controlledInput={controlledInput}
-            setControlledInput={setControlledInput}
-            heightOfScrollView={heightOfScrollView}
-          />
+          <Swiper
+            loop={true}
+            showsPagination={false}
+            onIndexChanged={(index) => setCurrentRenderItemsRange(index * 10)}
+          >
+
+            {listSortedInTens.map((tableData, index) => {
+              // console.log(tableData);
+              let arrOfTables = []
+              // const tables = [10, 20, 30]
+              // const arr = tables.forEach((tableStart, index) => {
+              //   let tenValuesOfArr = []
+              //   let tableIndex = tables[index - 1]
+              //   if (!tableIndex) tableIndex = 0
+              //   for (let i = currentRenderItemsRange + tableIndex; i < currentRenderItemsRange + tableStart; i++) {
+              //     tenValuesOfArr.push(flatlistItems[i])
+              //   }
+              //   arrOfTables.push(tenValuesOfArr)
+              // });
+              // console.log(arrOfTables[0]);
+              // console.log(tableData)
+              let currentTableOn = parseInt(currentRenderItemsRange.toString()[0]) + 1
+              if (listSortedInTens[currentTableOn] === tableData ||
+                // listSortedInTens[currentTableOn + ] === tableData ||
+                listSortedInTens[currentTableOn + 1] === tableData
+                // listSortedInTens[currentTableOn] === tableData
+              ) {
+                console.log(tableData[0].number, 'pp');
+                return (
+                  <View key={tableData}>
+                    {!editModeTrue &&
+                      <View style={{ position: "absolute", height: '100%', width: '100%', zIndex: 300 }}></View>
+                    }
+                    <PaginationModeTable
+                      setFirstUnfilledTextInput={setFirstUnfilledTextInput}
+                      firstUnfilledTextInput={firstUnfilledTextInput}
+                      firstOfTableTextInput={firstOfTableTextInput}
+                      lastOfTableTextInput={lastOfTableTextInput}
+                      prevTextInput={prevTextInput}
+                      nextTextInput={nextTextInput}
+                      currentlyFocusedTextInput={currentlyFocusedTextInput}
+                      setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
+                      editModeTrue={editModeTrue}
+                      tableData={tableData}
+                      controlledInput={controlledInput}
+                      setControlledInput={setControlledInput}
+                      heightOfScrollView={heightOfScrollView}
+                    />
+                  </View>
+                )
+              }
+            })}
+          </Swiper>
         }
-      </ScrollView>
+      </View>
       <Pagination
         currentlyFocusedTextInput={currentlyFocusedTextInput}
         navigateTextInputs={navigateTextInputs}
         currentRenderItemsRange={currentRenderItemsRange}
         setCurrentRenderItemsRange={setCurrentRenderItemsRange}
       />
-    </View>
+    </View >
   )
 }
 

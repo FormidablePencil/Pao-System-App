@@ -3,13 +3,15 @@ import { ControlledThemeContext } from "../routes/StackNavigator"
 import { PaoTheme } from "../styles/theming"
 import { useSelector } from "react-redux"
 
-export const textControlledColor = () => textColorFormula(210, 30)
-export const textControlledColorPagination = () => textColorFormula(180, 180).color ?? { color: 'rgba(255,255,255,.4)' }
 
-export const placeholderControlledColor = () => textColorFormula(220, 30)
-export const distinguishingTextColorFromRestOfText = () => textColorFormula(255, 30)
+export const textControlledColor = () => useTextColorFormula(210, 30)
+export const textControlledColorPagination = () => useTextColorFormula(180, 180).color ?? { color: 'rgba(255,255,255,.4)' }
 
-const textColorFormula = (firstNum: number, secondNum: number) => {
+export const placeholderControlledColor = () => useTextColorFormula(220, 30)
+export const distinguishingTextColorFromRestOfText = () => useTextColorFormula(255, 30)
+export const currentCardIndexTextControlledColor = () => useTextColorFormula(175, 255)
+
+const useTextColorFormula = (firstNum: number, secondNum: number) => {
   const { controlledThemeColor } = useSelector((state: any) => state)
   if (controlledThemeColor > .5) {
     return { color: `rgba(${firstNum},${firstNum},${firstNum},1.0)` }
@@ -37,6 +39,13 @@ export enum WhereToColor {
   paginationSideBtn,
   screenHeaderBack,
   flashcardBackground2,
+  fabActionEdit,
+  fabActonProfile,
+  goToUnfilledBtn,
+  flashcardBtnGoToPaoList,
+  orderBtnSelected,
+  fabActionContentBg,
+  switchBtnSelected,
 }
 const defaultRgb = (dynamicValue) => Math.floor(255 - 255 * dynamicValue)
 const usePrimaryControlledColor = (where?: WhereToColor, color?: string) => {
@@ -48,7 +57,7 @@ const usePrimaryControlledColor = (where?: WhereToColor, color?: string) => {
   switch (where) {
     case WhereToColor.flashcardItself:
       if (controlledThemeColor) rgb = Math.floor(255 - 155 * controlledThemeColor)
-      else rgb = 220
+      else rgb = 255
       break;
 
     case WhereToColor.pagination:
@@ -146,6 +155,39 @@ const usePrimaryControlledColor = (where?: WhereToColor, color?: string) => {
         opacity = .13
       }
       break
+
+    case WhereToColor.switchBtnSelected:
+    case WhereToColor.orderBtnSelected:
+    case WhereToColor.flashcardBtnGoToPaoList:
+    case WhereToColor.goToUnfilledBtn:
+    case WhereToColor.fabActionEdit:
+    case WhereToColor.fabActonProfile:
+      if (controlledThemeColor) {
+        rgb = primaryControllerColorFormula({
+          controlledThemeColor,
+          first: 150,
+          second: 150,
+          third: 100,
+          fourth: color,
+          _default: 255
+        })
+      } else return color
+      // opacity = .8
+      break;
+
+    case WhereToColor.fabActionContentBg:
+      if (controlledThemeColor) {
+        rgb = primaryControllerColorFormula({
+          controlledThemeColor,
+          first: 20,
+          second: 200,
+          third: 290,
+          fourth: color,
+          _default: 255
+        })
+        rgb = '#1A4749'
+      } else return color
+
 
     default:
       if (controlledThemeColor) rgb = defaultRgb(controlledThemeColor)

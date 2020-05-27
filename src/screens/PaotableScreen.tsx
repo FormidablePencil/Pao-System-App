@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useContext, createContext } from 'react'
+import React, { useState, useEffect, createContext } from 'react'
 import TableHeader from '../components/TableHeader'
 import RenderPaoItems from '../components/RenderPaoItems'
 import { useSelector } from 'react-redux'
 import FabActionBtn from '../components/FabActionBtn'
-import { enumFabAction } from '../constants/fabConstants'
-import OptionsModal from '../components/OptionsModal'
+import { enumFabAction, fabOpt } from '../constants/fabConstants'
 import { tabScreens } from '../constants/constants'
-import { Keyboard, View, LayoutAnimation, Animated } from 'react-native'
-import { TabNavContext } from '../routes/StackNavigator'
+import { Keyboard, View, LayoutAnimation } from 'react-native'
+import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
 
 export const PaoTableScreenContext = createContext()
 
@@ -17,6 +16,10 @@ export const PaotableScreen = ({ navigation }) => {
   const [editModeTrue, setEditModeTrue] = useState(false)
   const [keyboardPresent, setKeyboardPresent] = useState(false)
   const [goToUnfilledTrigger, setGoToUnfilledTrigger] = useState(false)
+
+  useEffect(() => {
+    if (goToUnfilledTrigger === true) setEditModeTrue(true)
+  }, [goToUnfilledTrigger])
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => {
@@ -34,7 +37,8 @@ export const PaotableScreen = ({ navigation }) => {
     }
   })
 
-  const bgColor = controlledThemeColor > .5 ? 'black' : 'white'
+  const controlledBgColor = controlledThemeColor > .5 ? 'black' : 'white'
+  const bgColor = controlledThemeColor ? controlledBgColor : usePrimaryControlledColor(WhereToColor.rowEven)
 
   return (
     <PaoTableScreenContext.Provider value={{ keyboardPresent, editModeTrue }}>

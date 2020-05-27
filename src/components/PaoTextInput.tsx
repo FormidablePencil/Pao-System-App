@@ -1,16 +1,15 @@
-import React, { useContext, useRef, useState, useEffect } from 'react'
-import { TextInput } from 'react-native-gesture-handler'
-import { useTheme } from 'react-native-paper'
+import React, { useEffect, useState } from 'react'
+import { useTheme, Text } from 'react-native-paper'
 import { PaoThemeType } from '../styles/theming'
 import { textControlledColor, placeholderControlledColor } from '../hooks/usePrimaryControlledColor'
-import { TabNavContext } from '../routes/StackNavigator'
-import { LayoutAnimation, View, Animated } from 'react-native'
+import { TextInput, ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import * as Animatable from 'react-native-animatable';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const PaoTextInput = ({
-  tenPaoItemsArr,
+  tableData,
   index,
   name,
   paotableEditMode,
@@ -23,10 +22,12 @@ const PaoTextInput = ({
   setCurrentlyFocusedTextInput,
   firstOfTableTextInput,
   lastOfTableTextInput,
-  firstUnfilledTextInput
+  firstUnfilledTextInput,
+  setFirstUnfilledTextInput,
 }) => {
   const theme: PaoThemeType = useTheme()
   const { controlledThemeColor } = useSelector((state: any) => state)
+  const [editOn, setEditOn] = useState(false)
 
   interface Btn {
     number: number
@@ -34,9 +35,6 @@ const PaoTextInput = ({
     show: boolean
   }
 
-  const onBlurHandler = () => {
-    saveControlledInputToReduxPaoList()
-  }
 
   const controlledTextColor = textControlledColor().color
   const textColor = controlledThemeColor ? controlledTextColor : theme.colors.text
@@ -53,13 +51,13 @@ const PaoTextInput = ({
 
         break;
       case currentlyFocusedTextInput.name === 'action':
-        /* */if (name === 'person' && currentlyFocusedTextInput.index === index) prevTextInput.current = input
+          /* */if (name === 'person' && currentlyFocusedTextInput.index === index) prevTextInput.current = input
         else if (name === 'action' && currentlyFocusedTextInput.index === index) return
         else if (name === 'object' && currentlyFocusedTextInput.index === index) nextTextInput.current = input
 
         break;
       case currentlyFocusedTextInput.name === 'object':
-        /* */if (name === 'person' && currentlyFocusedTextInput.index === index - 1) nextTextInput.current = input
+            /* */if (name === 'person' && currentlyFocusedTextInput.index === index - 1) nextTextInput.current = input
         else if (name === 'action' && currentlyFocusedTextInput.index === index) prevTextInput.current = input
         else if (name === 'object' && currentlyFocusedTextInput.index === index) return
 
@@ -70,34 +68,68 @@ const PaoTextInput = ({
     }
   }
 
-  const onFocusHandler = () => setCurrentlyFocusedTextInput({ index, name })
+  const onFocusHandler = () => {
+    setFirstUnfilledTextInput({ number: null, name: null })
+    setCurrentlyFocusedTextInput({ index, name })
+  }
 
-  const computed = tenPaoItemsArr.filter(doc => doc.number === firstUnfilledTextInput.number)[0] ?? { number: null }
-  const bgC = tenPaoItemsArr[index].number === computed.number
-    && firstUnfilledTextInput.name === name ? theme.colors.accent : 'transparent'
+  useEffect(() => {
+    if (!paotableEditMode) setFirstUnfilledTextInput({ number: null, name: null })
+  }, [paotableEditMode])
+
+  const onBlurHandler = () => {
+    setEditOn(false)
+    saveControlledInputToReduxPaoList()
+  }
+  const onPressHandlerTextChange = () => {
+    if (paotableEditMode) setEditOn(true)
+  }
+
+  const computed = tableData.filter(doc => doc.number === firstUnfilledTextInput.number)[0] ?? { number: null }
+  const bgColor = tableData[index].number === computed.number
+    && firstUnfilledTextInput.name === name ? theme.colors.accent : null
 
   return (
     <>
-      <TextInputContainer animation={bgC !== 'transparent' && 'bounceIn'} iterationCount={1} style={{ backgroundColor: bgC }}>
-        <TextInput
-          onFocus={() => onFocusHandler()}
-          blurOnSubmit={false}
-          ref={(input) => { assignRef(input) }}
-          editable={paotableEditMode}
-          onBlur={() => onBlurHandler()}
-          placeholder={name}
-          placeholderTextColor={placeholderColor}
-          style={{ backgroundColor: 'transparent', alignSelf: 'center', height: '100%', color: textColor }}
-          value={textInputValue}
-          onChangeText={text => onChangeTextHandler({ text, number: tenPaoItemsArr[index].number, name })}
-        />
+      <TextInputContainer animation={bgColor && 'bounceIn'} iterationCount={1} style={{ backgroundColor: bgColor }}>
+        {/* {!editOn ?
+          <TouchableWithoutFeedback onPress={() => onPressHandlerTextChange()}>
+            <PaoText>tap</PaoText>
+          </TouchableWithoutFeedback>
+          :
+          <></> */}
+          <TextInputStyled
+            selectTextOnFocus={true}
+            autoFocus={true}
+            onFocus={() => onFocusHandler()}
+            blurOnSubmit={false}
+            ref={(input) => { assignRef(input) }}
+            editable={paotableEditMode}
+            onBlur={() => onBlurHandler()}
+            placeholder={name}
+            placeholderTextColor={bgColor ? 'white' : placeholderColor}
+            textAlign='center'
+            textColor={textColor}
+            value={textInputValue}
+            onChangeText={text => onChangeTextHandler({ text, number: tableData[index].number, name })}
+          />
+         {/* } */}
       </TextInputContainer>
     </>
   )
 }
 
+const PaoText = styled(Text)`
+  textAlign: center;
+`;
 const TextInputContainer = styled<any>(Animatable.View)`
   border-radius: 10; margin: 10px 2px;
+`;
+const TextInputStyled = styled<any>(TextInput)`
+   align-self: center;
+    height: 100%;
+    color: ${({ textColor }) => textColor};
+    width: 100%;
 `;
 
 export default PaoTextInput

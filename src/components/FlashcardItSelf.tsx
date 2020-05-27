@@ -1,18 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { TextInput, Text, Animated, StyleSheet, Dimensions } from 'react-native'
-import { withTheme } from 'react-native-paper'
+import { TextInput, Text, Animated, StyleSheet, Dimensions, View } from 'react-native'
+import { withTheme, } from 'react-native-paper'
 import styled from 'styled-components';
 import { createAnimatableComponent } from 'react-native-animatable';
-// import CardStack from 'react-native-card-stack-swiper';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { tabScreens } from '../constants/constants';
 import useAnimation from '../hooks/useAnimation';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveControlledInputsToPao } from '../actions/paoAc';
-import { usePrevious } from '../hooks/usePrevious'
 import { PaoThemeType } from '../styles/theming';
-import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
+import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText } from '../hooks/usePrimaryControlledColor';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -33,7 +29,7 @@ export interface ControlledInputsTypes {
 
 const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
   const { flashcardOptions, flashcardOptions: { flashcardItemDisplayedFront } } = useSelector((state: any) => state)
-  const { config, config: { editMode } } = useSelector((state: any) => state.fabProperties)
+  const { config: { editMode } } = useSelector((state: any) => state.fabProperties)
   const [controlledInputs, setControlledInputs] = useState<ControlledInputsTypes>({
     data: [{ number: null, name: null, value: null }]
   })
@@ -90,8 +86,6 @@ const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
     setFrontSideCurrentlyDisplayed(false)
   }
 
-  const cardFliperOnPressPropDisabled = () => { }
-
   const onChangeHandler = ({ number, name, value }) => {
     const newControlledInput = { number, name, value }
     if (controlledInputs.data.filter(input => input.number === number)) {
@@ -102,113 +96,121 @@ const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
         } else {
           collection
         }
-      }
-      )
-      setControlledInputs({
-        ...controlledInputs,
-        data: modifiedData
       })
-    } else {
-      setControlledInputs({
-        ...controlledInputs, data: {
-          ...controlledInputs.data, ...{ number, name, value }
-        }
-      })
-    }
+      setControlledInputs({ ...controlledInputs, data: modifiedData })
+    } else setControlledInputs({ ...controlledInputs, data: { ...controlledInputs.data, ...{ number, name, value } } })
   }
   const handleOnBlur = () => {
     dispatch(saveControlledInputsToPao(controlledInputs))
   }
+  const formatPaoItems = (key) => {
+    if (typeof collection[key] === 'number' || typeof collection[key] === 'string') {
+      if (typeof collection[key] === 'number' && collection[key].toString().length === 1) return `0${collection[key]}`
+      else return `${collection[key]}`
+    } else return 'pao'
+  }
 
   const bgColor = usePrimaryControlledColor(WhereToColor.flashcardItself)
+  const controlledTextColor = distinguishingTextColorFromRestOfText().color
+  const textColorRenderConditionally = controlledTextColor?? '#828282'
+  const textColor = (key) => {
+    return typeof collection[key] === 'number' || typeof collection[key] === 'string' ? textColorRenderConditionally : 'rgba(51,51,51,.2)'
+  }
+  
+
   return (
     <>
       {sides.map((sidesDocument: any) =>
-        <>
-          <AnimatedFlashcard
-            key={sidesDocument.side}
-            style={{ opacity: sidesDocument.opacity, transform: [{ rotateY: sidesDocument.interpolation }] }}>
-            <TouchableWithoutFeedback
-              style={{
-                ...styles.cardDimensions,
-                width: SCREEN_WIDTH / 1.5,
-                height: SCREEN_HEIGHT / 1.8,
-                backgroundColor: bgColor
-              }}
-              onPress={editMode ? cardFliperOnPressPropDisabled : cardFliperOnPressProp}
-            >
-              <>
-                {paoDisplayOrder.map((name: any, index) => {
-                  const gotObjectsByName = flashcardItemDisplayedFront.filter(document => Object.keys(document)[0] === name)[0]
-                  const key = Object.keys(gotObjectsByName)[0]
-                  const valuePair = Object.values(gotObjectsByName)[0]
-                  if (valuePair === sidesDocument.symbol) {
-                    return (
-                      <Wrapper key={index}>
-                        <Text style={{ color: theme.colors.primary, width: '100%' }}>{key}</Text>
-                        <TextInputWrapper>
-                          <TextInput
-                            style={styles.textInput}
-                            editable={editMode ? true : false}
-                            placeholder={'blank'}
-                            value={collection[key] ? `${collection[key]}` : null}
-                            // onChangeText={(value) => onChangeHandler({ number, name, value })}
-                            onBlur={() => handleOnBlur()}
-                          />
-                          {!editMode &&
-                            <MaterialCommunityIcons size={15} style={{ borderBottomColor: theme.colors.primary, position: 'absolute', right: -6, top: -3 }} name='pencil' color='lightgrey' />
+        <AnimatedFlashcard
+          key={sidesDocument.side}
+          style={{ opacity: sidesDocument.opacity, transform: [{ rotateY: sidesDocument.interpolation }] }}
+        >
+          <TouchableWithoutFeedback
+            style={{
+              ...styles.cardDimensions,
+              width: SCREEN_WIDTH / 1.5,
+              height: SCREEN_HEIGHT / 1.8,
+              backgroundColor: bgColor
+            }}
+            onPress={() => cardFliperOnPressProp()}
+          >
+            {paoDisplayOrder.map((name: any, index) => {
+              const gotObjectsByName = flashcardItemDisplayedFront.filter(document => Object.keys(document)[0] === name)[0]
+              const key = Object.keys(gotObjectsByName)[0]
+              const valuePair = Object.values(gotObjectsByName)[0]
+
+              if (valuePair === sidesDocument.symbol) {
+                return (
+                  <Wrapper key={index}>
+                    <PaoName color={theme.colors.primary}>{key}</PaoName>
+                    {editMode ?
+                      <TextInput
+                        onFocus={() => console.log('pressed')}
+                        style={styles.textInput}
+                        placeholder={'edit'}
+                        value={collection[key] ? `${collection[key]}` : null}
+                        // onChangeText={(value) => onChangeHandler({ number, name, value })}
+                        onBlur={() => handleOnBlur()}
+                        textAlign={'center'}
+                      />
+                      :
+                      <>
+                        <View style={{ flexDirection: 'row', }}>
+                          <Text style={[styles.textInput,
+                          {
+                            alignSelf: "center",
+                            textAlign: 'center',
+                            width: 70,
+                            color: textColor(key)
                           }
-                        </TextInputWrapper>
-                      </Wrapper>
-                    )
-                  } else return null
-                })}
-                <PaoEmpty flashcardItemDisplayedFront={flashcardItemDisplayedFront} symbol={sidesDocument.symbol} />
-              </>
-            </TouchableWithoutFeedback>
-          </AnimatedFlashcard>
-        </>
+                          ]}>
+                            {formatPaoItems(key)}
+                          </Text>
+                        </View>
+                      </>
+                    }
+                  </Wrapper>
+                )
+              } else return null
+            })}
+            <PaoEmpty flashcardItemDisplayedFront={flashcardItemDisplayedFront} symbol={sidesDocument.symbol} />
+          </TouchableWithoutFeedback>
+        </AnimatedFlashcard>
       )}
     </>
   )
 }
 
 const PaoEmpty = ({ flashcardItemDisplayedFront, symbol }: any) => {
-  // if one side of the card contains no content then display "PAO"
   const arrOfTrues = flashcardItemDisplayedFront.filter(item => Object.values(item)[0] === !symbol)
   if (arrOfTrues[3]) {
     return (
-      <Text style={{ fontSize: 30 }}>Pao</Text>
+      <Text style={{ fontSize: 30, fontFamily: 'MontserratReg' }}>Pao</Text>
     )
   } else return null
 }
 
 const styles = StyleSheet.create({
-  cardDimensions: {
-    justifyContent: 'center', alignItems: "center", borderRadius: 10, backgroundColor: 'white'
-  },
-  textInput: {
-    height: 40, fontSize: 30, backgroundColor: 'transparent'
-  }
-
+  cardDimensions: { justifyContent: 'center', alignItems: "center", borderRadius: 10, backgroundColor: 'white' },
+  textInput: { height: 40, fontSize: 30, backgroundColor: 'transparent', fontFamily: 'MontserratReg', width: '100%' }
 })
 
-const TextInputWrapper = styled.View`
+const PaoName = styled<any>(Text)`
+  color: ${({ color }) => color};
+`;
+const TextInputWrapper = styled(View)`
    background-color: transparent;
    flex-direction: row;
    border-radius: 5;
+   height: 50
 `;
-const Wrapper = styled.View`
+const Wrapper = styled(View)`
   align-items: center; 
+  width: 100%;
 `;
-const FlashcardView = styled.View`
+const FlashcardView = styled(View)`
   position: absolute;
-  /* top: 0; */
 `;
 const AnimatedFlashcard = createAnimatableComponent(FlashcardView)
-
-
-
-
 
 export default withTheme(FlashcardItSelf)

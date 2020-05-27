@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Image } from 'react-native'
+import { View, StatusBar } from 'react-native'
 import playingCards from './../assets/playing-cards-png-11-original.png'
 import { Row, FirstItemInRowImage, ItemInRow, StyledTextInRowItem } from '../styles/paoTableStyles'
 import { useTheme } from 'react-native-paper'
@@ -8,11 +8,13 @@ import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryCont
 
 const TableHeader = () => {
   const theme = useTheme()
+
   return (
     <LinearGradient
       start={[.8, 0.8]}
       colors={[usePrimaryControlledColor(WhereToColor.tableHeader), usePrimaryControlledColor(WhereToColor.tableHeader2)]}
-      style={{ height: 60 }}>
+      style={{ height:  60 + StatusBar.currentHeight }}>
+      <View style={{height: 20 }}></View>
       <Row>
         <FirstItemInRowImage>
           {/* <Image style={{ resizeMode: 'contain', height: 20, width: 20 }} source={playingCards} /> */}

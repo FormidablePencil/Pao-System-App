@@ -17,11 +17,11 @@ export interface Control {
 const useTextInputHandler = ({
   controlledInput,
   setControlledInput,
-  tenPaoItemsArr,
+  tableData,
 }: {
   controlledInput: Control,
   setControlledInput: any,
-  tenPaoItemsArr?: any,
+  tableData?: any,
 }) => {
   const dispatch = useDispatch()
   const paoListApprovedByServer = useSelector((state: any) => state.paoListApprovedByServer)
@@ -99,9 +99,9 @@ const useTextInputHandler = ({
 
 
   const func1 = ({ index, name }: { index: number, name: string }) => {
-    if (controlledInput.number === tenPaoItemsArr[index].number && controlledInput.name === name) {
+    if (controlledInput.number === tableData[index].number && controlledInput.name === name) {
       return controlledInput.value
-    } else return tenPaoItemsArr[index][name]
+    } else return tableData[index][name]
   }
 
 
@@ -116,7 +116,7 @@ const useTextInputHandler = ({
     saveControlledInputToReduxPaoList,
     onChangeTextHandler,
     returnValueDependingOnWeatherItemsAreSame,
-    tenPaoItemsArr,
+    tableData,
   }
 }
 

@@ -1,24 +1,23 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { Portal, Provider, FAB, useTheme, TouchableRipple, Button } from 'react-native-paper'
+import { Portal, Provider, FAB, useTheme, TouchableRipple } from 'react-native-paper'
 import { fabProperties, fabModeOptions, fabActionOptions, fabOpt } from '../constants/fabConstants'
 import { tabScreens } from '../constants/constants'
-import { View, TouchableOpacity, LayoutAnimation, Animated, Text } from 'react-native'
+import { View, Animated, Text, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { PaoThemeType } from '../styles/theming'
 import { AntDesign } from '@expo/vector-icons';
 import styled from 'styled-components'
 import * as Animatable from 'react-native-animatable';
 import { TabNavContext } from '../routes/StackNavigator'
 import useCheckAmountOfPaoFilled from '../hooks/useCheckAmountOfPaoFilled'
-import { createNativeWrapper } from 'react-native-gesture-handler'
 import OptionsModal from './OptionsModal'
 import { FlashcardSettingsTypes } from '../reducer/flashcardOptionsReducer'
-import { usePrevious } from '../hooks/usePrevious'
 import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE } from '../actions/types'
 import { arrangmentOpt } from '../reducer/flashcardOptionsReducer';
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
 
+const SCREEN_WIDTH = Dimensions.get('window').width
 
 interface FabOptTypes {
   mode: number
@@ -36,8 +35,10 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const theme: PaoThemeType = useTheme()
-  const actionBtnsFadeAnim = useRef(new Animated.Value(1)).current
   const [paoDocumentsFilled, setPaoDocumentsFilled] = useState(null)
+  const actionBtnsFadeAnim = useRef(new Animated.Value(1)).current
+  const fabActionContentRef = useRef(null)
+  const fabActionContentRef2 = useRef(null)
 
   useCheckAmountOfPaoFilled({ setPaoDocumentsFilled })
 
@@ -47,7 +48,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     favListFabActions: [],
     sharedFabActions: [
       {
-        style: { backgroundColor: theme.colors.fabActionColors[0] },
+        style: { backgroundColor: usePrimaryControlledColor(WhereToColor.fabActionEdit, theme.colors.fabActionColors[0]) },
         icon: fabProperties.editMode.icon.pencil,
         label: showHints ? fabProperties.editMode.mesg : null,
         onPress: () => {
@@ -55,7 +56,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
         }
       },
       {
-        style: { backgroundColor: theme.colors.fabActionColors[1] },
+        style: { backgroundColor: usePrimaryControlledColor(WhereToColor.fabActonProfile, theme.colors.fabActionColors[1]) },
         icon: fabProperties.accountSettings.icon.accountSettings,
         label: showHints ? fabProperties.accountSettings.mesg : null,
         onPress: () => {
@@ -66,8 +67,11 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     ],
   }
 
-
   const [currentFabProps, setCurrentFabProps] = useState({ mainFab: fabOpt.standby })
+
+  useEffect(() => {
+    if (editModeTrue === true) setCurrentFabProps({ mainFab: fabOpt.editMode })
+  }, [editModeTrue])
 
   //~ settings for flashcard screen
   const [loading, setLoading] = useState(false)
@@ -84,9 +88,9 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
   })
 
   const handleOnPressGeneral = async () => {
+    if (loading) return
     if (currentFabProps.mainFab.icon === fabProperties.mainBtn.flashcardChangingSettings.icon.settings) {
       setLoading(true)
-      console.log('klklklk');
       await setFlashcardSettings({
         ...flashcardSettings, autoPlayFlashcards: {
           ...flashcardSettings.autoPlayFlashcards,
@@ -98,13 +102,34 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     }
     switch (currentFabProps.mainFab.mode) {
       case fabOpt.menuOpen.mode:
-        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
-        setShowNavigationIcons(true)
-
+        if (currentScreen === tabScreens.Flashcards) {
+          if (!loading) {
+            fabActionContentRef.current.fadeOutUpBig()
+            fabActionContentRef2.current.fadeOutDownBig()
+            setLoading(true)
+            await setTimeout(() => {
+              setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
+              setShowNavigationIcons(true)
+            }, 500);
+            setLoading(false)
+          }
+        } else {
+          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
+          setShowNavigationIcons(true)
+        }
         break;
       case fabOpt.standby.mode:
-        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen })
-        setShowNavigationIcons(false)
+        if (currentScreen === tabScreens.Flashcards) {
+          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen })
+          setShowNavigationIcons(false)
+          setLoading(true)
+          setTimeout(() => {
+            setLoading(false)
+          }, 1250);
+        } else {
+          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen })
+          setShowNavigationIcons(false)
+        }
 
         break;
       case fabOpt.editMode.mode:
@@ -136,9 +161,10 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
   const onPressHandler = () => setGoToUnfilledTrigger(true)
 
   const controlledColor = usePrimaryControlledColor(WhereToColor.primaryColor, theme.colors.primary)
-
   const mainFabBackgroundColor = currentFabProps.mainFab.mode === fabModeOptions.editing ?
     currentFabProps.mainFab.color : controlledColor
+  const bgColor = usePrimaryControlledColor(WhereToColor.goToUnfilledBtn, theme.colors.accent)
+  const themeIsUncontrolled = bgColor === theme.colors.accent
 
   return (
     <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
@@ -146,41 +172,39 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
         <Portal>
           <Portal>
             {currentFabProps.mainFab.mode === fabModeOptions.menuOpen &&
-              <>
-                <View style={[currentFabProps.mainFab.mode === fabModeOptions.menuOpen && { height: '50%' }, { alignItems: "center", justifyContent: 'flex-end' }]}>
-                  <Animatable.View
-                    animation='bounceIn'
-                    style={{ margin: 8, alignItems: 'center', }}>
-                    <Text style={{ color: 'white', fontFamily: 'MontserratMed' }}>Filled: {paoDocumentsFilled}/100</Text>
-                    {paoDocumentsFilled !== 100 &&
-                      <TouchableRipple onPress={() => onPressHandler()} style={{ marginHorizontal: 10, paddingHorizontal: 10, backgroundColor: theme.colors.accent, borderRadius: 15, padding: 5, elevation: 10 }}>
-                        <>
-                          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{ color: 'black', textAlign: 'center', fontFamily: 'MontserratReg' }}>
-                              Go to unfilled</Text>
-                            <View>
-                              <AntDesign style={{ marginHorizontal: 3 }} size={10} name='arrowright' />
-                            </View>
-                          </View>
-                        </>
-                      </TouchableRipple>
-                    }
-                  </Animatable.View>
-                </View>
+              <View style={{ height: '100%', width: SCREEN_WIDTH / 1.8, alignSelf: "center", flex: 1, justifyContent: 'center', }}>
+                <>
+                  {currentScreen === tabScreens.Paotable &&
+                    <BounceAnimationView animation='bounceIn'>
+                      <RegText>Filled: {paoDocumentsFilled}/100</RegText>
+                      {paoDocumentsFilled !== 100 &&
+                        <TouchableRippleStyled
+                          bgColor={bgColor}
+                          onPress={() => onPressHandler()}>
+                          <Row>
+                            <RegText black={themeIsUncontrolled}>Go to unfilled</RegText>
+                            <AntDesignStyled black={themeIsUncontrolled} size={10} name='arrowright' />
+                          </Row>
+                        </TouchableRippleStyled>
+                      }
+                    </BounceAnimationView>
+                  }
 
-                {currentScreen === tabScreens.Flashcards &&
-                  <OptionsModal
-                    sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
-                    setSliderValueautoPlayFlashcardsDuration={setSliderValueautoPlayFlashcardsDuration}
-                    currentScreen={currentScreen}
-                    flashcardSettings={flashcardSettings}
-                    setFlashcardSettings={setFlashcardSettings}
-                    loading={loading}
-                    setLoading={setLoading}
-                    setModalOpen={setModalOpen}
-                  />
-                }
-              </>
+                  {currentScreen === tabScreens.Flashcards &&
+                    <OptionsModal
+                      fabActionContentRef={fabActionContentRef}
+                      fabActionContentRef2={fabActionContentRef2}
+                      theme={theme}
+                      sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
+                      currentScreen={currentScreen}
+                      flashcardSettings={flashcardSettings}
+                      setFlashcardSettings={setFlashcardSettings}
+                      setLoading={setLoading}
+                      setModalOpen={setModalOpen}
+                    />
+                  }
+                </>
+              </View>
             }
           </Portal>
           <FAB.Group
@@ -200,11 +224,31 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
   )
 }
 
-const AntDesignStyled = styled<any>(AntDesign)`
-  position:absolute;
-  right: 20px;
-  top: 10px;
+const AntDesignStyled = styled(AntDesign)`
+  margin: 0px 3px;
+  color: ${({ black }) => black ? 'black' : 'white'};
 `;
-const AnimatableBtn = Animatable.createAnimatableComponent(AntDesignStyled)
+const AligningContainer = styled(View)`
+  justify-content: flex-end;
+`;
+const Row = styled(View)`
+  flex-direction: row;
+  align-items: center
+`;
+const RegText = styled<any>(Text)`
+  color: ${({ black }) => black ? 'black' : 'white'};
+  font-family: 'MontserratMed';
+`;
+const BounceAnimationView = styled(Animatable.View)`
+  margin: 8px;
+  align-items: center;
+`;
+const TouchableRippleStyled = styled<any>(TouchableRipple)`
+ padding: 0px 10px;
+  background-color: ${({ bgColor }) => bgColor};
+  border-radius: 15px;
+  padding: 5px;
+  elevation: 10px;
+`;
 
 export default FabActionBtn

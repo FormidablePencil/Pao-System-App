@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext, useRef } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components';
-import { Button, DefaultTheme, IconButton, useTheme, Text } from 'react-native-paper';
+import { Button, IconButton, useTheme, Text } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PaoThemeType } from '../styles/theming';
 import { Animated } from 'react-native';
-import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText, textControlledColor, textControlledColorPagination } from '../hooks/usePrimaryControlledColor';
+import usePrimaryControlledColor, { WhereToColor, textControlledColorPagination } from '../hooks/usePrimaryControlledColor';
 import { PaoTableScreenContext } from '../screens/PaotableScreen'
 import { useSelector } from 'react-redux';
 
@@ -21,7 +21,11 @@ export enum paginateDirection {
   lastOfTable,
 }
 
-const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange, navigateTextInputs, currentlyFocusedTextInput }: PaginationType) => {
+const Pagination = ({
+  currentRenderItemsRange, setCurrentRenderItemsRange,
+  navigateTextInputs,
+  currentlyFocusedTextInput,
+}: PaginationType) => {
   const { keyboardPresent, editModeTrue } = useContext(PaoTableScreenContext)
   const theme: PaoThemeType = useTheme()
 
@@ -69,7 +73,6 @@ const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange, navig
   const controlledPgColor = usePrimaryControlledColor(WhereToColor.paginationSideBtn)
   const paginationBtnColor = editModeTrue ? theme.colors.accent : controlledPgColor
 
-
   return (
     <LinearGradient
       colors={[usePrimaryControlledColor(WhereToColor.pagination), usePrimaryControlledColor(WhereToColor.pagination2)]}
@@ -77,9 +80,8 @@ const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange, navig
       start={[.8, 0.8]}
     >
       <PaginationContainer>
-
         <PaginationBtnAnimated
-          style={{ backgroundColor: paginationBtnColor }}
+          style={{ backgroundColor: paginationBtnColor, marginRight: 4 }}
           icon='menu-left'
           size={35}
           color='white'
@@ -95,7 +97,7 @@ const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange, navig
         </Column>
         <Row style={{ justifyContent: 'space-around' }}>
           <PaginationBtnAnimated
-            style={{ backgroundColor: paginationBtnColor }}
+            style={{ backgroundColor: paginationBtnColor, marginLeft: 4 }}
             icon='menu-right'
             size={35}
             color='white'
@@ -103,16 +105,17 @@ const Pagination = ({ currentRenderItemsRange, setCurrentRenderItemsRange, navig
             mode="contained" />
         </Row>
       </PaginationContainer>
-    </LinearGradient>
+    </LinearGradient >
   )
 }
 
 const PaginationBtnComponent = ({ num, currentRenderItemsRange, paginateTo, theme }) => {
+  const { controlledThemeColor } = useSelector((state: any) => state)
   const active = currentRenderItemsRange.toString()[0] === num.toString()
   const textColor = active ? 'white' : textControlledColorPagination()
-  // const dynamicBackgroundColor = active && { backgroundColor: usePrimaryControlledColor(WhereToColor.paginationBtns, theme.colors.primary) }
+  const dynamicBackgroundColor = active && { backgroundColor: usePrimaryControlledColor(WhereToColor.paginationBtns, theme.colors.primary) }
   return (
-    <Button /* style={dynamicBackgroundColor} */ onPress={() => paginateTo(num)} key={num} compact={true}>
+    <Button style={controlledThemeColor ? dynamicBackgroundColor : null} onPress={() => paginateTo(num)} key={num} compact={true}>
       <PaginationBtnText style={textColor}>{`${num}0`}</PaginationBtnText>
     </Button>
   )
@@ -131,12 +134,15 @@ const PaginationBtnAnimated = Animated.createAnimatedComponent(PaginationBtn)/* 
 
 
 const Column = styled.View`
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
 `;
 const Row = styled.View`
   flex-direction: row;
 `;
 const PaginationContainer = styled.View`
+/* height: ${({height}) => height}; */
   flex-direction: row;
   align-items: center;
   padding: 5px 0px 5px 25px;

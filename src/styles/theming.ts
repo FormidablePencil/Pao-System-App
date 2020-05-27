@@ -22,9 +22,10 @@ export const PaoTheme: PaoThemeType = {
   roundness: 15,
   colors: {
     ...DefaultTheme.colors,
-    text: 'rgba(18,113,245,1.0)',
+    text: 'rgba(21,79,178,1.0)',
     primary: '#9979FF',
-    accent: 'rgba(72,223,255,1.0)',
+    accent: 'rgba(40,242,235,1.0)',
+    background: '#BAAFE5',
     fabActionColors: {
       0: 'rgba(153,177,248,1.0)',
       1: 'rgba(90,178,237,1.0)',

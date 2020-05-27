@@ -7,12 +7,11 @@ import { LayoutAnimation, Animated, Slider, View, Text } from 'react-native'
 import styled from 'styled-components'
 import { PaoThemeType } from '../styles/theming'
 import { TabNavContext } from '../routes/StackNavigator'
-import { textControlledColor } from '../hooks/usePrimaryControlledColor';
+import { textControlledColor, distinguishingTextColorFromRestOfText, placeholderControlledColor, textControlledColorPagination } from '../hooks/usePrimaryControlledColor';
 import { SAVE_CONTROLLED_THEME_COLOR } from '../actions/types'
 
 
 const AppInfo = ({ navigation }: any) => {
-  // const { controlledThemeColor, setControlledThemeColor } = useContext(TabNavContext)
   const { controlledThemeColor } = useSelector((state: any) => state)
   const dispatch = useDispatch()
   const theme: PaoThemeType = useTheme()
@@ -31,26 +30,36 @@ const AppInfo = ({ navigation }: any) => {
     }
   }, [userSignedOut])
 
+  useEffect(() => {
+    if (controlledThemeColor === null) setThemeControllerValue(.5)
+    else setThemeControllerValue(controlledThemeColor)
+  }, [])
+
   const handleOnPress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     dispatch(signOut({ refreshToken }))
   }
-
-  // const sliderOnValueChangeHandler = (value) => setControlledThemeColor(value)
   const sliderOnValueChangeHandler = (value) => dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: value })
 
-  // console.log(controlledThemeColor);
-  const sliderOnResponderEndHandler = () => setThemeControllerValue(controlledThemeColor => !controlledThemeColor)
+  const onSlideCompleteHanlder = () => {
+    if (controlledThemeColor === null) setThemeControllerValue(.5)
+    else setThemeControllerValue(controlledThemeColor)
+  }
+
   const switchOnValueChangeHander = () => {
-    if (controlledThemeColor) dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: 155 })
-    // setControlledThemeColor(prev => prev === null ? 155 : null)
+    if (!controlledThemeColor) {
+      dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: themeControllerValue })
+    } else {
+      setThemeControllerValue(controlledThemeColor)
+      dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: null })
+    }
   }
 
   return (
     <Container>
       {/* //~ this will control the darkness of the app. Only applicable to plain mode */}
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <Animated.Text style={textControlledColor(controlledThemeColor)}>Control theme opacity</Animated.Text>
+        <Animated.Text style={{ color: 'white' }}>Control theme opacity</Animated.Text>
         <Switch
           value={controlledThemeColor ? true : false}
           onValueChange={() => switchOnValueChangeHander()}
@@ -58,7 +67,7 @@ const AppInfo = ({ navigation }: any) => {
       </View>
       <Slider
         value={themeControllerValue}
-        // disabled={true}
+        disabled={controlledThemeColor ? false : true}
         onValueChange={(value) => { sliderOnValueChangeHandler(value) }}
         style={{ width: 200, height: 40 }}
         minimumValue={.05}
@@ -66,7 +75,7 @@ const AppInfo = ({ navigation }: any) => {
         minimumTrackTintColor="#FFFFFF"
         maximumTrackTintColor="#000000"
         thumbTintColor={theme.colors.accent}
-        onResponderEnd={() => sliderOnResponderEndHandler()}
+        onSlidingComplete={() => onSlideCompleteHanlder()}
       />
       <Button
         loading={loading}

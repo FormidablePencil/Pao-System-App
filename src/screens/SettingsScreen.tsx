@@ -22,7 +22,7 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <>
-      <Appbar.Header statusBarHeight={0}
+      <Appbar.Header 
         style={{ backgroundColor: usePrimaryControlledColor(WhereToColor.profileHeader) }}>
         <Appbar.BackAction
           onPress={() => navigation.goBack()}
@@ -33,12 +33,11 @@ const ProfileScreen = ({ navigation }) => {
         <View>
           <Image source={require('./../assets/playing-cards-png-11-original.png')} style={{ height: 125, width: 125 }} />
           <TouchableOpacity style={{ marginVertical: 5 }}>
-            <StyledText style={textControlledColor(controlledThemeColor)}>{username ?? 'guest'}</StyledText>
+            <StyledText style={textControlledColor()}>{username ?? 'guest'}</StyledText>
           </TouchableOpacity>
         </View>
         <AppInfo navigation={navigation} />
         {/* <AppSettings /> */}
-
       </View>
     </>
   )
