@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import { View, LayoutAnimation, Text } from 'react-native'
 import { useSelector } from 'react-redux'
 import Pagination, { paginateDirection } from './Pagination'
-import PaginationModeTable from './PaginationModeTable'
+import RenderPaoTables from './RenderPaoTables'
 import { mergePaoArrays } from './logic/sortPaoList'
 import { TabNavContext } from '../routes/StackNavigator'
 import Swiper from 'react-native-swiper'
 
-const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
+const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
   const fabProps = useSelector((state: any) => state.fabProperties)
   const pagination = fabProps.config.pagination
   const { tableReady, setTableReady } = useContext(TabNavContext)
@@ -22,9 +22,11 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
   const flatListRef = useRef(null)
 
   const [currentRenderItemsRange, setCurrentRenderItemsRange] = useState(0) //@
+  const [test, setTest] = useState<number>(null)
   const paoList: any = useSelector((state: any) => state.pao)  //@
   const [flatlistItems, setFlatlistItems] = useState(arr) //@ !!!
   const [listSortedInTens, setListSortedInTens] = useState([])
+
 
   const [currentlyFocusedTextInput, setCurrentlyFocusedTextInput] = useState({ index: null, name: null })
   const prevTextInput = useRef(null)
@@ -32,6 +34,17 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
   const firstOfTableTextInput = useRef(null)
   const lastOfTableTextInput = useRef(null)
   const [firstUnfilledTextInput, setFirstUnfilledTextInput] = useState({ number: null, name: null })
+  const swiperRef = useRef(null)
+  const swiperIndex = useRef(null)
+  // const swiperIndex = createRef(null)
+
+  // useEffect(() => {
+  //   console.log(swiperIndex.current, 'swiperIndex from parent')
+  // }, [swiperIndex.current])
+
+  const onIndexChangeHandler = (index) => {
+    setCurrentRenderItemsRange(index)
+  }
 
   const navigateTextInputs = (direction) => {
     if (direction === paginateDirection.next) nextTextInput.current.focus()
@@ -67,6 +80,7 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
     else if (amountOfDigits === 1) setCurrentRenderItemsRange(0)
   }
 
+  const paginationNextPrev = () => console.log(swiperRef.current)
 
   useEffect(() => {
     const newFlatListItem = mergePaoArrays(paoList, flatlistItems)
@@ -98,9 +112,11 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
     }
   }, [goToUnfilledTrigger])
 
-
   const oraganizeListInTens = () => {
     let tables = []
+    //* Change this array of numbers to turn on and off swipe on edit mode
+    //[9, 19, 29, 39, 49, 59, 69, 79, 89, 99] // ~ many tables pairs with Swiper package
+    //[0, 9] //~ one table pair with dynamic tables
     const s = [9, 19, 29, 39, 49, 59, 69, 79, 89, 99].map(endOfPaoTable => {
       const begginingOfPaoTable = endOfPaoTable - 9
       let table = []
@@ -115,7 +131,10 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
   useEffect(() => {
     oraganizeListInTens()
   }, [flatlistItems])
-  console.log(currentRenderItemsRange);
+
+  const jumpToCertainTable = (index) => swiperRef.current.scrollTo(index + 1)
+
+  console.log(currentRenderItemsRange, 'currentRenderItemsRange');
 
   return (
     <View style={{ flex: 1 }}>
@@ -135,63 +154,53 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
         style={{ flex: 1, height: "80%" }}
       >
         {tableReady &&
-          <Swiper
-            loop={true}
-            showsPagination={false}
-            onIndexChanged={(index) => setCurrentRenderItemsRange(index * 10)}
-          >
-
-            {listSortedInTens.map((tableData, index) => {
-              // console.log(tableData);
-              let arrOfTables = []
-              // const tables = [10, 20, 30]
-              // const arr = tables.forEach((tableStart, index) => {
-              //   let tenValuesOfArr = []
-              //   let tableIndex = tables[index - 1]
-              //   if (!tableIndex) tableIndex = 0
-              //   for (let i = currentRenderItemsRange + tableIndex; i < currentRenderItemsRange + tableStart; i++) {
-              //     tenValuesOfArr.push(flatlistItems[i])
-              //   }
-              //   arrOfTables.push(tenValuesOfArr)
-              // });
-              // console.log(arrOfTables[0]);
-              // console.log(tableData)
-              let currentTableOn = parseInt(currentRenderItemsRange.toString()[0]) + 1
-              if (listSortedInTens[currentTableOn] === tableData ||
-                // listSortedInTens[currentTableOn + ] === tableData ||
-                listSortedInTens[currentTableOn + 1] === tableData
-                // listSortedInTens[currentTableOn] === tableData
-              ) {
-                console.log(tableData[0].number, 'pp');
-                return (
-                  <View key={tableData}>
-                    {!editModeTrue &&
-                      <View style={{ position: "absolute", height: '100%', width: '100%', zIndex: 300 }}></View>
-                    }
-                    <PaginationModeTable
-                      setFirstUnfilledTextInput={setFirstUnfilledTextInput}
-                      firstUnfilledTextInput={firstUnfilledTextInput}
-                      firstOfTableTextInput={firstOfTableTextInput}
-                      lastOfTableTextInput={lastOfTableTextInput}
-                      prevTextInput={prevTextInput}
-                      nextTextInput={nextTextInput}
-                      currentlyFocusedTextInput={currentlyFocusedTextInput}
-                      setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
-                      editModeTrue={editModeTrue}
-                      tableData={tableData}
-                      controlledInput={controlledInput}
-                      setControlledInput={setControlledInput}
-                      heightOfScrollView={heightOfScrollView}
-                    />
-                  </View>
-                )
-              }
-            })}
-          </Swiper>
+          <>
+            <Swiper
+              // onMomentumScrollEnd={(e) => console.log(e)}
+              ref={swiperRef}
+              loop={true}
+              showsPagination={true}
+              onIndexChanged={(index) => onIndexChangeHandler(index)}
+            >
+              {listSortedInTens.map((tableData, index) => {
+                let currentTableOn = parseInt(currentRenderItemsRange.toString()[0]) + 1
+                // if (listSortedInTens[currentTableOn] === tableData ||
+                //   listSortedInTens[currentTableOn + 1] === tableData
+                // ) {
+                if (true === true) {
+                  return (
+                    <View key={index}>
+                      {!editModeTrue &&
+                        <View style={{ position: "absolute", height: '100%', width: '100%', zIndex: 300 }}></View>
+                      }
+                      <RenderPaoTables
+                        currentRenderItemsRange={currentRenderItemsRange}
+                        setFirstUnfilledTextInput={setFirstUnfilledTextInput}
+                        firstUnfilledTextInput={firstUnfilledTextInput}
+                        firstOfTableTextInput={firstOfTableTextInput}
+                        lastOfTableTextInput={lastOfTableTextInput}
+                        prevTextInput={prevTextInput}
+                        nextTextInput={nextTextInput}
+                        currentlyFocusedTextInput={currentlyFocusedTextInput}
+                        setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
+                        editModeTrue={editModeTrue}
+                        tableData={tableData}
+                        controlledInput={controlledInput}
+                        setControlledInput={setControlledInput}
+                        heightOfScrollView={heightOfScrollView}
+                      />
+                    </View>
+                  )
+                }
+              })}
+            </Swiper>
+          </>
         }
       </View>
       <Pagination
-        currentlyFocusedTextInput={currentlyFocusedTextInput}
+        swiperIndex={swiperIndex}
+        jumpToCertainTable={jumpToCertainTable}
+        currentlyFocusedTextInput={currentlyFocusedTextInput} //! will go
         navigateTextInputs={navigateTextInputs}
         currentRenderItemsRange={currentRenderItemsRange}
         setCurrentRenderItemsRange={setCurrentRenderItemsRange}
@@ -204,7 +213,7 @@ const RenderPaoItems = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrig
 // {/* :
 // <ListModeTable
 //  /> */}
-export default RenderPaoItems
+export default RenderPaoContent
 
 
    //~ code this first (oh how I love TypeScript) then work with the phone. Try to code a result without testing it first

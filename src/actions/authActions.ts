@@ -36,7 +36,7 @@ export const signUp = ({ username, password, email }) => async dispatch => {
 }
 
 export const signIn = ({ username, password }) => async (dispatch) => {
-  const res = await fetch('http://10.0.0.6:4001/auth/signin', {
+  const res = await fetch('http://10.0.0.7:4001/auth/signin', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ export const signOut = ({ refreshToken }) => async dispatch => { //? I know you 
     },
     body: JSON.stringify({ token: refreshToken })
   }
-  const res = await fetch('http://10.0.0.6:4001/auth/signout', request)
+  const res = await fetch('http://10.0.0.7:4001/auth/signout', request)
   const fetchedData = await res.json()
 
   if (fetchedData.mesg === server_responses.signed_out) {
@@ -83,7 +83,7 @@ export const refreshAccessToken = ({ refreshToken }) => async (dispatch: any) =>
     },
     body: JSON.stringify({ token: refreshToken })
   }
-  const res = await fetch('http://10.0.0.6:4001/auth/token', request)
+  const res = await fetch('http://10.0.0.7:4001/auth/token', request)
   const fetchedData = await res.json()
   console.log(fetchedData, 'refreshed token')
   if (fetchedData.message = server_responses.successfully_refreshed_token) {

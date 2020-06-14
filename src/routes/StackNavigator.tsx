@@ -45,7 +45,7 @@ const StackNavigator = () => {
         tableReady, setTableReady,
       }}>
         <Stack.Navigator
-          initialRouteName={tabScreens.Paotable}
+          initialRouteName={tabScreens.Flashcards}
           screenOptions={{}}>
           <Stack.Screen options={{
             headerShown: false,

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, createContext } from 'react'
+import React, { useState, useEffect, createContext, useRef } from 'react'
 import TableHeader from '../components/TableHeader'
-import RenderPaoItems from '../components/RenderPaoItems'
+import RenderPaoContent from '../components/RenderPaoContent'
 import { useSelector } from 'react-redux'
 import FabActionBtn from '../components/FabActionBtn'
 import { enumFabAction, fabOpt } from '../constants/fabConstants'
@@ -46,7 +46,7 @@ export const PaotableScreen = ({ navigation }) => {
         {!keyboardPresent &&
           <TableHeader />
         }
-        <RenderPaoItems
+        <RenderPaoContent
           goToUnfilledTrigger={goToUnfilledTrigger}
           setGoToUnfilledTrigger={setGoToUnfilledTrigger}
           editModeTrue={editModeTrue}

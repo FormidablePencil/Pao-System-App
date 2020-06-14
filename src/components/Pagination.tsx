@@ -13,6 +13,8 @@ interface PaginationType {
   setCurrentRenderItemsRange
   navigateTextInputs
   currentlyFocusedTextInput
+  swiperIndex
+  jumpToCertainTable
 }
 export enum paginateDirection {
   previous,
@@ -25,13 +27,16 @@ const Pagination = ({
   currentRenderItemsRange, setCurrentRenderItemsRange,
   navigateTextInputs,
   currentlyFocusedTextInput,
+  jumpToCertainTable,
+  swiperIndex
 }: PaginationType) => {
   const { keyboardPresent, editModeTrue } = useContext(PaoTableScreenContext)
   const theme: PaoThemeType = useTheme()
 
-
+// console.log(swiperIndex.current, 'swiperIndex from pagination');
   const paginateTo = (num: number) => {
     const newNum = num * 10
+    jumpToCertainTable(num)
     setCurrentRenderItemsRange(newNum)
   } //table pagination option
 
@@ -142,7 +147,7 @@ const Row = styled.View`
   flex-direction: row;
 `;
 const PaginationContainer = styled.View`
-/* height: ${({height}) => height}; */
+/* height: ${({ height }) => height}; */
   flex-direction: row;
   align-items: center;
   padding: 5px 0px 5px 25px;
