@@ -94,7 +94,6 @@ const OptionsModal = ({
   }
 
   const bgColor = usePrimaryControlledColor(WhereToColor.fabActionContentBg, theme.colors.background)
-  console.log(theme.colors.background);
   return (
     <View className="flex justify-center items-center justify-around">
 

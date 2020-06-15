@@ -7,6 +7,7 @@ import { enumFabAction, fabOpt } from '../constants/fabConstants'
 import { tabScreens } from '../constants/constants'
 import { Keyboard, View, LayoutAnimation } from 'react-native'
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
+import { Button } from 'react-native-paper'
 
 export const PaoTableScreenContext = createContext()
 
@@ -38,7 +39,8 @@ export const PaotableScreen = ({ navigation }) => {
   })
 
   const controlledBgColor = controlledThemeColor > .5 ? 'black' : 'white'
-  const bgColor = controlledThemeColor ? controlledBgColor : usePrimaryControlledColor(WhereToColor.rowEven)
+  const rowEvenColor = usePrimaryControlledColor(WhereToColor.rowEven)
+  const bgColor = controlledThemeColor ? controlledBgColor : rowEvenColor
 
   return (
     <PaoTableScreenContext.Provider value={{ keyboardPresent, editModeTrue }}>

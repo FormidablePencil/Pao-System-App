@@ -1,20 +1,19 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { ItemInRow, Row, FirstItemInRow } from '../styles/paoTableStyles'
-import { useTheme, Button } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import useTextInputHandler, { Control } from '../hooks/useTextInputHandler'
 import { listMode } from '../constants/constants'
 import styled from 'styled-components'
-import PaoTextInput from './PaoTextInput'
 import { PaoThemeType } from '../styles/theming'
-import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText, textControlledColor, placeholderControlledColor } from '../hooks/usePrimaryControlledColor'
-import { ScrollView, FlatList, Text, TextInput } from 'react-native'
-import { TouchableWithoutFeedback, TouchableOpacity, TouchableNativeFeedback } from 'react-native-gesture-handler'
+import usePrimaryControlledColor, { WhereToColor, textControlledColor, placeholderControlledColor } from '../hooks/usePrimaryControlledColor'
+import { FlatList, Text, TextInput } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
 import * as Animatable from 'react-native-animatable';
 
 const RenderPaoTables = ({
+  listSortedInTens,
   currentRenderItemsRange,
-  bgColorByIndex,
   heightOfScrollView,
   controlledInput,
   setControlledInput,
@@ -29,6 +28,7 @@ const RenderPaoTables = ({
   firstUnfilledTextInput,
   setFirstUnfilledTextInput,
 }: {
+  listSortedInTens
   currentRenderItemsRange
   heightOfScrollView: number | undefined
   controlledInput: Control
@@ -57,16 +57,9 @@ const RenderPaoTables = ({
   const theme: PaoThemeType = useTheme()
   const rowEvenBgColor = usePrimaryControlledColor(WhereToColor.rowEven)
   const rowOddBgColor = usePrimaryControlledColor(WhereToColor.rowOdd)
-  const textColor2 = distinguishingTextColorFromRestOfText().color
 
   const { controlledThemeColor } = useSelector((state: any) => state)
   const [editOn, setEditOn] = useState(false)
-
-  interface Btn {
-    number: number
-    name: string
-    show: boolean
-  }
 
   const controlledTextColor = textControlledColor().color
   const textColor = controlledThemeColor ? controlledTextColor : theme.colors.text
@@ -104,112 +97,70 @@ const RenderPaoTables = ({
     setFirstUnfilledTextInput({ number: null, name: null })
     setCurrentlyFocusedTextInput({ index, name })
   }
-
-  // useEffect(() => {
-  //   if (!editModeTrue) setFirstUnfilledTextInput({ number: null, name: null })
-  // }, [editModeTrue])
-
   const onBlurHandler = () => {
     setEditOn(false)
     saveControlledInputToReduxPaoList()
   }
-  const onPressHandlerTextChange = () => {
-    if (editModeTrue) setEditOn(true)
+  const onPressHandlerTextChange = () => editModeTrue && setEditOn(true)
+  const getPaoNumber = (index) => {
+    return currentRenderItemsRange + index >= 0 && currentRenderItemsRange + index <= 9 ?
+      `0${currentRenderItemsRange + index}` : currentRenderItemsRange + index
   }
-
-  const computed = tableData.filter(doc => doc.number === firstUnfilledTextInput.number)[0] ?? { number: null }
-  // const bgColor = tableData[index].number === computed.number
-  //   && firstUnfilledTextInput.name === name ? theme.colors.accent : null
-
 
 
   return (
     <>
-      {/* <ScrollView keyboardShouldPersistTaps={'always'} style={{ height: 30 }}> */}
-      {/* {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((index: number) => { */}
       <FlatList
         data={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
-        keyExtractor={item => item}
-        renderItem={({ item }) => {
-          const index = item
-          const bgColor = index % 2 == 1 ? rowEvenBgColor : rowOddBgColor
-
+        keyExtractor={item => item.toString()}
+        renderItem={({ item, index }: any) => {
+          const bgColor = item % 2 == 1 ? rowEvenBgColor : rowOddBgColor
           const paoNumText = textColor ?? theme.colors.text
-
-          const paoNumbers = tableData[index].number >= 0 && tableData[index].number <= 9 ?
-            `0${tableData[index].number}` : tableData[index].number
           return (
-            <>
-              <Row
-                key={item}
-                style={{ backgroundColor: bgColor, height: heightOfScrollView }}
-              >
-                <FirstItemInRow color={paoNumText}>
-                  {paoNumbers}
-                </FirstItemInRow>
-                {['person', 'action', 'object'].map((name: string, index) => {
+            <Row
+              key={item}
+              style={{ backgroundColor: bgColor, height: heightOfScrollView }}
+            >
+              <FirstItemInRow color={paoNumText}>
+                {getPaoNumber(item)}
+              </FirstItemInRow>
+              {['person', 'action', 'object'].map((name: string, whatIndex) => {
 
-                  const textInputValue = returnValueDependingOnWeatherItemsAreSame({ index, name, mode: listMode.pagination })
+                const textInputValue = returnValueDependingOnWeatherItemsAreSame({ index: currentRenderItemsRange + item, name, mode: listMode.pagination })
 
-                  return (
-                    <ItemInRow key={index}>
-                      {/* <TouchableNativeFeedback> */}
-                      {/* <Text>tap</Text> */}
-                      {/* </TouchableNativeFeedback> */}
-                      <TextInputContainer key={index} animation={bgColor && 'bounceIn'} iterationCount={1} style={{ backgroundColor: bgColor }}>
-                        {editOn ?
-                          <TouchableWithoutFeedback onPress={() => onPressHandlerTextChange()}>
-                            <PaoText>tap</PaoText>
-                          </TouchableWithoutFeedback>
-                          :
-                          <TextInputStyled
-
-                            selectTextOnFocus={true}
-                            autoFocus={true}
-                            onFocus={() => onFocusHandler(index, name)}
-                            blurOnSubmit={false}
-                            ref={(input) => { assignRef(input, index, name) }}
-                            editable={editModeTrue}
-                            onBlur={() => onBlurHandler()}
-                            placeholder={name}
-                            placeholderTextColor={bgColor ? textColor : placeholderColor}
-                            textAlign='center'
-                            textColor={textColor}
-                            value={textInputValue}
-                            onChangeText={text => onChangeTextHandler({ text, number: tableData[index].number, name })}
-                          />
-                        }
-                      </TextInputContainer>
-                      {/* <PaoTextInput
-                      setFirstUnfilledTextInput={setFirstUnfilledTextInput}
-                      firstUnfilledTextInput={firstUnfilledTextInput}
-                      firstOfTableTextInput={firstOfTableTextInput}
-                      lastOfTableTextInput={lastOfTableTextInput}
-                      currentlyFocusedTextInput={currentlyFocusedTextInput}
-                      setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
-                      prevTextInput={prevTextInput}
-                      nextTextInput={nextTextInput}
-                      tableData={tableData}
-                      index={index}
-                      name={name}
-                      editModeTrue={editModeTrue}
-                      saveControlledInputToReduxPaoList={saveControlledInputToReduxPaoList}
-                      textInputValue={textInputValue}
-                      onChangeTextHandler={onChangeTextHandler}
-                    /> */}
-                    </ItemInRow>
-                  )
-                }
-                )}
-              </Row>
-            </>
+                return (
+                  <ItemInRow key={whatIndex}>
+                    <TextInputContainer key={whatIndex} animation={bgColor && 'bounceIn'} iterationCount={1} style={{ backgroundColor: bgColor }}>
+                      {editOn ?
+                        <TouchableWithoutFeedback onPress={() => onPressHandlerTextChange()}>
+                          <PaoText>tap</PaoText>
+                        </TouchableWithoutFeedback>
+                        :
+                        <TextInputStyled
+                          selectTextOnFocus={true}
+                          autoFocus={true}
+                          onFocus={() => onFocusHandler(whatIndex, name)}
+                          blurOnSubmit={false}
+                          ref={(input) => { assignRef(input, whatIndex, name) }}
+                          editable={editModeTrue}
+                          onBlur={() => onBlurHandler()}
+                          placeholder={name}
+                          placeholderTextColor={bgColor ? textColor : placeholderColor}
+                          textAlign='center'
+                          textColor={textColor}
+                          value={textInputValue}
+                          onChangeText={text => onChangeTextHandler({ text, number: tableData[whatIndex].number, name })}
+                        />
+                      }
+                    </TextInputContainer>
+                  </ItemInRow>
+                )
+              }
+              )}
+            </Row>
           )
         }}
       />
-      {/* // } */}
-      {/* ) */}
-      {/* } */}
-      {/* </ScrollView> */}
     </>
   )
 }

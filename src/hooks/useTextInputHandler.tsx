@@ -99,9 +99,10 @@ const useTextInputHandler = ({
 
 
   const func1 = ({ index, name }: { index: number, name: string }) => {
-    if (controlledInput.number === tableData[index].number && controlledInput.name === name) {
+    const paoItem = tableData[index]
+    if (controlledInput.number === paoItem.number && controlledInput.name === name) {
       return controlledInput.value
-    } else return tableData[index][name]
+    } else return paoItem[name]
   }
 
 
