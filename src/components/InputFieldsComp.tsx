@@ -9,6 +9,8 @@ import { withTheme } from 'react-native-paper'
 import { PaoThemeType } from '../styles/theming';
 import useUserAuthentication, { form_res_msg } from '../hooks/useUserAuthentication';
 import { useNavigation } from '@react-navigation/native';
+import { WhiteText } from '../styles/global';
+import { Ionicons } from '@expo/vector-icons';
 
 interface propertyTypes {
   enteringMethod: number
@@ -81,7 +83,7 @@ const InputFieldsComp = ({
   return (
     <View>
       <Animatable.Text
-       ref={error_text_anim}
+        ref={error_text_anim}
         animation={errorMsg !== form_res_msg.no_err && 'bounce'} duration={1000} style={styles.errorMessage}>{errorMsg !== form_res_msg.no_err && errorMsg}</Animatable.Text>
 
       <StyledTextInput
@@ -122,12 +124,11 @@ const InputFieldsComp = ({
       <BottomSection>
         <StyledButton
           contentStyle={{ height: theme.btnHeight.large }}
-          icon={'keyboard-backspace'}
           mode="contained"
           onPress={() => onPressHandler(onPress.goBack)}
         >
-          Back
-      </StyledButton>
+          <IoniconsStyled name="ios-arrow-round-back" color='white' size={20} />    <WhiteText>Back</WhiteText>
+        </StyledButton>
         <StyledButton
           contentStyle={{ height: theme.btnHeight.large }}
           mode="contained"
@@ -135,7 +136,7 @@ const InputFieldsComp = ({
           loading={loading === LoadingTypes.loading ? true : false}
           icon={loading === LoadingTypes.success && 'check'}
         >
-          {comps[enteringMethod]}
+          <WhiteText>{comps[enteringMethod]}</WhiteText>
         </StyledButton>
       </BottomSection>
     </View>
@@ -158,12 +159,15 @@ const styles = StyleSheet.create({
   }
 })
 
-const StyledButton = styled(Button)`
-  margin-right: 5; flex: 1; 
+const IoniconsStyled = styled(Ionicons)`
+ margin-right: 20px;
 `
-
-const BottomSection = styled.View`
-  margin-top: 10; flex-direction: row; justify-content: space-around;
+const StyledButton = styled(Button)`
+  margin: 2px;
+   flex: 1; 
+`
+const BottomSection = styled(View)`
+  margin-top: 10; flex-direction: row;
 `;
 
 

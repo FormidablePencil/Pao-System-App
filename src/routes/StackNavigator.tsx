@@ -7,6 +7,7 @@ import { tabScreens } from '../constants/constants';
 import FlashcardsScreen from '../screens/FlashcardsScreen';
 import NavigateToPaoTable, { NavigateToFlashcards } from '../components/ScreenHeaderComponents';
 import PaotableScreen from '../screens/PaotableScreen';
+import useHandleSystemMesgAuth from '../hooks/useHandleSystemMesgAuth';
 
 const Stack = createStackNavigator()
 //@ts-ignore
@@ -17,24 +18,11 @@ export const ControlledThemeContext = createContext({
 })
 
 const StackNavigator = () => {
-  //connect all the components that previously depended on the context in here to redux instead
   const [modalOpen, setModalOpen] = useState(false)
   const [showHints, setShowHints] = useState(false)
   const [showNavigationIcons, setShowNavigationIcons] = useState(true)
   const [tableReady, setTableReady] = useState(false)
-  // const [controlledThemeColor, setControlledThemeColor] = useState(null)
-
-  const config = {
-    animation: 'spring',
-    config: {
-      stiffness: 1000,
-      damping: 500,
-      mass: 3,
-      overshootClamping: true,
-      restDisplacementThreshold: 0.01,
-      restSpeedThreshold: 0.01,
-    },
-  };
+  useHandleSystemMesgAuth()
 
   return (
     <NavigationContainer>
@@ -45,7 +33,7 @@ const StackNavigator = () => {
         tableReady, setTableReady,
       }}>
         <Stack.Navigator
-          initialRouteName={tabScreens.Flashcards}
+          initialRouteName={tabScreens.WelcomeScreen}
           screenOptions={{}}>
           <Stack.Screen options={{
             headerShown: false,
@@ -53,7 +41,7 @@ const StackNavigator = () => {
             name='ProfileScreen' component={ProfileScreen} />
           <Stack.Screen
             options={{ headerShown: false }}
-            name='WelcomeScreen' component={WelcomeScreen} />
+            name={tabScreens.WelcomeScreen} component={WelcomeScreen} />
           <Stack.Screen
             options={{
               headerTransparent: true,

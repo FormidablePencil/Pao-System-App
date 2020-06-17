@@ -1,28 +1,32 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { tabScreens } from "../constants/constants"
 import { AntDesign } from '@expo/vector-icons';
-import { TouchableRipple } from 'react-native-paper';
-import playingCards from '../assets/playing-cards-png-11-original.png'
+import { TouchableRipple, useTheme } from 'react-native-paper';
 import styled from 'styled-components';
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
-import * as Animatable from 'react-native-animatable'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import LogoBtnImg from './LogoBtnImg';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootReducerT } from '../store';
+import { STUDY_MODE_TOGGLE } from '../actions/types';
+import { PaoThemeType } from '../styles/theming';
 
 const NavigateToPaoTable = ({ tableReady, showNavigationIcons }) => {
+  const { study } = useSelector((state: RootReducerT) => state)
   const navigation = useNavigation()
   const route = useRoute()
-  const spinAnim = useRef(null)
+  const theme: PaoThemeType = useTheme()
 
   const bgColor = route.name === tabScreens.Flashcards ?
     usePrimaryControlledColor(WhereToColor.screenHeaderBack) : 'transparent'
 
   const onPressHandler = () => navigation.navigate(tabScreens.Paotable)
-  const onPressHandlerImg = () => spinAnim.current.rotate()
+
+  const btnBgColor = study.study ? theme.colors.accent : 'transparent'
 
   return ( //spin animation!
     <>
-      {tableReady && showNavigationIcons &&
+      {showNavigationIcons &&
         <NavigationBtn
           left
           disabled={route.name !== tabScreens.Flashcards}
@@ -32,9 +36,7 @@ const NavigateToPaoTable = ({ tableReady, showNavigationIcons }) => {
           {route.name === tabScreens.Flashcards ?
             <AntDesign size={20} style={{ marginHorizontal: 15, color: 'white', transform: [{ scaleX: -1 }] }} name='arrowright' />
             :
-            <TouchableWithoutFeedback onPress={() => onPressHandlerImg()}>
-              <Animatable.Image ref={spinAnim} style={{ resizeMode: 'contain', height: 20, width: 20, marginHorizontal: 15, }} source={playingCards} />
-            </TouchableWithoutFeedback>
+            <LogoBtnImg btnBgColor={btnBgColor} onlyToggleOffAllowed={true} />
           }
 
         </NavigationBtn>
@@ -53,7 +55,7 @@ export const NavigateToFlashcards = ({ tableReady, showNavigationIcons }) => {
   const onPressHandler = () => navigation.navigate(tabScreens.Flashcards)
   return (
     <>
-      {tableReady && showNavigationIcons &&
+      {showNavigationIcons &&
         <NavigationBtn
           disabled={route.name !== tabScreens.Paotable}
           bgColor={bgColor}

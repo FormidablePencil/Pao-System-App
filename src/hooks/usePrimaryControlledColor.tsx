@@ -46,6 +46,8 @@ export enum WhereToColor {
   orderBtnSelected,
   fabActionContentBg,
   switchBtnSelected,
+  studyModeOn,
+  studyModeOff,
 }
 const defaultRgb = (dynamicValue) => Math.floor(255 - 255 * dynamicValue)
 const usePrimaryControlledColor = (where?: WhereToColor, color?: string) => {
@@ -122,6 +124,7 @@ const usePrimaryControlledColor = (where?: WhereToColor, color?: string) => {
       } else return 'rgba(218,238,255,1.0)'
       break
 
+    case WhereToColor.studyModeOff:
     case WhereToColor.paginationBtns:
     case WhereToColor.accentColor:
     case WhereToColor.primaryColor:
@@ -156,6 +159,7 @@ const usePrimaryControlledColor = (where?: WhereToColor, color?: string) => {
       }
       break
 
+    case WhereToColor.studyModeOn:
     case WhereToColor.switchBtnSelected:
     case WhereToColor.orderBtnSelected:
     case WhereToColor.flashcardBtnGoToPaoList:

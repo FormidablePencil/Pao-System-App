@@ -44,6 +44,7 @@ const WelcomeScreen = ({ navigation, theme }: WelcomeScreenTypes) => {
   return (
     <EnterMethodContext.Provider>
       <ImageBackground style={{
+        backgroundColor: 'black',
         flex: 1, height: SCREEN_HEIGHT, alignItems: "center", justifyContent: 'center'
       }} source={bgImg}>
 
@@ -69,7 +70,7 @@ const WelcomeScreen = ({ navigation, theme }: WelcomeScreenTypes) => {
 
 
         <View style={{ flex: 3.2, width: '100%', paddingHorizontal: 20, justifyContent: 'center' }}>
-          <RenderEnterComps navigation={navigation} />
+          <RenderEnterComps />
         </View>
 
       </StyledLinearGradient>

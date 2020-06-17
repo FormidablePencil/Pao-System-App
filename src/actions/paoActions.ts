@@ -24,7 +24,6 @@ export enum ServerPaoResponses {
 }
 
 export const fetchPao = ({ accessToken }: { accessToken: string }) => async (dispatch: (arg0: { type: string; payload: string; }) => void) => {//TypeScript 
-  console.log('hit fetchPao')
   const request = {
     method: 'GET',
     headers: {
@@ -69,8 +68,6 @@ export const putNewDoc = ({
   
   const res = await fetch('http://10.0.0.7:8000/lists/newdoc', request)
   const fetchedData = await res.json()
-  console.log(fetchedData.message, 0)
-  console.log(fetchedData.document, 0)
   
   const response = dispatch(handle_update_and_create_pao_doc_server_responses({
     fetchedData, paoListApprovedByServer
@@ -85,9 +82,6 @@ export const updateExistingDoc = ({
   id
 }) => async (dispatch) => {
 
-  console.log(id, 'idididid')
- 
-
   const request = {
     method: 'PUT',
     headers: {
@@ -99,7 +93,6 @@ export const updateExistingDoc = ({
 
   const res = await fetch(`http://10.0.0.7:8000/lists/update/${id}`, request)
   const fetchedData = await res.json()
-  console.log(fetchedData.message, 1)
 
   // console.log(paoListApprovedByServer)
   const response = dispatch(handle_update_and_create_pao_doc_server_responses({

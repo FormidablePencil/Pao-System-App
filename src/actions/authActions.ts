@@ -85,7 +85,6 @@ export const refreshAccessToken = ({ refreshToken }) => async (dispatch: any) =>
   }
   const res = await fetch('http://10.0.0.7:4001/auth/token', request)
   const fetchedData = await res.json()
-  console.log(fetchedData, 'refreshed token')
   if (fetchedData.message = server_responses.successfully_refreshed_token) {
     dispatch({ action: REFRESHED_TOKENS, payload: fetchedData.accessToken })
     return server_responses.successfully_refreshed_token

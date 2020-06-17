@@ -1,7 +1,14 @@
-import { arrangmentOpt } from "./flashcardOptionsReducer"
-import { tabScreens } from "../constants/constants"
 import { enumFabAction, fabOpt } from "../constants/fabConstants"
-import { PAOTABLE_SCREEN_SETTINGS, FLASHCARDS_SCREEN_SETTINGS, TOGGLE_EDIT_MODE } from "../actions/types"
+import { TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY_FALSE, TOGGLE_FAB_VISIBILITY_TRUE } from "../actions/types"
+
+export interface fabPropertiesT {
+  fabVisibility
+  screen
+  config
+  fabActionsProperties
+  mainFabProperties
+  keyword
+}
 
 const initialState = {
   fabVisibility: true,
@@ -17,30 +24,12 @@ export default (state = initialState, { type, payload }) => {
 
     case TOGGLE_EDIT_MODE:
       return { ...state, config: { ...state.config, editMode: !state.config.editMode } }
-      return state
 
-    // case PAOTABLE_SCREEN_SETTINGS:
-    //   return ({
-    //     fabVisibility: true,
-    //     screen: tabScreens.Paotable,
-    //     config: { editMode: false, pagination: true, showHints: false }, //move to reducer 
-    //     keyword: enumFabAction.paoTableFabActions,
-    //     mainFabProperties: fabOpt.standby
-    //   })
-    //   break
+    case TOGGLE_FAB_VISIBILITY_FALSE:
+      return { ...state, fabVisibility: false }
 
-    // case FLASHCARDS_SCREEN_SETTINGS:
-    //   return ({
-    //     fabVisibility: true,
-    //     screen: tabScreens.Flashcards,
-    //     config: { editMode: false, pagination: true, showHints: false },
-    //     keyword: enumFabAction.flashcardFabActions,
-    //     mainFabProperties: fabOpt.standby
-    //   })
-    //   break
-
-    // case TOGGLE_EDIT_MODE:
-    //   return { ...state, fabVisibility: !state.fabVisibility }
+    case TOGGLE_FAB_VISIBILITY_TRUE:
+      return { ...state, fabVisibility: true }
 
     default:
       return state

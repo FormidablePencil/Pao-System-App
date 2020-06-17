@@ -11,6 +11,7 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
   const fabProps = useSelector((state: any) => state.fabProperties)
   const pagination = fabProps.config.pagination
   const { tableReady, setTableReady } = useContext(TabNavContext)
+  const paoList: any = useSelector((state: any) => state.pao)  //@
 
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }
@@ -23,7 +24,6 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
 
   const [currentRenderItemsRange, setCurrentRenderItemsRange] = useState(0) //@
   const [test, setTest] = useState<number>(null)
-  const paoList: any = useSelector((state: any) => state.pao)  //@
   const [flatlistItems, setFlatlistItems] = useState(arr) //@ !!!
   const [listSortedInTens, setListSortedInTens] = useState([])
 

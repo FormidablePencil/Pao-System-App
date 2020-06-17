@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { TextInput, Text, Animated, StyleSheet, Dimensions, View } from 'react-native'
-import { withTheme, } from 'react-native-paper'
+import { withTheme, useTheme, } from 'react-native-paper'
 import styled from 'styled-components';
 import { createAnimatableComponent } from 'react-native-animatable';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -16,6 +16,8 @@ const SCREEN_HEIGHT = Dimensions.get("window").height
 interface FlashcardsTypes {
   collection: any
   theme: PaoThemeType
+  studyMode?: boolean
+  index?: number
 }
 export interface ControlledInputsTypes {
   data: {
@@ -27,7 +29,7 @@ export interface ControlledInputsTypes {
   }
 }
 
-const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
+const FlashcardItSelf = ({ collection, theme, studyMode, index }: FlashcardsTypes) => {
   const { flashcardOptions, flashcardOptions: { flashcardItemDisplayedFront } } = useSelector((state: any) => state)
   const { config: { editMode } } = useSelector((state: any) => state.fabProperties)
   const [controlledInputs, setControlledInputs] = useState<ControlledInputsTypes>({
@@ -57,7 +59,6 @@ const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
 
   useEffect(() => {
     if (!frontSideCurrentlyDisplayed) {
-      console.log('reset')
       flipCard()
       setFrontSideCurrentlyDisplayed(true)
     }
@@ -89,7 +90,6 @@ const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
   const onChangeHandler = ({ number, name, value }) => {
     const newControlledInput = { number, name, value }
     if (controlledInputs.data.filter(input => input.number === number)) {
-      console.log('exists')
       const modifiedData = controlledInputs.data.filter(collection => {
         if (collection.number === number) {
           return newControlledInput
@@ -112,11 +112,11 @@ const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
 
   const bgColor = usePrimaryControlledColor(WhereToColor.flashcardItself)
   const controlledTextColor = distinguishingTextColorFromRestOfText().color
-  const textColorRenderConditionally = controlledTextColor?? '#828282'
+  const textColorRenderConditionally = controlledTextColor ?? '#828282'
   const textColor = (key) => {
     return typeof collection[key] === 'number' || typeof collection[key] === 'string' ? textColorRenderConditionally : 'rgba(51,51,51,.2)'
   }
-  
+
 
   return (
     <>
@@ -134,49 +134,94 @@ const FlashcardItSelf = ({ collection, theme }: FlashcardsTypes) => {
             }}
             onPress={() => cardFliperOnPressProp()}
           >
-            {paoDisplayOrder.map((name: any, index) => {
-              const gotObjectsByName = flashcardItemDisplayedFront.filter(document => Object.keys(document)[0] === name)[0]
-              const key = Object.keys(gotObjectsByName)[0]
-              const valuePair = Object.values(gotObjectsByName)[0]
-
-              if (valuePair === sidesDocument.symbol) {
-                return (
-                  <Wrapper key={index}>
-                    <PaoName color={theme.colors.primary}>{key}</PaoName>
-                    {editMode ?
-                      <TextInput
-                        onFocus={() => console.log('pressed')}
-                        style={styles.textInput}
-                        placeholder={'edit'}
-                        value={collection[key] ? `${collection[key]}` : null}
-                        // onChangeText={(value) => onChangeHandler({ number, name, value })}
-                        onBlur={() => handleOnBlur()}
-                        textAlign={'center'}
-                      />
-                      :
-                      <>
-                        <View style={{ flexDirection: 'row', }}>
-                          <Text style={[styles.textInput,
-                          {
-                            alignSelf: "center",
-                            textAlign: 'center',
-                            width: 70,
-                            color: textColor(key)
-                          }
-                          ]}>
-                            {formatPaoItems(key)}
-                          </Text>
-                        </View>
-                      </>
-                    }
-                  </Wrapper>
-                )
-              } else return null
-            })}
+            {studyMode ?
+              <StudyMode collection={collection} index={index} />
+              :
+              <RegularMode
+                paoDisplayOrder={paoDisplayOrder}
+                editMode={editMode}
+                flashcardItemDisplayedFront={flashcardItemDisplayedFront}
+                sidesDocument={sidesDocument}
+                collection={collection}
+                handleOnBlur={handleOnBlur}
+                textColor={textColor}
+                formatPaoItems={formatPaoItems}
+              />
+            }
             <PaoEmpty flashcardItemDisplayedFront={flashcardItemDisplayedFront} symbol={sidesDocument.symbol} />
           </TouchableWithoutFeedback>
         </AnimatedFlashcard>
       )}
+    </>
+  )
+}
+
+const StudyMode = ({ collection, index }) => {
+  return (
+    <View style={{ flexDirection: 'column', }}>
+      {Object.keys(collection).map(key => {
+        return (
+          <Text style={[styles.textInput,
+          {
+            alignSelf: "center",
+            textAlign: 'center',
+            width: 70,
+            // color: textColor(key)
+            color: 'pink'
+          }
+          ]}>
+            {collection[key][index].item}
+            {collection[key][index].number}
+          </Text>
+        )
+      })}
+    </View>
+  )
+}
+
+const RegularMode = ({ paoDisplayOrder, editMode, flashcardItemDisplayedFront, sidesDocument, collection, handleOnBlur, textColor, formatPaoItems }) => {
+  const theme = useTheme()
+
+  return (
+    <>
+      {paoDisplayOrder.map((name: any, index) => {
+        const gotObjectsByName = flashcardItemDisplayedFront.filter(document => Object.keys(document)[0] === name)[0]
+        const key = Object.keys(gotObjectsByName)[0]
+        const valuePair = Object.values(gotObjectsByName)[0]
+
+        if (valuePair === sidesDocument.symbol) {
+          return (
+            <Wrapper key={index}>
+              <PaoName color={theme.colors.primary}>{key}</PaoName>
+              <>
+                {editMode ?
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder={'edit'}
+                    value={collection[key] ? `${collection[key]}` : null}
+                    // onChangeText={(value) => onChangeHandler({ number, name, value })}
+                    onBlur={() => handleOnBlur()}
+                    textAlign={'center'}
+                  />
+                  :
+                  <View style={{ flexDirection: 'row', }}>
+                    <Text style={[styles.textInput,
+                    {
+                      alignSelf: "center",
+                      textAlign: 'center',
+                      width: 70,
+                      color: textColor(key)
+                    }
+                    ]}>
+                      {formatPaoItems(key)}
+                    </Text>
+                  </View>
+                }
+              </>
+            </Wrapper>
+          )
+        } else return null
+      })}
     </>
   )
 }

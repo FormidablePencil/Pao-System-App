@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import styled from 'styled-components'
+import { Text } from 'react-native-paper'
 
 export const globalStyles = StyleSheet.create({
   rockSaltFont: {
@@ -35,7 +36,7 @@ export const globalStyles = StyleSheet.create({
     zIndex: 300
   },
   card: {
-   
+
   },
   cardFlip: {
     borderRadius: 20,
@@ -48,6 +49,11 @@ export const globalStyles = StyleSheet.create({
     alignSelf: 'center'
   },
   flashView: {
+  },
+  whiteText: {
+    fontSize: 25,
+    color: 'white',
+    fontFamily: 'MontserratReg',
   }
 })
 
@@ -61,5 +67,6 @@ export const StyledText = styled.Text`
   text-align: center;
   font-size: 15;
 `
-
-
+export const WhiteText = styled(Text)`
+  color: white;
+`

@@ -13,27 +13,38 @@ import { TabNavContext } from '../routes/StackNavigator';
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
 import { tabScreens } from '../constants/constants';
 import { useNavigation } from '@react-navigation/native';
-import {currentCardIndexTextControlledColor} from '../hooks/usePrimaryControlledColor'
+import { currentCardIndexTextControlledColor } from '../hooks/usePrimaryControlledColor'
+import studyReducer, { listItemsT } from '../reducer/studyReducer';
+import { RootReducerT } from '../store';
+import { arrangmentOpt } from '../reducer/flashcardOptionsReducer';
+
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
 const FlashcardSwiper = ({ currentDeckOfCard, setCurrentDeckOfCard, pao }) => {
-  const { flashcardOptions } = useSelector((state: any) => state)
+  const { flashcardOptions, study } = useSelector((state: RootReducerT) => state)
   const { autoPlayFlashcards: { play, duration } } = useSelector((state: any) => state.flashcardOptions)
   const { retreivedPaoDataFromDb } = useSelector((state: any) => state.systemMessages)
   const [tenDeckOfCardsAtOneTime, setTenDeckOfCardsAtOneTime] = useState(null)
   const [flashcardOrderAssortment, setFlashcardOrderAssortment] = useState([{
-    "action": null,
-    "number": null,
-    "object": null,
-    "person": null,
+    id: null,
+    number: null,
+    action: null,
+    object: null,
+    person: null,
   }])
   const theme: PaoThemeType = useTheme()
   const navigation = useNavigation()
 
   useEffect(() => {
-    if (pao) setFlashcardOrderAssortment(pao)
+    if (pao) setFlashcardOrderAssortment(sortPaoList({ list: pao, order: arrangmentOpt.ascending })); // now would this be less proformant since we're replacing the list completely when one thing in the list needs updating or does react compares prev and new and rerenders only the things that are new. is that how the vertual dom works?
   }, [pao])
+
+  // useEffect(() => {
+  // if (study.study) setFlashcardOrderAssortment(study.paoStudySets)
+  // else if (!study.study) setFlashcardOrderAssortment(pao)
+  // }, [study.study])
+
 
   const bgColor = [
     usePrimaryControlledColor(WhereToColor.flashcardBackground),
@@ -53,6 +64,7 @@ const FlashcardSwiper = ({ currentDeckOfCard, setCurrentDeckOfCard, pao }) => {
 
   const noItemsInPaoList = flashcardOrderAssortment[0].number === null
   const textColor = 'white'
+  console.log(study.study);
 
   return (
     <Container style={{ ...styles2.slide1, }}>
@@ -71,16 +83,21 @@ const FlashcardSwiper = ({ currentDeckOfCard, setCurrentDeckOfCard, pao }) => {
             onIndexChanged={(index) => setCurrentDeckOfCard(index + 1)}
           >
             {!noItemsInPaoList &&
-              flashcardOrderAssortment.map((collection: any, index: number) => {
-                let render
-                for (let i = currentDeckOfCard - 3; i <= currentDeckOfCard + 3; i++) {
-                  if (collection.number === i) render = true
-                }
+              study.study ?
+              <>
+                {study.paoStudySets.person.map((item, index) => {
+                  return (
+                    <AlignCenterWrapper>
+                      <FlashcardItSelf collection={study.paoStudySets} index={index} studyMode={true} />
+                    </AlignCenterWrapper>
+                  )
+                })}
+              </>
+              :
+              flashcardOrderAssortment.map(collection => { //! just like we've mapped out the pao itemes here We have to study pao fpr study cards here as well
                 return (
-                  <AlignCenterWrapper key={index}>
-                    {render &&
-                      <FlashcardItSelf collection={collection} />
-                    }
+                  <AlignCenterWrapper key={collection.id}>
+                    <FlashcardItSelf collection={collection} />
                   </AlignCenterWrapper>
                 )
               })}

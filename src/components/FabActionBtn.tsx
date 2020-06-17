@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { Portal, Provider, FAB, useTheme, TouchableRipple } from 'react-native-paper'
-import { fabProperties, fabModeOptions, fabActionOptions, fabOpt } from '../constants/fabConstants'
+import { fabProperties as fabConsts, fabModeOptions, fabActionOptions, fabOpt } from '../constants/fabConstants'
 import { tabScreens } from '../constants/constants'
 import { View, Animated, Text, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { PaoThemeType } from '../styles/theming'
 import { AntDesign } from '@expo/vector-icons';
 import styled from 'styled-components'
@@ -13,9 +13,10 @@ import { TabNavContext } from '../routes/StackNavigator'
 import useCheckAmountOfPaoFilled from '../hooks/useCheckAmountOfPaoFilled'
 import OptionsModal from './OptionsModal'
 import { FlashcardSettingsTypes } from '../reducer/flashcardOptionsReducer'
-import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE } from '../actions/types'
+import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY, TOGGLE_FAB_VISIBILITY_FALSE, TOGGLE_FAB_VISIBILITY_TRUE } from '../actions/types'
 import { arrangmentOpt } from '../reducer/flashcardOptionsReducer';
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
+import { RootReducerT } from '../store'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
@@ -49,16 +50,16 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     sharedFabActions: [
       {
         style: { backgroundColor: usePrimaryControlledColor(WhereToColor.fabActionEdit, theme.colors.fabActionColors[0]) },
-        icon: fabProperties.editMode.icon.pencil,
-        label: showHints ? fabProperties.editMode.mesg : null,
+        icon: fabConsts.editMode.icon.pencil,
+        label: showHints ? fabConsts.editMode.mesg : null,
         onPress: () => {
           handleOnPressFabActions(fabActionOptions.editMode)
         }
       },
       {
         style: { backgroundColor: usePrimaryControlledColor(WhereToColor.fabActonProfile, theme.colors.fabActionColors[1]) },
-        icon: fabProperties.accountSettings.icon.accountSettings,
-        label: showHints ? fabProperties.accountSettings.mesg : null,
+        icon: fabConsts.accountSettings.icon.accountSettings,
+        label: showHints ? fabConsts.accountSettings.mesg : null,
         onPress: () => {
           navigation.navigate('ProfileScreen')
           handleOnPressGeneral()
@@ -87,9 +88,11 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     flashcardOrder: arrangmentOpt.ascending
   })
 
+  //* solution is to fire a function from parent to toggle fab visibility 
+
   const handleOnPressGeneral = async () => {
     if (loading) return
-    if (currentFabProps.mainFab.icon === fabProperties.mainBtn.flashcardChangingSettings.icon.settings) {
+    if (currentFabProps.mainFab.icon === fabConsts.mainBtn.flashcardChangingSettings.icon.settings) {
       setLoading(true)
       await setFlashcardSettings({
         ...flashcardSettings, autoPlayFlashcards: {
@@ -108,33 +111,37 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
             fabActionContentRef2.current.fadeOutDownBig()
             setLoading(true)
             await setTimeout(() => {
-              setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
+              setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //replace
+              dispatch({ type: TOGGLE_FAB_VISIBILITY_FALSE })
               setShowNavigationIcons(true)
             }, 500);
             setLoading(false)
           }
         } else {
-          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
+          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //replace 
+          dispatch({ type: TOGGLE_FAB_VISIBILITY_FALSE })
           setShowNavigationIcons(true)
         }
         break;
       case fabOpt.standby.mode:
         if (currentScreen === tabScreens.Flashcards) {
-          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen })
+          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen }) //REPLACE
+          dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
           setShowNavigationIcons(false)
           setLoading(true)
           setTimeout(() => {
             setLoading(false)
           }, 1250);
         } else {
-          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen })
+          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen }) //REPLACE
           setShowNavigationIcons(false)
         }
 
         break;
       case fabOpt.editMode.mode:
         if (currentScreen === tabScreens.Flashcards) dispatch({ type: TOGGLE_EDIT_MODE })
-        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby })
+        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //REPLACE
+        dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
         setEditModeTrue(false)
         setShowNavigationIcons(true)
 
@@ -149,7 +156,8 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     switch (whatFabAction) {
       case fabActionOptions.editMode:
         if (currentScreen === tabScreens.Flashcards) dispatch({ type: TOGGLE_EDIT_MODE })
-        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.editMode })
+        dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
+        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.editMode }) //REPLACE... OR KEEP
         setEditModeTrue(true)
         break;
 
