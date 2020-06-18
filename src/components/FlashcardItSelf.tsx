@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { TextInput, Text, Animated, StyleSheet, Dimensions, View } from 'react-native'
-import { withTheme, useTheme, } from 'react-native-paper'
+import { TextInput, Animated, StyleSheet, Dimensions, View } from 'react-native'
+import { withTheme, useTheme, Text } from 'react-native-paper'
 import styled from 'styled-components';
 import { createAnimatableComponent } from 'react-native-animatable';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -130,12 +130,13 @@ const FlashcardItSelf = ({ collection, theme, studyMode, index }: FlashcardsType
               ...styles.cardDimensions,
               width: SCREEN_WIDTH / 1.5,
               height: SCREEN_HEIGHT / 1.8,
-              backgroundColor: bgColor
+              backgroundColor: bgColor,
             }}
             onPress={() => cardFliperOnPressProp()}
           >
+            <>
             {studyMode ?
-              <StudyMode collection={collection} index={index} />
+              <StudyMode collection={collection} index={index} side={sidesDocument.side} />
               :
               <RegularMode
                 paoDisplayOrder={paoDisplayOrder}
@@ -148,6 +149,7 @@ const FlashcardItSelf = ({ collection, theme, studyMode, index }: FlashcardsType
                 formatPaoItems={formatPaoItems}
               />
             }
+            </>
             <PaoEmpty flashcardItemDisplayedFront={flashcardItemDisplayedFront} symbol={sidesDocument.symbol} />
           </TouchableWithoutFeedback>
         </AnimatedFlashcard>
@@ -156,26 +158,24 @@ const FlashcardItSelf = ({ collection, theme, studyMode, index }: FlashcardsType
   )
 }
 
-const StudyMode = ({ collection, index }) => {
+const StudyMode = ({ collection, index, side }) => {
   return (
-    <View style={{ flexDirection: 'column', }}>
-      {Object.keys(collection).map(key => {
+    <Wrapper>
+      {['person', 'action', 'object'].map(name => {
         return (
-          <Text style={[styles.textInput,
-          {
-            alignSelf: "center",
-            textAlign: 'center',
-            width: 70,
-            // color: textColor(key)
-            color: 'pink'
-          }
-          ]}>
-            {collection[key][index].item}
-            {collection[key][index].number}
-          </Text>
+          <StudyCardContainer key={name} side={side}>
+            <StudyCardText>
+              {collection[name][index].item}
+            </StudyCardText>
+            {side === 'back' &&
+              <StudyCardText>
+                {collection[name][index].number}
+              </StudyCardText>
+            }
+          </StudyCardContainer>
         )
       })}
-    </View>
+    </Wrapper>
   )
 }
 
@@ -191,7 +191,7 @@ const RegularMode = ({ paoDisplayOrder, editMode, flashcardItemDisplayedFront, s
 
         if (valuePair === sidesDocument.symbol) {
           return (
-            <Wrapper key={index}>
+            <Wrapper key={name}>
               <PaoName color={theme.colors.primary}>{key}</PaoName>
               <>
                 {editMode ?
@@ -239,7 +239,19 @@ const styles = StyleSheet.create({
   cardDimensions: { justifyContent: 'center', alignItems: "center", borderRadius: 10, backgroundColor: 'white' },
   textInput: { height: 40, fontSize: 30, backgroundColor: 'transparent', fontFamily: 'MontserratReg', width: '100%' }
 })
-
+const StudyCardText = styled(Text)`
+  align-self: center;
+  text-align: center;
+  font-family: MontserratReg; 
+  font-size: 30;
+`
+const StudyCardContainer = styled<any>(View)`
+  height: 60;
+  background-color: transparent;
+  flex-direction: row;
+  width: 80%;
+  justify-content: ${({ side }) => side === 'front' ? 'center' : 'space-between'};
+`
 const PaoName = styled<any>(Text)`
   color: ${({ color }) => color};
 `;
@@ -247,7 +259,7 @@ const TextInputWrapper = styled(View)`
    background-color: transparent;
    flex-direction: row;
    border-radius: 5;
-   height: 50
+   height: 50;
 `;
 const Wrapper = styled(View)`
   align-items: center; 

@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootReducerT } from '../store';
 import { STUDY_MODE_TOGGLE } from '../actions/types';
 import { PaoThemeType } from '../styles/theming';
+import { View } from 'react-native';
 
 const NavigateToPaoTable = ({ tableReady, showNavigationIcons }) => {
   const { study } = useSelector((state: RootReducerT) => state)
@@ -36,7 +37,9 @@ const NavigateToPaoTable = ({ tableReady, showNavigationIcons }) => {
           {route.name === tabScreens.Flashcards ?
             <AntDesign size={20} style={{ marginHorizontal: 15, color: 'white', transform: [{ scaleX: -1 }] }} name='arrowright' />
             :
-            <LogoBtnImg btnBgColor={btnBgColor} onlyToggleOffAllowed={true} />
+            <BtnImgContainer>
+              <LogoBtnImg btnBgColor={'transparent'} onlyToggleOffAllowed={true} />
+            </BtnImgContainer>
           }
 
         </NavigationBtn>
@@ -73,7 +76,11 @@ export const NavigateToFlashcards = ({ tableReady, showNavigationIcons }) => {
   )
 }
 
+const BtnImgContainer = styled(View)`
+  margin: -5px 10px;
+`
 const NavigationBtn = styled<any>(TouchableRipple)`
+  /* padding: 25px; */
   z-index: 40;
   background-color: ${({ bgColor }) => bgColor ?? 'transparent'};
   margin-top: 5; padding: 10px 0px;

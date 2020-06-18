@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useRef } from 'react'
 import styled from 'styled-components';
 import { FAB, Colors, useTheme, Button, Text, DefaultTheme, Title, Headline } from 'react-native-paper';
 import { useSelector } from 'react-redux';
@@ -21,7 +21,7 @@ import { arrangmentOpt } from '../reducer/flashcardOptionsReducer';
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
-const FlashcardSwiper = ({ currentDeckOfCard, setCurrentDeckOfCard, pao }) => {
+const FlashcardSwiper = ({ currentDeckOfCard, onSwipeCardHandler, pao }) => {
   const { flashcardOptions, study } = useSelector((state: RootReducerT) => state)
   const { autoPlayFlashcards: { play, duration } } = useSelector((state: any) => state.flashcardOptions)
   const { retreivedPaoDataFromDb } = useSelector((state: any) => state.systemMessages)
@@ -64,7 +64,6 @@ const FlashcardSwiper = ({ currentDeckOfCard, setCurrentDeckOfCard, pao }) => {
 
   const noItemsInPaoList = flashcardOrderAssortment[0].number === null
   const textColor = 'white'
-  console.log(study.study);
 
   return (
     <Container style={{ ...styles2.slide1, }}>
@@ -80,23 +79,22 @@ const FlashcardSwiper = ({ currentDeckOfCard, setCurrentDeckOfCard, pao }) => {
             // loop={true}
             // loadMinimal={false}
             // loadMinimalSize={20}
-            onIndexChanged={(index) => setCurrentDeckOfCard(index + 1)}
+            onIndexChanged={(index) => onSwipeCardHandler(index)}
           >
             {!noItemsInPaoList &&
               study.study ?
-              <>
-                {study.paoStudySets.person.map((item, index) => {
-                  return (
-                    <AlignCenterWrapper>
-                      <FlashcardItSelf collection={study.paoStudySets} index={index} studyMode={true} />
-                    </AlignCenterWrapper>
-                  )
-                })}
-              </>
-              :
-              flashcardOrderAssortment.map(collection => { //! just like we've mapped out the pao itemes here We have to study pao fpr study cards here as well
+
+              study.paoStudySets.person.map((item, index) => {
                 return (
-                  <AlignCenterWrapper key={collection.id}>
+                  <AlignCenterWrapper key={index}>
+                    <FlashcardItSelf collection={study.paoStudySets} index={index} studyMode={true} />
+                  </AlignCenterWrapper>
+                )
+              })
+              :
+              flashcardOrderAssortment.map((collection, index) => { //! just like we've mapped out the pao itemes here We have to study pao fpr study cards here as well
+                return (
+                  <AlignCenterWrapper key={index}>
                     <FlashcardItSelf collection={collection} />
                   </AlignCenterWrapper>
                 )

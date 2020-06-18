@@ -33,7 +33,7 @@ const StackNavigator = () => {
         tableReady, setTableReady,
       }}>
         <Stack.Navigator
-          initialRouteName={tabScreens.WelcomeScreen}
+          initialRouteName={tabScreens.Paotable}
           screenOptions={{}}>
           <Stack.Screen options={{
             headerShown: false,

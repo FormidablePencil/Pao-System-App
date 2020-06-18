@@ -115,7 +115,7 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
         ref={flatListRef}
         style={{ flex: 1, height: "80%" }}
       >
-        {tableReady &&
+        {/* {tableReady && */}
             <View>
               {!editModeTrue &&
                 <View style={{ position: "absolute", height: '100%', width: '100%', zIndex: 300 }}></View>
@@ -138,7 +138,7 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
                 heightOfScrollView={heightOfScrollView}
               />
             </View>
-        }
+        {/* } */}
       </View>
       <Pagination
         swiperIndex={swiperIndex}

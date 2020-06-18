@@ -13,7 +13,7 @@ import { Text } from 'react-native';
 import usePrimaryControlledColor, { currentCardIndexTextControlledColor, WhereToColor } from '../hooks/usePrimaryControlledColor'
 import { PaoThemeType } from '../styles/theming';
 import { RootReducerT } from '../store';
-import { STUDY_MODE_TOGGLE, STUDY_MODE_TOGGLE_OFF } from '../actions/types';
+import { STUDY_MODE_TOGGLE, STUDY_MODE_TOGGLE_OFF, CURRENT_STUDY_CARD } from '../actions/types';
 import LogoBtnImg from '../components/LogoBtnImg';
 import InputSpinner from "react-native-input-spinner";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -38,8 +38,12 @@ export const FlashcardsScreen = () => {
   }, [modalOpen])
 
   const dynamicTextColor = currentCardIndexTextControlledColor().color ?? 'white'
-  const renderCardsLeft = pao.length === 1 && pao[0].number === null ?
-    null : pao.length - currentDeckOfCard
+  const renderCardsLeft = () => {
+    if (study.study) return study.paoStudySets.person.length - study.currentStudyCard
+    else {
+      return pao.length === 1 && pao[0].number === null ? null : pao.length - currentDeckOfCard
+    }
+  }
 
   const noItemsInPaoList = pao[0].number === null
 
@@ -78,8 +82,16 @@ export const FlashcardsScreen = () => {
     setOpenStudyModalOpts(prev => !prev)
   }
 
+  const onSwipeCardHandler = (index) => {
+    if (study.study) {
+      dispatch({ type: CURRENT_STUDY_CARD, payload: index })
+    } else {
+      setCurrentDeckOfCard(index)
+    }
+  }
+
   const studyButtonColor = study.study ? { colors: { primary: theme.colors.fabActionColors[1] } } : { colors: { primary: theme.colors.accent } }
-  const studyButtonText = study.study ? 'Study' : 'Done Study'
+  const studyButtonText = study.study ? 'Done Study' : 'Study'
 
   const btnBgColorUncontrolled = study.study ? theme.colors.accent : theme.colors.fabActionColors[1]
   const bgColorStudyOn = usePrimaryControlledColor(WhereToColor.studyModeOn, btnBgColorUncontrolled)
@@ -108,7 +120,7 @@ export const FlashcardsScreen = () => {
                   </TouchableRippleStyled>
                 </ButtonPositionView>
               }
-              <CardsLeftText color={dynamicTextColor}>{renderCardsLeft}</CardsLeftText>
+              <CardsLeftText color={dynamicTextColor}>{renderCardsLeft()}</CardsLeftText>
               {openStudyModalOpts &&
                 <Portal>
                   <LinearGradientStyled
@@ -150,7 +162,7 @@ export const FlashcardsScreen = () => {
           <FlashcardSwiper
             pao={pao}
             currentDeckOfCard={currentDeckOfCard}
-            setCurrentDeckOfCard={setCurrentDeckOfCard}
+            onSwipeCardHandler={onSwipeCardHandler}
           />
         </View>
       </View>
