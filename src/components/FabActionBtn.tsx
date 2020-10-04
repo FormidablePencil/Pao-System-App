@@ -112,14 +112,14 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
             setLoading(true)
             await setTimeout(() => {
               setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //replace
-              dispatch({ type: TOGGLE_FAB_VISIBILITY_FALSE })
+              // dispatch({ type: TOGGLE_FAB_VISIBILITY_FALSE })
               setShowNavigationIcons(true)
             }, 500);
             setLoading(false)
           }
         } else {
           setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //replace 
-          dispatch({ type: TOGGLE_FAB_VISIBILITY_FALSE })
+          // dispatch({ type: TOGGLE_FAB_VISIBILITY_FALSE })
           setShowNavigationIcons(true)
         }
         break;
@@ -141,7 +141,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
       case fabOpt.editMode.mode:
         if (currentScreen === tabScreens.Flashcards) dispatch({ type: TOGGLE_EDIT_MODE })
         setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //REPLACE
-        dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
+        // dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
         setEditModeTrue(false)
         setShowNavigationIcons(true)
 
@@ -156,7 +156,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     switch (whatFabAction) {
       case fabActionOptions.editMode:
         if (currentScreen === tabScreens.Flashcards) dispatch({ type: TOGGLE_EDIT_MODE })
-        dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
+        // dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
         setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.editMode }) //REPLACE... OR KEEP
         setEditModeTrue(true)
         break;

@@ -15,7 +15,6 @@ const SCREEN_HEIGHT = Dimensions.get("window").height
 
 interface FlashcardsTypes {
   collection: any
-  theme: PaoThemeType
   studyMode?: boolean
   index?: number
 }
@@ -29,12 +28,13 @@ export interface ControlledInputsTypes {
   }
 }
 
-const FlashcardItSelf = ({ collection, theme, studyMode, index }: FlashcardsTypes) => {
+const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
   const { flashcardOptions, flashcardOptions: { flashcardItemDisplayedFront } } = useSelector((state: any) => state)
   const { config: { editMode } } = useSelector((state: any) => state.fabProperties)
   const [controlledInputs, setControlledInputs] = useState<ControlledInputsTypes>({
     data: [{ number: null, name: null, value: null }]
   })
+  const theme: PaoThemeType = useTheme()
   const [frontSideCurrentlyDisplayed, setFrontSideCurrentlyDisplayed] = useState(true)
   const dispatch = useDispatch()
 
@@ -270,4 +270,4 @@ const FlashcardView = styled(View)`
 `;
 const AnimatedFlashcard = createAnimatableComponent(FlashcardView)
 
-export default withTheme(FlashcardItSelf)
+export default FlashcardItSelf

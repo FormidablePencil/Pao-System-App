@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View } from 'react-native-tailwind';
 import { globalStyles, WhiteText } from '../styles/global'
 import { Button, useTheme, TouchableRipple, Modal, Portal } from 'react-native-paper';
@@ -18,8 +18,10 @@ import LogoBtnImg from '../components/LogoBtnImg';
 import InputSpinner from "react-native-input-spinner";
 import { LinearGradient } from 'expo-linear-gradient';
 import shuffle from 'shuffle-array'
-
+import { swipeDirection } from '../constants/constants';
 import { listItemsT } from '../reducer/studyReducer';
+import {useCallbackRef} from 'use-callback-ref';
+
 
 
 export const FlashcardsScreen = () => {
@@ -27,9 +29,10 @@ export const FlashcardsScreen = () => {
   const { pao, study, fabProperties } = useSelector((state: RootReducerT) => state)
   const [modalOpen, setModalOpen] = useState(false)
   const [editModeTrue, setEditModeTrue] = useState(false)
-  const [currentDeckOfCard, setCurrentDeckOfCard] = useState(0)
   const [studyAmount, setStudyAmount] = useState<number | null>(10)
   const [openStudyModalOpts, setOpenStudyModalOpts] = useState(false)
+  const [prevIndexSwipedFrom, setPrevIndexSwipedFrom] = useState(0)
+  const currentDeckOfCard = useRef(null)
   const theme: PaoThemeType = useTheme()
   const dispatch = useDispatch()
 
@@ -41,7 +44,7 @@ export const FlashcardsScreen = () => {
   const renderCardsLeft = () => {
     if (study.study) return study.paoStudySets.person.length - study.currentStudyCard
     else {
-      return pao.length === 1 && pao[0].number === null ? null : pao.length - currentDeckOfCard
+      return pao.length === 1 && pao[0].number === null ? null : pao.length - currentDeckOfCard.current
     }
   }
 
@@ -80,14 +83,6 @@ export const FlashcardsScreen = () => {
     dispatch({ type: STUDY_MODE_TOGGLE, payload: randomlyGeneratedPaoList() })
     // openStudyModal()
     setOpenStudyModalOpts(prev => !prev)
-  }
-
-  const onSwipeCardHandler = (index) => {
-    if (study.study) {
-      dispatch({ type: CURRENT_STUDY_CARD, payload: index })
-    } else {
-      setCurrentDeckOfCard(index)
-    }
   }
 
   const studyButtonColor = study.study ? { colors: { primary: theme.colors.fabActionColors[1] } } : { colors: { primary: theme.colors.accent } }
@@ -162,7 +157,6 @@ export const FlashcardsScreen = () => {
           <FlashcardSwiper
             pao={pao}
             currentDeckOfCard={currentDeckOfCard}
-            onSwipeCardHandler={onSwipeCardHandler}
           />
         </View>
       </View>
