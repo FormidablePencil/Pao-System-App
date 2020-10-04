@@ -8,7 +8,7 @@ To learning such a system requires one to refer back to it once in a while and p
 
 ## Technologies utilized
 - React Native https://gist.githubusercontent.com/FormidablePencil/08767773b974a5e26f84ddb558cda01f/raw/441a3b040130c35e3892eb3c8c4fe273cf0347dd/typescript.svg
-![Test Image 3](https://gist.githubusercontent.com/FormidablePencil/08767773b974a5e26f84ddb558cda01f/raw/441a3b040130c35e3892eb3c8c4fe273cf0347dd/typescript.svg)
+![Test Image 6](https://gist.githubusercontent.com/FormidablePencil/08767773b974a5e26f84ddb558cda01f/raw/441a3b040130c35e3892eb3c8c4fe273cf0347dd/typescript.svg)
 
 ## Links
 
