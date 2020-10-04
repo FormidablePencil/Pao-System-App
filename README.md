@@ -4,7 +4,7 @@ A mnemonic device for memorizing long strands of digits.
 
 ## What is the pao system?
 
-The Pao system is a mnemonic device to allow one to memorizing long digits of numbers at a short amount of time. The idea is to convert digits into memorable images and arrange those images in some kind of story or "memory palace." Once the Pao system is learned one can memorize many digits of numbers at a time and technique could help memorize anything like another language or difficult biological terminology. Here's a tutorial of this mnemonic device [https://youtu.be/R-gCm3gEFQE](https://youtu.be/R-gCm3gEFQE).
+The Pao system is a mnemonic device to allow one to memorizing long digits of numbers at a short amount of time. The idea is to convert digits into memorable images and arrange those images in some kind of story or "memory palace." Once the Pao system is learned one can memorize many digits of numbers at a time and technique could help memorize anything like another language or difficult biological terminology. Watch a tutorial of this mnemonic device [here] (https://youtu.be/R-gCm3gEFQE](https://youtu.be/R-gCm3gEFQE)
 
 ## Purpose
 
