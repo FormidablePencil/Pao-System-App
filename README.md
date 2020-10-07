@@ -13,10 +13,11 @@ Once the Pao system is learned one can potentially memorize hundreds of digits a
 To learning such a system requires one to refer back to it every so often and putting it to practice to imprint it in the memory. The Pao System app serves as a catalog and has a study mode to aid one in memorizing the system.
 
 ## Demo
-Demo video:
-https://youtu.be/-U7ysY2m1QE
-#
-<img src="https://i.ibb.co/XXPcnsB/Screenshot-20201006-210038-The-Pao-System.jpg" width="200" title="app">.<img src="https://i.ibb.co/brgFXS4/Screenshot-20200715-131741-The-Pao-System.jpg" width="200" title="app">.<img src="https://i.ibb.co/VmnpC2t/Screenshot-20201006-210056-The-Pao-System.jpg" width="200" title="app">.<img src="https://i.ibb.co/dtrkwNz/Screenshot-20200715-131803-The-Pao-System.jpg" width="200" title="app">
+Demo video:https://youtu.be/-U7ysY2m1QE
+
+<img src="https://i.ibb.co/XXPcnsB/Screenshot-20201006-210038-The-Pao-System.jpg" width="200" title="app">.<img src="https://i.ibb.co/brgFXS4/Screenshot-20200715-131741-The-Pao-System.jpg" width="200" title="app">
+<img src="https://i.ibb.co/VmnpC2t/Screenshot-20201006-210056-The-Pao-System.jpg" width="200" title="app">
+<img src="https://i.ibb.co/dtrkwNz/Screenshot-20200715-131803-The-Pao-System.jpg" width="200" title="app">
 
 
 
