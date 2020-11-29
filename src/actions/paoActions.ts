@@ -30,7 +30,7 @@ export const fetchPao = ({ accessToken }: { accessToken: string }) => async (dis
       'Authorization': `Bearer ${accessToken}`,
     }
   }
-  const res = await fetch('http://10.0.0.7:8000/lists', request)
+  const res = await fetch('http://10.0.0.7:4001/lists', request)
   const paoList = await res.json()
 
   if (paoList.pao.list) {
@@ -66,7 +66,7 @@ export const putNewDoc = ({
     })
   }
   
-  const res = await fetch('http://10.0.0.7:8000/lists/newdoc', request)
+  const res = await fetch('http://10.0.0.7:4001/lists/newdoc', request)
   const fetchedData = await res.json()
   
   const response = dispatch(handle_update_and_create_pao_doc_server_responses({
@@ -91,7 +91,7 @@ export const updateExistingDoc = ({
     body: JSON.stringify(controlledInput)
   }
 
-  const res = await fetch(`http://10.0.0.7:8000/lists/update/${id}`, request)
+  const res = await fetch(`http://10.0.0.7:4001/lists/update/${id}`, request)
   const fetchedData = await res.json()
 
   // console.log(paoListApprovedByServer)
@@ -105,7 +105,7 @@ export const updateExistingDoc = ({
 //   const request = {
 
 //   }
-//   const res = await fetch('http://localhost:8000/lists/', request)
+//   const res = await fetch('http://localhost:4001/lists/', request)
 
 //   if (fetchedData.message === 'completely replaced') {
 //     dispatch({ type: SAVED_PAOLIST_TO_DB_SUCCESS_MESG, payload: controlledInput })
@@ -121,7 +121,7 @@ export const updateExistingDoc = ({
 
 
 // export const updatePaoDocument = () => async (dispatch: any) => {
-//   const res = await fetch(`http://10.0.0.7:8000/lists/${docId}`, {
+//   const res = await fetch(`http://10.0.0.7:4001/lists/${docId}`, {
 //     method: 'PUT',
 //     headers: {
 //       'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNvbWV0aGluZyIsImlhdCI6MTU4NjgwNzE3MCwiZXhwIjoxNTg2ODA4OTcwfQ.N081GrnSbvixb8Odb-70CIYV0pUwJipia5WrTHfRy5I'
@@ -137,7 +137,7 @@ export const updateExistingDoc = ({
 // }
 
 // export const deletePaoDoc = () => async (dispatch: any) => {
-//   const res = await fetch(`http://10.0.0.7:8000/lists/${docId}`, {
+//   const res = await fetch(`http://10.0.0.7:4001/lists/${docId}`, {
 //     method: 'DELETE',
 //     headers: {
 //       "Content-Type": 'application/json',

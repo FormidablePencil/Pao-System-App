@@ -23,7 +23,7 @@ export const signUp = ({ username, password, email }) => async dispatch => {
     },
     body: JSON.stringify({ password, username, email })
   }
-  const res = await fetch('http://10.0.0.6:4001/auth/signup', request)
+  const res = await fetch('http://10.0.0.7:4001/auth/signup', request)
   const fetchedData = await res.json()
   // console.log(fetchedData)
 
