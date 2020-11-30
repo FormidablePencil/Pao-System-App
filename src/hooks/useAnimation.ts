@@ -23,8 +23,8 @@ const useAnimation = ({
       Animated.sequence([
         Animated.timing(flipFrontSide, {
           toValue: 1,
-          duration: 200,
-          easing: Easing.in(Easing.linear),
+          duration: 150,
+          easing: Easing.in(Easing.ease),
           useNativeDriver: true
         }),
         Animated.parallel([
@@ -41,8 +41,8 @@ const useAnimation = ({
         ]),
         Animated.timing(flipBackSide, {
           toValue: 1,
-          duration: 200,
-          easing: Easing.out(Easing.linear),
+          duration: 150,
+          easing: Easing.out(Easing.ease),
           useNativeDriver: true
         })
       ]).start()
@@ -52,8 +52,8 @@ const useAnimation = ({
       Animated.sequence([
         Animated.timing(flipBackSide, {
           toValue: 0,
-          duration: 200,
-          easing: Easing.in(Easing.linear),
+          duration: 150,
+          easing: Easing.in(Easing.ease),
           useNativeDriver: true
         }),
         Animated.timing(frontSideOpacity, {
@@ -75,8 +75,8 @@ const useAnimation = ({
         ]),
         Animated.timing(flipFrontSide, {
           toValue: 0,
-          duration: 200,
-          easing: Easing.out(Easing.linear),
+          duration: 150,
+          easing: Easing.out(Easing.ease),
           useNativeDriver: true
         })
       ]).start()

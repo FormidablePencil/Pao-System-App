@@ -39,7 +39,7 @@ const FlashcardSwiper = ({ currentDeckOfCard, pao }) => {
     object: null,
     person: null,
   }])
-  const [arrToRenderOfTen, setArrToRenderOfTen] = useState([0, 1, 2, 3, 4])
+  const [arrToRenderOfTen, setArrToRenderOfTen] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
   const keepTrack = useRef(null)
 
   const theme: PaoThemeType = useTheme()
@@ -67,6 +67,7 @@ const FlashcardSwiper = ({ currentDeckOfCard, pao }) => {
   }
 
   const saveDeckOfCardBasedOnSwipeDirection = (swipe: swipeDirection) => {
+    console.log(swipe, 'dir');
     /* */if (swipe === swipeDirection.right) currentDeckOfCard.current = currentDeckOfCard.current + 1
     else if (swipe === swipeDirection.left) currentDeckOfCard.current = currentDeckOfCard.current - 1
     changeArrToRenderOfTen()
@@ -95,15 +96,15 @@ const FlashcardSwiper = ({ currentDeckOfCard, pao }) => {
     }
   }
 
-  
+
   const changeArrToRenderOfTen = () => {
     console.log(currentDeckOfCard.current, '!currentDeckOfCard.current');
-    if (currentDeckOfCard.current === 5) {
-      setArrToRenderOfTen([5, 6, 7, 8, 9])
-      // onSwipeCardHandler(0)
-      // setArrToRenderOfTen(prev => [prev[0] + 5, prev[1] + 5, prev[2] + 5, prev[3] + 5, prev[4] + 5])
-      // setListOfTen(flashcardOrderAssortment.filter((item, index) => index >= 20 && index <= 10));
-    }
+    // if (currentDeckOfCard.current === 4) {
+    // setArrToRenderOfTen([5, 6, 7, 8, 9])
+    // onSwipeCardHandler(0)
+    // setArrToRenderOfTen(prev => [prev[0] + 5, prev[1] + 5, prev[2] + 5, prev[3] + 5, prev[4] + 5])
+    // setListOfTen(flashcardOrderAssortment.filter((item, index) => index >= 20 && index <= 10));
+    // }
   }
 
   // useEffect(() => {
@@ -132,7 +133,7 @@ const FlashcardSwiper = ({ currentDeckOfCard, pao }) => {
   const textColor = 'white'
 
   const swiperReff = useRef(null)
-  
+
   return (
     <Container style={{ ...styles2.slide1, }}>
       <LinearGradient
@@ -141,7 +142,7 @@ const FlashcardSwiper = ({ currentDeckOfCard, pao }) => {
 
         {!noItemsInPaoList &&
           <Swiper
-          ref={swiperReff}
+            ref={swiperReff}
             // autoplay={play}
             // autoplayTimeout={duration} //~ make this a setting
             showsPagination={false}
@@ -150,7 +151,7 @@ const FlashcardSwiper = ({ currentDeckOfCard, pao }) => {
             loadMinimalSize={1}
             // index={0}
             // onIndexChanged={async (index) =>} // the way we can know what direction the user swiped is by comparing prev to new index
-            onIndexChanged={async (index) => await console.log(index, 'lol')} // the way we can know what direction the user swiped is by comparing prev to new index
+            onIndexChanged={async (index) => await onSwipeCardHandler(index)} // the way we can know what direction the user swiped is by comparing prev to new index
           >
             {!noItemsInPaoList &&
               study.study ?

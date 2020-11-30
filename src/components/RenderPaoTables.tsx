@@ -130,7 +130,7 @@ const RenderPaoTables = ({
 
                 return (
                   <ItemInRow key={whatIndex}>
-                    <TextInputContainer key={whatIndex} animation={bgColor && 'bounceIn'} iterationCount={1} style={{ backgroundColor: bgColor }}>
+                    <TextInputContainer animation={bgColor && 'bounceIn'} iterationCount={1} style={{ backgroundColor: bgColor }}>
                       {editOn ?
                         <TouchableWithoutFeedback onPress={() => onPressHandlerTextChange()}>
                           <PaoText>tap</PaoText>
@@ -149,7 +149,7 @@ const RenderPaoTables = ({
                           textAlign='center'
                           textColor={textColor}
                           value={textInputValue}
-                          onChangeText={text => onChangeTextHandler({ text, number: tableData[whatIndex].number, name })}
+                          onChangeText={text => onChangeTextHandler({ text, number: tableData[index].number, name })}
                         />
                       }
                     </TextInputContainer>

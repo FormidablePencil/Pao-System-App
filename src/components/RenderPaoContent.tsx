@@ -5,6 +5,7 @@ import Pagination, { paginateDirection } from './Pagination'
 import RenderPaoTables from './RenderPaoTables'
 import { mergePaoArrays } from './logic/sortPaoList'
 import { TabNavContext } from '../routes/StackNavigator'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Swiper from 'react-native-swiper'
 
 const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
@@ -116,28 +117,30 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
         style={{ flex: 1, height: "80%" }}
       >
         {/* {tableReady && */}
-            <View>
-              {!editModeTrue &&
-                <View style={{ position: "absolute", height: '100%', width: '100%', zIndex: 300 }}></View>
-              }
-              <RenderPaoTables
-                listSortedInTens={listSortedInTens}
-                currentRenderItemsRange={currentRenderItemsRange}
-                setFirstUnfilledTextInput={setFirstUnfilledTextInput}
-                firstUnfilledTextInput={firstUnfilledTextInput}
-                firstOfTableTextInput={firstOfTableTextInput}
-                lastOfTableTextInput={lastOfTableTextInput}
-                prevTextInput={prevTextInput}
-                nextTextInput={nextTextInput}
-                currentlyFocusedTextInput={currentlyFocusedTextInput}
-                setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
-                editModeTrue={editModeTrue}
-                tableData={flatlistItems}
-                controlledInput={controlledInput}
-                setControlledInput={setControlledInput}
-                heightOfScrollView={heightOfScrollView}
-              />
-            </View>
+        <View>
+          {!editModeTrue &&
+            <View style={{ position: "absolute", height: '100%', width: '100%', zIndex: 300 }}></View>
+          }
+          <KeyboardAwareScrollView>
+            <RenderPaoTables
+              listSortedInTens={listSortedInTens}
+              currentRenderItemsRange={currentRenderItemsRange}
+              setFirstUnfilledTextInput={setFirstUnfilledTextInput}
+              firstUnfilledTextInput={firstUnfilledTextInput}
+              firstOfTableTextInput={firstOfTableTextInput}
+              lastOfTableTextInput={lastOfTableTextInput}
+              prevTextInput={prevTextInput}
+              nextTextInput={nextTextInput}
+              currentlyFocusedTextInput={currentlyFocusedTextInput}
+              setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
+              editModeTrue={editModeTrue}
+              tableData={flatlistItems}
+              controlledInput={controlledInput}
+              setControlledInput={setControlledInput}
+              heightOfScrollView={heightOfScrollView}
+            />
+          </KeyboardAwareScrollView>
+        </View>
         {/* } */}
       </View>
       <Pagination

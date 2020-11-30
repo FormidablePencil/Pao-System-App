@@ -20,9 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import shuffle from 'shuffle-array'
 import { swipeDirection } from '../constants/constants';
 import { listItemsT } from '../reducer/studyReducer';
-import {useCallbackRef} from 'use-callback-ref';
-
-
+import { useCallbackRef } from 'use-callback-ref';
 
 export const FlashcardsScreen = () => {
   const { showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)

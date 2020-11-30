@@ -1,4 +1,4 @@
-import { FETCHED_PAOLIST, SAVED_PAOLIST_TO_DB_SUCCESS_MESG, SAVED_PAOLIST_TO_DB_FAILED_MESG, SAVED_PAOLIST_TO_DB_FAILED_NO_TOKEN_MESG, UPDATE_PAO_LIST, FAILED_SERVER_CRUD_REQUEST, ADD_TO_PAO_LIST, ADD_TO_PAO_LIST_WITH_SCHEMA } from './types'
+import { FETCHED_PAOLIST } from './types'
 import { PutPaoList } from '../reducerTypes/paoTypes'
 import paoSchemaGenerator from '../components/logic/paoSchemaGenerator'
 import { handle_update_and_create_pao_doc_server_responses } from './logic/useHandleServerResponses'
@@ -40,6 +40,14 @@ export const fetchPao = ({ accessToken }: { accessToken: string }) => async (dis
   }
 }
 
+
+
+
+
+
+
+
+
 export const putNewDoc = ({
   accessToken,
   controlledInput,
@@ -65,15 +73,23 @@ export const putNewDoc = ({
       object: paoDocModal.object,
     })
   }
-  
+
   const res = await fetch('http://10.0.0.7:4001/lists/newdoc', request)
   const fetchedData = await res.json()
-  
+
   const response = dispatch(handle_update_and_create_pao_doc_server_responses({
     fetchedData, paoListApprovedByServer
   }))
   return response
 }
+
+
+
+
+
+
+
+
 
 export const updateExistingDoc = ({
   accessToken,

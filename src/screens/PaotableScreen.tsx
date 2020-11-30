@@ -7,6 +7,7 @@ import { enumFabAction, fabOpt } from '../constants/fabConstants'
 import { tabScreens } from '../constants/constants'
 import { Keyboard, View, LayoutAnimation } from 'react-native'
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
+
 import { Button } from 'react-native-paper'
 
 export const PaoTableScreenContext = createContext()
@@ -48,19 +49,19 @@ export const PaotableScreen = ({ navigation }) => {
         {!keyboardPresent &&
           <TableHeader />
         }
-        <RenderPaoContent
-          goToUnfilledTrigger={goToUnfilledTrigger}
-          setGoToUnfilledTrigger={setGoToUnfilledTrigger}
-          editModeTrue={editModeTrue}
-        />
-        <FabActionBtn
-          setGoToUnfilledTrigger={setGoToUnfilledTrigger}
-          currentScreen={tabScreens.Paotable}
-          editModeTrue={editModeTrue}
-          setEditModeTrue={setEditModeTrue}
-          setModalOpen={setModalOpen}
-          whatFabProps={enumFabAction.paoTableFabActions}
-        />
+          <RenderPaoContent
+            goToUnfilledTrigger={goToUnfilledTrigger}
+            setGoToUnfilledTrigger={setGoToUnfilledTrigger}
+            editModeTrue={editModeTrue}
+            />
+          <FabActionBtn
+            setGoToUnfilledTrigger={setGoToUnfilledTrigger}
+            currentScreen={tabScreens.Paotable}
+            editModeTrue={editModeTrue}
+            setEditModeTrue={setEditModeTrue}
+            setModalOpen={setModalOpen}
+            whatFabProps={enumFabAction.paoTableFabActions}
+          />
       </View>
     </PaoTableScreenContext.Provider>
   )

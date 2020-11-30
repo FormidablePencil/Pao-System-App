@@ -85,6 +85,7 @@ const useTextInputHandler = ({
 
 
   const onChangeTextHandler = ({ text, number, name }: any) => {
+    console.log(number, name, 'number, name');
     setControlledInput({ ...controlledInput, value: text, number, name })
   }
 

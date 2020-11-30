@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@bit/formidablepencil.list-of-textinputs.dynamic-form-fields": "file:./components/dynamic-form-fields",
-    "@bit/formidablepencil.my-react-native-comps.add-and-delete-item-from-redux-btn": "0.0.2",
     "@react-native-community/masked-view": "0.1.6",
     "@react-native-community/slider": "^2.0.9",
     "@react-navigation/bottom-tabs": "^5.2.5",
@@ -37,6 +36,7 @@
     "react-native-elevated-view": "0.0.6",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-input-spinner": "^1.2.10",
+    "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-number-slider": "^1.0.0",
     "react-native-paper": "github:FormidablePencil/react-native-paper",
     "react-native-reanimated": "~1.7.0",
@@ -71,10 +71,10 @@
     "typescript": "^4.0.0-dev.20200428"
   },
   "peerDependencies": {
+    "expo": "~36.0.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
-    "expo": "~36.0.0"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz"
   },
   "private": true,
   "bit": {
