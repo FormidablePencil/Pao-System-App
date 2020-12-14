@@ -25,7 +25,6 @@ const useHandleSystemMesgAuth = () => {
         dispatch({ type: SET_NOT_LOADING })
       }
       if (signin === true || signup === true) {
-        console.log('hit useHandlerSystemesgAuth')
         await setAuthenticated(true)
         await dispatch(fetchPao({ accessToken }))
         dispatch({ type: RESET_SIGNIN_MESG })

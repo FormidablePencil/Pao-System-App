@@ -88,6 +88,7 @@ const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
   }
 
   const onChangeHandler = ({ number, name, value }) => {
+    console.log('hittign')
     const newControlledInput = { number, name, value }
     if (controlledInputs.data.filter(input => input.number === number)) {
       const modifiedData = controlledInputs.data.filter(collection => {
@@ -135,20 +136,21 @@ const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
             onPress={() => cardFliperOnPressProp()}
           >
             <>
-            {studyMode ?
-              <StudyMode collection={collection} index={index} side={sidesDocument.side} />
-              :
-              <RegularMode
-                paoDisplayOrder={paoDisplayOrder}
-                editMode={editMode}
-                flashcardItemDisplayedFront={flashcardItemDisplayedFront}
-                sidesDocument={sidesDocument}
-                collection={collection}
-                handleOnBlur={handleOnBlur}
-                textColor={textColor}
-                formatPaoItems={formatPaoItems}
-              />
-            }
+              {studyMode ?
+                <StudyMode collection={collection} index={index} side={sidesDocument.side} />
+                :
+                <RegularMode
+                  paoDisplayOrder={paoDisplayOrder}
+                  editMode={editMode}
+                  flashcardItemDisplayedFront={flashcardItemDisplayedFront}
+                  sidesDocument={sidesDocument}
+                  collection={collection}
+                  handleOnBlur={handleOnBlur}
+                  textColor={textColor}
+                  formatPaoItems={formatPaoItems}
+                  onChangeHandler={onChangeHandler}
+                />
+              }
             </>
             <PaoEmpty flashcardItemDisplayedFront={flashcardItemDisplayedFront} symbol={sidesDocument.symbol} />
           </TouchableWithoutFeedback>
@@ -179,7 +181,9 @@ const StudyMode = ({ collection, index, side }) => {
   )
 }
 
-const RegularMode = ({ paoDisplayOrder, editMode, flashcardItemDisplayedFront, sidesDocument, collection, handleOnBlur, textColor, formatPaoItems }) => {
+const RegularMode = ({
+  paoDisplayOrder, editMode, flashcardItemDisplayedFront, sidesDocument,
+  collection, handleOnBlur, textColor, formatPaoItems, onChangeHandler }) => {
   const theme = useTheme()
 
   return (
@@ -199,7 +203,7 @@ const RegularMode = ({ paoDisplayOrder, editMode, flashcardItemDisplayedFront, s
                     style={styles.textInput}
                     placeholder={'edit'}
                     value={collection[key] ? `${collection[key]}` : null}
-                    // onChangeText={(value) => onChangeHandler({ number, name, value })}
+                    onChangeText={(value) => onChangeHandler({ number: collection.number, name, value })}
                     onBlur={() => handleOnBlur()}
                     textAlign={'center'}
                   />
@@ -209,7 +213,6 @@ const RegularMode = ({ paoDisplayOrder, editMode, flashcardItemDisplayedFront, s
                     {
                       alignSelf: "center",
                       textAlign: 'center',
-                      width: 70,
                       color: textColor(key)
                     }
                     ]}>
@@ -249,7 +252,7 @@ const StudyCardContainer = styled<any>(View)`
   height: 60;
   background-color: transparent;
   flex-direction: row;
-  width: 80%;
+  width: 100%;
   justify-content: ${({ side }) => side === 'front' ? 'center' : 'space-between'};
 `
 const PaoName = styled<any>(Text)`

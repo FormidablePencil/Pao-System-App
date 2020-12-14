@@ -7,13 +7,10 @@ const listCopy = list.map(item => item)// can't mutate state so this is how we'd
   //first put them in order then do the operations
   listCopy.sort(compare);
   if (order === arrangmentOpt.random) {
-    console.log('random')
     return shuffle(listCopy)
   } else if (order === arrangmentOpt.ascending) {
-    console.log('ascending')
     return listCopy
   } else if (order === arrangmentOpt.descending) {
-    console.log('descending')
     return listCopy.reverse()
   }
   else return listCopy

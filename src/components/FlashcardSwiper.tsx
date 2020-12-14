@@ -19,11 +19,10 @@ const defaultFlashcards = [{
   person: null,
 }]
 
-const FlashcardSwiper = ({ currentDeckOfCard, pao }) => {
+const FlashcardSwiper = ({ pao }) => {
   const study = useSelector((state: RootReducerT) => state.study)
   const [flashcardOrderAssortment, setFlashcardOrderAssortment] = useState<any>(defaultFlashcards)
   const swiperReff = useRef(null)
-  const theme: PaoThemeType = useTheme()
 
   const bgColor = [
     usePrimaryControlledColor(WhereToColor.flashcardBackground),

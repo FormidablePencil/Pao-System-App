@@ -83,7 +83,6 @@ const useUserAuthentication = () => {
           return form_res_msg.empty_email_and_username
 
         default:
-          console.log('wrong')
           break;
       }
     }

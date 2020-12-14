@@ -152,10 +152,7 @@ export const FlashcardsScreen = () => {
               }
             </>
           }
-          <FlashcardSwiper
-            pao={pao}
-            currentDeckOfCard={currentDeckOfCard}
-          />
+          <FlashcardSwiper pao={pao} />
         </View>
       </View>
       <FabActionBtn

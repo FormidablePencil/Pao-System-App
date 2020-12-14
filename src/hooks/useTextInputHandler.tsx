@@ -46,25 +46,20 @@ const useTextInputHandler = ({
     let id
     paoListApprovedByServer.forEach(doc => doc.number === paoDocModal.number ? id = doc._id : null);
     paoDocModal['_id'] = id
-    console.log(id, 'id@@');
 
     if (controlledInput.value && docExists === false) {
-      console.log('K');
       // await dispatch({ type: ADD_TO_PAO_LIST, payload: paoDocModal })
       const response: any = await dispatch(putNewDoc({
         controlledInput,
         accessToken: auth.accessToken,
         paoListApprovedByServer
       }))
-      console.log(response, 'responseresponse1');
       if (response === PaoResponses.token_invalid) {
-        console.log('kk, token invalid');
         dispatch(refreshAccessToken({ refreshToken: auth.refreshToken }))
       }
       return response
 
     } else if (controlledInput.value && docExists === true) {
-      console.log('KK');
       await dispatch({ type: UPDATE_PAO_LIST, payload: controlledInput })
       const response: any = await dispatch(updateExistingDoc({
         id,
@@ -73,7 +68,6 @@ const useTextInputHandler = ({
         paoListApprovedByServer
       }))
       if (response === PaoResponses.token_invalid) {
-        console.log('kk, token invalid');
         dispatch(refreshAccessToken({ refreshToken: auth.refreshToken }))
       }
       return response

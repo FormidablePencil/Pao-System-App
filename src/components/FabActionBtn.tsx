@@ -44,10 +44,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
   useCheckAmountOfPaoFilled({ setPaoDocumentsFilled })
 
   const fabActions = {
-    paoTableFabActions: [],
-    flashcardFabActions: [],
-    favListFabActions: [],
-    sharedFabActions: [
+    paoTableFabActions: [
       {
         style: { backgroundColor: usePrimaryControlledColor(WhereToColor.fabActionEdit, theme.colors.fabActionColors[0]) },
         icon: fabConsts.editMode.icon.pencil,
@@ -56,6 +53,10 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
           handleOnPressFabActions(fabActionOptions.editMode)
         }
       },
+    ],
+    flashcardFabActions: [],
+    favListFabActions: [],
+    sharedFabActions: [
       {
         style: { backgroundColor: usePrimaryControlledColor(WhereToColor.fabActonProfile, theme.colors.fabActionColors[1]) },
         icon: fabConsts.accountSettings.icon.accountSettings,
