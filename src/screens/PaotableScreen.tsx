@@ -8,12 +8,10 @@ import { tabScreens } from '../constants/constants'
 import { Keyboard, View, LayoutAnimation } from 'react-native'
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
 
-import { Button } from 'react-native-paper'
-
 export const PaoTableScreenContext = createContext()
 
 export const PaotableScreen = ({ navigation }) => {
-  const { controlledThemeColor } = useSelector((state: any) => state)
+  const controlledThemeColor = useSelector((state: any) => state.controlledThemeColor)
   const [modalOpen, setModalOpen] = useState(false)
   const [editModeTrue, setEditModeTrue] = useState(false)
   const [keyboardPresent, setKeyboardPresent] = useState(false)

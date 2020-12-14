@@ -115,7 +115,7 @@ const Pagination = ({
 }
 
 const PaginationBtnComponent = ({ num, currentRenderItemsRange, paginateTo, theme }) => {
-  const { controlledThemeColor } = useSelector((state: any) => state)
+  const controlledThemeColor = useSelector((state: any) => state.controlledThemeColor)
   const active = currentRenderItemsRange.toString()[0] === num.toString()
   const textColor = active ? 'white' : textControlledColorPagination()
   const dynamicBackgroundColor = active && { backgroundColor: usePrimaryControlledColor(WhereToColor.paginationBtns, theme.colors.primary) }

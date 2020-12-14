@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { RESET_SIGNIN_MESG, RESET_SIGNUP_MESG, SET_NOT_LOADING, RESET_SIGNED_OUT, RESET_SAVED_PAOLIST_TO_DB_MESG } from '../actions/types'
 import { fetchPao } from '../actions/paoActions'
+import { RootReducerT } from '../store'
 
 const useHandleSystemMesgAuth = () => {
-  const {
-    signin,
-    signup,
-    signedout,
-    savedPaoToDb
-  } = useSelector((state: any) => state.systemMessages)
-  const accessToken = useSelector((state: any) => state.auth.accessToken)
+  const signin = useSelector((state: RootReducerT) => state.systemMessages.signin)
+  const signup = useSelector((state: RootReducerT) => state.systemMessages.signup)
+  const signedout = useSelector((state: RootReducerT) => state.systemMessages.signedout)
+  const savedPaoToDb = useSelector((state: RootReducerT) => state.systemMessages.savedPaoToDb)
+  const accessToken = useSelector((state: RootReducerT) => state.auth.accessToken)
   const dispatch = useDispatch()
   const [authenticated, setAuthenticated]: any = useState(undefined)
   const [userSignedOut, setUserSignedOut]: any = useState(null)

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { TextInput, Animated, StyleSheet, Dimensions, View } from 'react-native'
-import { withTheme, useTheme, Text } from 'react-native-paper'
+import {  useTheme, Text } from 'react-native-paper'
 import styled from 'styled-components';
 import { createAnimatableComponent } from 'react-native-animatable';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -29,8 +29,9 @@ export interface ControlledInputsTypes {
 }
 
 const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
-  const { flashcardOptions, flashcardOptions: { flashcardItemDisplayedFront } } = useSelector((state: any) => state)
-  const { config: { editMode } } = useSelector((state: any) => state.fabProperties)
+  const flashcardOptions = useSelector((state: any) => state.flashcardOptions)
+  const flashcardItemDisplayedFront = useSelector((state: any) => state.flashcardOptions.flashcardItemDisplayedFront)
+  const editMode = useSelector((state: any) => state.fabProperties.config.editMode)
   const [controlledInputs, setControlledInputs] = useState<ControlledInputsTypes>({
     data: [{ number: null, name: null, value: null }]
   })

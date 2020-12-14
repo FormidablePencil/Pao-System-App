@@ -4,13 +4,11 @@ import * as Animatable from 'react-native-animatable'
 import playingCards from '../assets/playing-cards-png-11-original.png'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootReducerT } from '../store'
-import { useTheme } from 'react-native-paper'
-import { PaoThemeType } from '../styles/theming'
 import { STUDY_MODE_TOGGLE } from '../actions/types'
 import { Animated } from 'react-native'
 
 export default function LogoBtnImg({ btnBgColor, onlyToggleOffAllowed, disableToggle }: { btnBgColor?: string, onlyToggleOffAllowed?: boolean, disableToggle?: boolean }) {
-  const { study } = useSelector((state: RootReducerT) => state)
+  const study = useSelector((state: RootReducerT) => state.study)
   const spinAnim = useRef(null)
   const dispatch = useDispatch()
 

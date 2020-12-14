@@ -24,7 +24,9 @@ import { useCallbackRef } from 'use-callback-ref';
 
 export const FlashcardsScreen = () => {
   const { showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)
-  const { pao, study, fabProperties } = useSelector((state: RootReducerT) => state)
+  const pao = useSelector((state: RootReducerT) => state.pao)
+  const study = useSelector((state: RootReducerT) => state.study)
+  const fabProperties = useSelector((state: RootReducerT) => state.fabProperties)
   const [modalOpen, setModalOpen] = useState(false)
   const [editModeTrue, setEditModeTrue] = useState(false)
   const [studyAmount, setStudyAmount] = useState<number | null>(10)

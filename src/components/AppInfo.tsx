@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, useTheme, Switch } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
 import { signOut } from '../actions/authActions'
@@ -6,20 +6,18 @@ import useHandleSystemMesgAuth from '../hooks/useHandleSystemMesgAuth'
 import { LayoutAnimation, Animated, Slider, View, Text } from 'react-native'
 import styled from 'styled-components'
 import { PaoThemeType } from '../styles/theming'
-import { TabNavContext } from '../routes/StackNavigator'
-import { textControlledColor, distinguishingTextColorFromRestOfText, placeholderControlledColor, textControlledColorPagination } from '../hooks/usePrimaryControlledColor';
 import { SAVE_CONTROLLED_THEME_COLOR } from '../actions/types'
 
 
 const AppInfo = ({ navigation }: any) => {
-  const { controlledThemeColor } = useSelector((state: any) => state)
-  const dispatch = useDispatch()
-  const theme: PaoThemeType = useTheme()
-  const { refreshToken } = useSelector((state: any) => state.auth)
+  const controlledThemeColor = useSelector((state: any) => state.controlledThemeColor)
+  const refreshToken = useSelector((state: any) => state.auth.refreshToken)
   const loading = useSelector((state: any) => state.systemMessages.loading)
   const { userSignedOut } = useHandleSystemMesgAuth()
   const [loadingComplete, setLoadingComplete] = useState(false)
   const [themeControllerValue, setThemeControllerValue] = useState(controlledThemeColor)
+  const dispatch = useDispatch()
+  const theme: PaoThemeType = useTheme()
 
   useEffect(() => {
     if (userSignedOut === true || userSignedOut === false) {

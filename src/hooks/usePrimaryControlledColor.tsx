@@ -1,5 +1,3 @@
-import { useContext } from "react"
-import { ControlledThemeContext } from "../routes/StackNavigator"
 import { PaoTheme } from "../styles/theming"
 import { useSelector } from "react-redux"
 
@@ -12,7 +10,7 @@ export const distinguishingTextColorFromRestOfText = () => useTextColorFormula(2
 export const currentCardIndexTextControlledColor = () => useTextColorFormula(175, 255)
 
 const useTextColorFormula = (firstNum: number, secondNum: number) => {
-  const { controlledThemeColor } = useSelector((state: any) => state)
+  const controlledThemeColor = useSelector((state: any) => state.controlledThemeColor)
   if (controlledThemeColor > .5) {
     return { color: `rgba(${firstNum},${firstNum},${firstNum},1.0)` }
   } else if (controlledThemeColor !== null && controlledThemeColor <= .5) {

@@ -19,7 +19,7 @@ const ListModeTable = ({
   setControlledInput: any
   arr: any
 }) => {
-  const { tabScreenOptions: { config: {pagination} } } = useSelector((state: any) => state.fabProperties)
+  const pagination = useSelector((state: any) => state.fabProperties.tabScreenOptions.config.pagination)
   const {
     saveControlledInputToReduxPaoList,
     onChangeTextHandler,

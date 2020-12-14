@@ -4,7 +4,7 @@ import { fabProperties as fabConsts, fabModeOptions, fabActionOptions, fabOpt } 
 import { tabScreens } from '../constants/constants'
 import { View, Animated, Text, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { PaoThemeType } from '../styles/theming'
 import { AntDesign } from '@expo/vector-icons';
 import styled from 'styled-components'
@@ -13,10 +13,9 @@ import { TabNavContext } from '../routes/StackNavigator'
 import useCheckAmountOfPaoFilled from '../hooks/useCheckAmountOfPaoFilled'
 import OptionsModal from './OptionsModal'
 import { FlashcardSettingsTypes } from '../reducer/flashcardOptionsReducer'
-import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY, TOGGLE_FAB_VISIBILITY_FALSE, TOGGLE_FAB_VISIBILITY_TRUE } from '../actions/types'
+import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY_TRUE } from '../actions/types'
 import { arrangmentOpt } from '../reducer/flashcardOptionsReducer';
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
-import { RootReducerT } from '../store'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 

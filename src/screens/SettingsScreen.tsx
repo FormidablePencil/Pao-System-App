@@ -1,28 +1,21 @@
-import React, { useState, useContext } from 'react'
-import { View, Text } from 'react-native-tailwind'
-import { Image, Animated, Slider } from 'react-native'
+import React from 'react'
+import { View } from 'react-native-tailwind'
+import { Image } from 'react-native'
 import BackgroundSvg from '../components/BackgroundSvg';
-// import AccountSettings from '../components/AccountSettings'
-import profileImg from '../assets/mycat.jpg'
-import AppSettings from '../components/AppSettings'
 import AppInfo from '../components/AppInfo'
-import { IconButton, Appbar } from 'react-native-paper'
-import { TabNavContext } from '../routes/StackNavigator';
+import { Appbar } from 'react-native-paper'
 import usePrimaryControlledColor, { WhereToColor, textControlledColor } from '../hooks/usePrimaryControlledColor';
-
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { StyledText } from '../styles/global';
 import { useSelector } from 'react-redux';
-
-//~ I have to learn svg to get that border slanted effect on settings screen
+import { RootReducerT } from '../store';
 
 const ProfileScreen = ({ navigation }) => {
-  const { controlledThemeColor } = useSelector((state: any) => state)
-  const { username } = useSelector((state: any) => state.auth)
+  const username = useSelector((state: RootReducerT) => state.auth.username)
 
   return (
     <>
-      <Appbar.Header 
+      <Appbar.Header
         style={{ backgroundColor: usePrimaryControlledColor(WhereToColor.profileHeader) }}>
         <Appbar.BackAction
           onPress={() => navigation.goBack()}

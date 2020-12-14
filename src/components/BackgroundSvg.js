@@ -1,15 +1,9 @@
-import React, { useContext } from 'react'
-import { View, Text } from 'react-native-tailwind'
-import Svg, { Circle, Rect, Polygon, Defs, RadialGradient, Stop } from 'react-native-svg';
-import { Constants } from 'expo';
-import { useTheme } from 'react-native-paper';
+import React from 'react'
+import { View } from 'react-native-tailwind'
+import Svg, { Polygon, Defs, RadialGradient, Stop } from 'react-native-svg';
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
-import { ControlledThemeContext } from '../routes/StackNavigator';
-import { useSelector } from 'react-redux';
 
 const BackgroundSvg = () => {
-  const theme = useTheme()
-  const { controlledThemeColor } = useSelector(state => state)
 
   return (
     <View className="absolute w-full h-full">

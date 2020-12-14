@@ -35,13 +35,6 @@ const StackNavigator = () => {
         <Stack.Navigator
           initialRouteName={tabScreens.WelcomeScreen}
           screenOptions={{}}>
-          <Stack.Screen options={{
-            headerShown: false,
-          }}
-            name='ProfileScreen' component={ProfileScreen} />
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name={tabScreens.WelcomeScreen} component={WelcomeScreen} />
           <Stack.Screen
             options={{
               headerTransparent: true,
@@ -50,6 +43,13 @@ const StackNavigator = () => {
               headerRight: props => <NavigateToFlashcards tableReady={tableReady} showNavigationIcons={showNavigationIcons} />,
             }}
             name={tabScreens.Paotable} component={PaotableScreen} />
+          <Stack.Screen options={{
+            headerShown: false,
+          }}
+            name='ProfileScreen' component={ProfileScreen} />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name={tabScreens.WelcomeScreen} component={WelcomeScreen} />
           <Stack.Screen
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

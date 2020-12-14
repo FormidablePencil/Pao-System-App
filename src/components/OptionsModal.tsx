@@ -3,7 +3,6 @@ import { View } from 'react-native-tailwind'
 import { Dimensions } from 'react-native';
 import { Button, Text, Headline } from 'react-native-paper'
 import SwitchSelector from "react-native-switch-selector";
-import { useSelector } from 'react-redux';
 import { arrangmentOpt } from '../reducer/flashcardOptionsReducer';
 import { tabScreens } from '../constants/constants';
 import { capitalizeFirstCharFunc } from './logic/logic';
@@ -20,7 +19,6 @@ const OptionsModal = ({
   setLoading,
   currentScreen, theme,
   fabActionContentRef, fabActionContentRef2 }) => {
-  const { flashcardItemDisplayedFront, autoPlayFlashcards } = useSelector((state: any) => state.flashcardOptions)
 
   const switchSelectorsInfo: any = [
     { name: 'number' },

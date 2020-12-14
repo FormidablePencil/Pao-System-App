@@ -1,15 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, Suspense } from 'react'
 import styled from 'styled-components';
-import { FAB, useTheme, Button, Text, Headline } from 'react-native-paper';
+import { FAB, Button, Text, Headline } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import FlashcardItSelf from './FlashcardItSelf';
 import Swiper from 'react-native-swiper'
 import { LinearGradient } from 'expo-linear-gradient';
-import { PaoThemeType } from '../styles/theming';
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
 import { RootReducerT } from '../store';
 import sortBy from 'lodash.sortby'
+import {
+  LazyloadScrollView,
+  LazyloadView,
+  LazyloadImage
+} from 'react-native-lazyload';
+
 
 const defaultFlashcards = [{
   id: null,
@@ -50,7 +55,8 @@ const FlashcardSwiper = ({ pao }) => {
             showsPagination={false}
             loop={true}
             // loadMinimal={false}
-            loadMinimalSize={1}
+            loadMinimal={true}
+            loadMinimalSize={2}
             // index={0}
             // onIndexChanged={async (index) =>} // the way we can know what direction the user swiped is by comparing prev to new index
             onIndexChanged={async (index) => await console.log(index)} // the way we can know what direction the user swiped is by comparing prev to new index
@@ -58,6 +64,7 @@ const FlashcardSwiper = ({ pao }) => {
             {/*       <AlignCenterWrapper key={index}>
                     <FlashcardItSelf collection={study.paoStudySets} index={index} studyMode={true} />
                   </AlignCenterWrapper> */}
+
             {flashcardOrderAssortment.map(item => {
               // console.log(currentDeckOfCard, 'sd');
               return (

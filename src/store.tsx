@@ -20,11 +20,11 @@ export interface RootReducerT {
   fabVisible: boolean
   paoListApprovedByServer
   controlledThemeColor
-  study: StudyModeT
   fabProperties
+  study: StudyModeT
 }
 
-const rootReducer = combineReducers<RootReducerT>({
+const rootReducer = combineReducers({
   pao: paoReducer,
   auth: authReducer,
   systemMessages: systemMesgReducer,

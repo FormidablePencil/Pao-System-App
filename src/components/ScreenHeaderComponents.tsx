@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React from 'react'
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { tabScreens } from "../constants/constants"
 import { AntDesign } from '@expo/vector-icons';
@@ -6,14 +6,13 @@ import { TouchableRipple, useTheme } from 'react-native-paper';
 import styled from 'styled-components';
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
 import LogoBtnImg from './LogoBtnImg';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootReducerT } from '../store';
-import { STUDY_MODE_TOGGLE } from '../actions/types';
 import { PaoThemeType } from '../styles/theming';
 import { View } from 'react-native';
 
 const NavigateToPaoTable = ({ tableReady, showNavigationIcons }) => {
-  const { study } = useSelector((state: RootReducerT) => state)
+  const study = useSelector((state: RootReducerT) => state.study)
   const navigation = useNavigation()
   const route = useRoute()
   const theme: PaoThemeType = useTheme()

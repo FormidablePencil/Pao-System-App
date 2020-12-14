@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, LayoutAnimation, Text } from 'react-native'
+import { View, LayoutAnimation } from 'react-native'
 import { useSelector } from 'react-redux'
 import Pagination, { paginateDirection } from './Pagination'
 import RenderPaoTables from './RenderPaoTables'
 import { mergePaoArrays } from './logic/sortPaoList'
 import { TabNavContext } from '../routes/StackNavigator'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import Swiper from 'react-native-swiper'
+import { RootReducerT } from '../store'
 
 const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
   const fabProps = useSelector((state: any) => state.fabProperties)
-  const pagination = fabProps.config.pagination
-  const { tableReady, setTableReady } = useContext(TabNavContext)
-  const paoList: any = useSelector((state: any) => state.pao)  //@
+  const { setTableReady } = useContext(TabNavContext)
+  const paoList: any = useSelector((state: RootReducerT) => state.pao)  //@
+  const study: any = useSelector((state: RootReducerT) => state.study.study)  //@
+  const paoStudySets: any = useSelector((state: RootReducerT) => state.study.paoStudySets)  //@
 
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }
@@ -27,8 +28,6 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
   const [test, setTest] = useState<number>(null)
   const [flatlistItems, setFlatlistItems] = useState(arr) //@ !!!
   const [listSortedInTens, setListSortedInTens] = useState([])
-
-
 
   const [currentlyFocusedTextInput, setCurrentlyFocusedTextInput] = useState({ index: null, name: null })
   const prevTextInput = useRef(null)
@@ -76,6 +75,13 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
     else if (amountOfDigits === 1) setCurrentRenderItemsRange(0)
   }
 
+  useEffect(() => {
+    // setListSortedInTens
+    // ~ save by the number
+    // ~ table and flashcards
+    console.log(paoStudySets, 'paoStudySets');
+  }, [study])
+  
   useEffect(() => {
     const newFlatListItem = mergePaoArrays(paoList, flatlistItems)
     setFlatlistItems(newFlatListItem)

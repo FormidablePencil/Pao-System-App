@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { YellowBox, Platform, UIManager, StatusBar, BackHandler } from 'react-native';
-import { View, Text } from 'react-native-tailwind';
+import { YellowBox, Platform, UIManager, StatusBar } from 'react-native';
+import { Text } from 'react-native-tailwind';
 import * as Font from 'expo-font';
 import ErrorBoundary from 'react-error-boundary';
-import { Provider as StoreProvider, useSelector } from 'react-redux'
+import { Provider as StoreProvider } from 'react-redux'
 import configureStore from './store';
 import StackNavigator from './routes/StackNavigator';
-import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper'
+import { Provider as PaperProvider } from 'react-native-paper'
 import { PaoTheme } from './styles/theming';
 
 const store = configureStore()

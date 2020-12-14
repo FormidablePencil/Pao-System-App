@@ -65,7 +65,7 @@ const InputFieldsComp = ({
       await Keyboard.dismiss()
       setLoading(LoadingTypes.success)
       setTimeout(async () => {
-        await navigation.navigate(tabScreens.Flashcards)
+        await navigation.navigate(tabScreens.Paotable)
         setLoading(LoadingTypes.notLoading)
       }, 1250);
     } else {
