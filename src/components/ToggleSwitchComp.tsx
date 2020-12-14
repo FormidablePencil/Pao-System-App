@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
-import { globalStyles } from '../styles/global'
+import { reusableStyles } from '../styles/global'
 import Icon2 from "react-native-vector-icons/FontAwesome5"
 
 const ToggleSwitchComp = () => {
@@ -10,7 +10,7 @@ const ToggleSwitchComp = () => {
     setSwitchToggle(!switchToggle)
   }
   return (
-    <TouchableOpacity onPress={() => onPressHandlerToggle()} style={{ ...globalStyles.tiger }}>
+    <TouchableOpacity onPress={() => onPressHandlerToggle()} style={{ ...reusableStyles.tiger }}>
       {switchToggle ?
         <Icon2 name='toggle-on' size={35} />
         :

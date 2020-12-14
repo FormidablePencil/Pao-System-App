@@ -6,6 +6,8 @@ import { Row, FirstItemInRowImage, ItemInRow, StyledTextInRowItem } from '../sty
 import { useTheme } from 'react-native-paper'
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
 
+export const TableHeaderHeight = 60 + StatusBar.currentHeight
+
 const TableHeader = () => {
   const theme = useTheme()
 
@@ -13,8 +15,8 @@ const TableHeader = () => {
     <LinearGradient
       start={[.8, 0.8]}
       colors={[usePrimaryControlledColor(WhereToColor.tableHeader), usePrimaryControlledColor(WhereToColor.tableHeader2)]}
-      style={{ height:  60 + StatusBar.currentHeight }}>
-      <View style={{height: 20 }}></View>
+      style={{ height: TableHeaderHeight }}>
+      <View style={{ height: 20 }}></View>
       <Row>
         <FirstItemInRowImage>
           {/* <Image style={{ resizeMode: 'contain', height: 20, width: 20 }} source={playingCards} /> */}

@@ -37,7 +37,7 @@ export default (state: StudyModeT = initialState, { type, payload }) => {
       return { ...state, list: state.list.filter(paoNum => paoNum !== payload) }
 
     case ADD_OR_REMOVE_ITEM_STUDY:
-      if (state.list.filter(paoNum => paoNum === payload)[0])
+      if (state.list.filter(paoNum => paoNum === payload).length)
         return { ...state, list: state.list.filter(paoNum => paoNum !== payload) }
       else
         return { ...state, list: [...state.list, payload] }

@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import styled from 'styled-components'
 import { Text } from 'react-native-paper'
 
-export const globalStyles = StyleSheet.create({
+export const reusableStyles = StyleSheet.create({
   rockSaltFont: {
     fontFamily: "rock-salt",
   },
@@ -54,10 +54,17 @@ export const globalStyles = StyleSheet.create({
     fontSize: 25,
     color: 'white',
     fontFamily: 'MontserratReg',
-  }
+  },
+  regText: {
+    fontSize: 12,
+  },
+  lgText: {
+    fontFamily: 'MontserratReg',
+    fontSize: 20,
+  },
 })
 
-{/* < View className = "flex justify-center items-center bg-white w-full" style = {{ ...globalStyles.flashcard }}> */ }
+{/* < View className = "flex justify-center items-center bg-white w-full" style = {{ ...reusableStyles.flashcard }}> */ }
 
 
 // style={{rotate: '90deg'}}

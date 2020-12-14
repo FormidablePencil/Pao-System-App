@@ -7,6 +7,7 @@ export const Row = styled.View`
   padding: 0px 15px;
 `
 export const FirstItemInRow = styled.Text`
+  margin-left: 3;
   align-self: center;
   color: ${({ color }) => color ?? 'white'};
   width: 20px;
@@ -15,11 +16,13 @@ export const FirstItemInRow = styled.Text`
 `;
 export const FirstItemInRowImage = styled(FirstItemInRow)`
   height: 30;
+  width: 30;
 `;
 export const ItemInRow = styled.View`
   width: 33%;
   flex: 1;
   justify-content: center;
+  align-items: center;
 `;
 export const StyledTextInRowItem = styled.Text`
   text-align: center;

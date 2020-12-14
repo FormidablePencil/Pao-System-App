@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import { Button, IconButton, useTheme, Text } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PaoThemeType } from '../styles/theming';
-import { Animated } from 'react-native';
+import { Animated, Dimensions } from 'react-native';
 import usePrimaryControlledColor, { WhereToColor, textControlledColorPagination } from '../hooks/usePrimaryControlledColor';
 import { PaoTableScreenContext } from '../screens/PaotableScreen'
 import { useSelector } from 'react-redux';
+
+const SCREEN_WIDTH = Dimensions.get("window").width
 
 interface PaginationType {
   currentRenderItemsRange
@@ -33,7 +35,7 @@ const Pagination = ({
   const { keyboardPresent, editModeTrue } = useContext(PaoTableScreenContext)
   const theme: PaoThemeType = useTheme()
 
-// console.log(swiperIndex.current, 'swiperIndex from pagination');
+  // console.log(swiperIndex.current, 'swiperIndex from pagination');
   const paginateTo = (num: number) => {
     const newNum = num * 10
     jumpToCertainTable(num)
@@ -86,7 +88,11 @@ const Pagination = ({
     >
       <PaginationContainer>
         <PaginationBtnAnimated
-          style={{ backgroundColor: paginationBtnColor, marginRight: 4 }}
+          style={{
+            backgroundColor: paginationBtnColor,
+            marginRight: SCREEN_WIDTH > 380 ? 4 : 0,
+            width: SCREEN_WIDTH > 380 ? 50 : 40
+          }}
           icon='menu-left'
           size={35}
           color='white'
@@ -102,7 +108,11 @@ const Pagination = ({
         </Column>
         <Row style={{ justifyContent: 'space-around' }}>
           <PaginationBtnAnimated
-            style={{ backgroundColor: paginationBtnColor, marginLeft: 4 }}
+            style={{
+              backgroundColor: paginationBtnColor,
+              marginLeft: SCREEN_WIDTH > 380 ? 4 : 0,
+              width: SCREEN_WIDTH > 380 ? 50 : 40
+            }}
             icon='menu-right'
             size={35}
             color='white'

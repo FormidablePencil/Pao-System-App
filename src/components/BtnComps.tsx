@@ -1,7 +1,7 @@
 // import React, { useContext } from 'react'
 // import { View, Text } from 'react-native-tailwind'
 // import { TouchableOpacity } from 'react-native'
-// import { StyledText, globalStyles } from '../styles/global'
+// import { StyledText, reusableStyles } from '../styles/global'
 // // import { TabNavContext } from '../routes/TabNavigator'
 
 // interface SimpleBtnStyles { //for theming pruposes

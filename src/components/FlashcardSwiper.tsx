@@ -25,7 +25,8 @@ const defaultFlashcards = [{
 }]
 
 const FlashcardSwiper = ({ pao }) => {
-  const study = useSelector((state: RootReducerT) => state.study)
+  const study = useSelector((state: RootReducerT) => state.study.study)
+  const studyList = useSelector((state: RootReducerT) => state.study.list)
   const [flashcardOrderAssortment, setFlashcardOrderAssortment] = useState<any>(defaultFlashcards)
   const swiperReff = useRef(null)
 
@@ -36,11 +37,11 @@ const FlashcardSwiper = ({ pao }) => {
   const noItemsInPaoList = flashcardOrderAssortment[0].number === null
 
   useEffect(() => {
-    if (study.study) setFlashcardOrderAssortment(study.paoStudySets)
-    else if (!study.study) {
-      setFlashcardOrderAssortment(sortBy(pao, 'number'))
-    }
-  }, [study.study])
+    // if (study.study) setFlashcardOrderAssortment(study.paoStudySets)
+    // else if (!study.study) {
+    setFlashcardOrderAssortment(sortBy(pao, 'number'))
+    // }
+  }, [])
 
   return (
     <Container style={{ ...styles2.slide1, }}>
@@ -67,11 +68,12 @@ const FlashcardSwiper = ({ pao }) => {
 
             {flashcardOrderAssortment.map(item => {
               // console.log(currentDeckOfCard, 'sd');
-              return (
-                <AlignCenterWrapper key={item}>
-                  <FlashcardItSelf collection={item} />
-                </AlignCenterWrapper>
-              )
+              if (!study || study && studyList.filter(studyNum => studyNum === item.number)[0])
+                return (
+                  <AlignCenterWrapper key={item}>
+                    <FlashcardItSelf collection={item} />
+                  </AlignCenterWrapper>
+                )
             })
             }
           </Swiper>

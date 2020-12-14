@@ -89,7 +89,6 @@ const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
   }
 
   const onChangeHandler = ({ number, name, value }) => {
-    console.log('hittign')
     const newControlledInput = { number, name, value }
     if (controlledInputs.data.filter(input => input.number === number)) {
       const modifiedData = controlledInputs.data.filter(collection => {

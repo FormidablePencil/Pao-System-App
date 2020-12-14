@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View } from 'react-native-tailwind';
-import { globalStyles, WhiteText } from '../styles/global'
+import { reusableStyles, WhiteText } from '../styles/global'
 import { Button, useTheme, TouchableRipple, Modal, Portal } from 'react-native-paper';
 import styled from 'styled-components';
 import FlashcardSwiper from '../components/FlashcardSwiper';
@@ -127,7 +127,7 @@ export const FlashcardsScreen = () => {
                       <ModalContainer>
                         <InputSpinnerContainer>
                           <InputSpinner
-                            inputStyle={{ ...globalStyles.whiteText }}
+                            inputStyle={{ ...reusableStyles.whiteText }}
                             colorLeft={theme.colors.fabActionColors[1]}
                             colorRight={theme.colors.fabActionColors[1]}
                             colorPress='#4880A5'

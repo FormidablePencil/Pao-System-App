@@ -9,7 +9,6 @@ import LogoBtnImg from './LogoBtnImg';
 import { useSelector } from 'react-redux';
 import { RootReducerT } from '../store';
 import { PaoThemeType } from '../styles/theming';
-import { View } from 'react-native';
 
 const NavigateToPaoTable = ({ tableReady, showNavigationIcons }) => {
   const study = useSelector((state: RootReducerT) => state.study)
@@ -26,22 +25,17 @@ const NavigateToPaoTable = ({ tableReady, showNavigationIcons }) => {
 
   return ( //spin animation!
     <>
-      {showNavigationIcons &&
+      {showNavigationIcons && route.name === tabScreens.Flashcards ?
         <NavigationBtn
           left
           disabled={route.name !== tabScreens.Flashcards}
           bgColor={bgColor}
           onPress={() => onPressHandler()}
         >
-          {route.name === tabScreens.Flashcards ?
-            <AntDesign size={20} style={{ marginHorizontal: 15, color: 'white', transform: [{ scaleX: -1 }] }} name='arrowright' />
-            :
-            <BtnImgContainer>
-              <LogoBtnImg btnBgColor={'transparent'} onlyToggleOffAllowed={true} />
-            </BtnImgContainer>
-          }
-
+          <AntDesign size={20} style={{ marginHorizontal: 15, color: 'white', transform: [{ scaleX: -1 }] }} name='arrowright' />
         </NavigationBtn>
+        :
+        <LogoBtnImg />
       }
     </>
   )
@@ -66,7 +60,7 @@ export const NavigateToFlashcards = ({ tableReady, showNavigationIcons }) => {
           {route.name === tabScreens.Paotable ?
             <AntDesign size={20} style={{ marginHorizontal: 15, color: 'white' }} name='arrowright' />
             :
-            <></>
+            <LogoBtnImg />
             // <Image style={{ resizeMode: 'contain', height: 20, width: 20, marginHorizontal: 15, }} source={playingCards} />
           }
         </NavigationBtn>
@@ -75,9 +69,6 @@ export const NavigateToFlashcards = ({ tableReady, showNavigationIcons }) => {
   )
 }
 
-const BtnImgContainer = styled(View)`
-  margin: -5px 10px;
-`
 const NavigationBtn = styled<any>(TouchableRipple)`
   /* padding: 25px; */
   z-index: 40;
