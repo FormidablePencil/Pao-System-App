@@ -1,29 +1,21 @@
 import React from 'react'
 import { View } from 'react-native-tailwind'
-import { Dimensions } from 'react-native';
-import { Button, Text, Headline } from 'react-native-paper'
-import SwitchSelector from "react-native-switch-selector";
-import { arrangmentOpt } from '../../../../../reducer/flashcardOptionsReducer';
-import { tabScreens } from '../../../../../constants/constants';
-import { capitalizeFirstCharFunc } from '../../../../../components/logic/logic';
-import * as Animatable from 'react-native-animatable';
-import usePrimaryControlledColor, { WhereToColor, textControlledColor } from '../../../../../hooks/usePrimaryControlledColor';
-import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE } from '../../../../../actions/types';
+import { arrangmentOpt } from '../../../../reducer/flashcardOptionsReducer';
+import usePrimaryControlledColor, { WhereToColor, textControlledColor } from '../../../../hooks/usePrimaryControlledColor';
 import { useDispatch, useSelector } from 'react-redux';
 import CardOpts from './reg-mode-opts/CardOpts';
 import ListOpts from './reg-mode-opts/ListOpts';
 import RandomStudyModeOpts from './random-mode-opts';
-import { RootReducerT } from '../../../../../store';
+import { RootReducerT } from '../../../../store';
 
 
-const OptionsModal = ({
+const FlashcardsOptsModal = ({
   sliderValueautoPlayFlashcardsDuration,
   setModalOpen,
   setFlashcardSettings, flashcardSettings,
   setLoading,
   currentScreen, theme,
   fabActionContentRef, fabActionContentRef2 }) => {
-  const dispatch = useDispatch()
   const isRandomStudyMode = useSelector((state: RootReducerT) => state.studyRandomMode.isRandomStudyMode)
 
   const switchSelectorsInfo: any = [
@@ -103,7 +95,6 @@ const OptionsModal = ({
     <View className="flex justify-center items-center justify-around">
       <View className='flex-col' style={{ alignItems: 'center', }}>
 
-        {/* reg mode */}
         {!isRandomStudyMode ?
           <>
             <CardOpts
@@ -122,7 +113,6 @@ const OptionsModal = ({
               setFlashcardSettings={setFlashcardSettings}
             />
           </>
-
           :
           <RandomStudyModeOpts />
         }
@@ -132,4 +122,4 @@ const OptionsModal = ({
   )
 }
 
-export default OptionsModal
+export default FlashcardsOptsModal

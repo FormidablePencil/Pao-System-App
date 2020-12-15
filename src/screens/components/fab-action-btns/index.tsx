@@ -8,16 +8,18 @@ import { useDispatch } from 'react-redux'
 import { PaoThemeType } from '../../../styles/theming'
 import { AntDesign } from '@expo/vector-icons';
 import styled from 'styled-components'
-import * as Animatable from 'react-native-animatable';
 import { TabNavContext } from '../../../routes/StackNavigator'
 import useCheckAmountOfPaoFilled from '../../../hooks/useCheckAmountOfPaoFilled'
-import OptionsModal from '../../flashcard-screen/components/options-modal/modal-options'
+import FlashcardsOptsModal from './flashcards-opts'
 import { FlashcardSettingsTypes } from '../../../reducer/flashcardOptionsReducer'
 import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY_TRUE } from '../../../actions/types'
 import { arrangmentOpt } from '../../../reducer/flashcardOptionsReducer';
 import usePrimaryControlledColor, { WhereToColor } from '../../../hooks/usePrimaryControlledColor'
 import useOnPressFabsHandlers from './useOnPressFabsHandlers'
 import useFabActionVariousProperties from './useFabActionVariousProperties'
+import PaoTableOptsModal from './paotable-opts/PaoTableOptsModal'
+import SelectorComp from './sharable-opts/SelectorComp'
+import SharableOptions from './sharable-opts'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
@@ -88,7 +90,6 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     handleOnPressGeneral
   })
 
-  const onPressHandler = () => setGoToUnfilledTrigger(true)
 
   const controlledColor = usePrimaryControlledColor(WhereToColor.primaryColor, theme.colors.primary)
   const mainFabBackgroundColor = currentFabProps.mainFab.mode === fabModeOptions.editing ?
@@ -103,25 +104,19 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
           <Portal>
             {currentFabProps.mainFab.mode === fabModeOptions.menuOpen &&
               <View style={{ height: '100%', width: SCREEN_WIDTH / 1.8, alignSelf: "center", flex: 1, justifyContent: 'center', }}>
+                <SharableOptions />
                 <>
                   {currentScreen === tabScreens.Paotable &&
-                    <BounceAnimationView animation='bounceIn'>
-                      <RegText>Filled: {paoDocumentsFilled}/100</RegText>
-                      {paoDocumentsFilled !== 100 &&
-                        <TouchableRippleStyled
-                          bgColor={bgColor}
-                          onPress={() => onPressHandler()}>
-                          <Row>
-                            <RegText black={themeIsUncontrolled}>Go to unfilled</RegText>
-                            <AntDesignStyled black={themeIsUncontrolled} size={10} name='arrowright' />
-                          </Row>
-                        </TouchableRippleStyled>
-                      }
-                    </BounceAnimationView>
+                    <PaoTableOptsModal
+                      paoDocumentsFilled={paoDocumentsFilled}
+                      bgColor={bgColor}
+                      setGoToUnfilledTrigger={setGoToUnfilledTrigger}
+                      themeIsUncontrolled={themeIsUncontrolled}
+                    />
                   }
 
                   {currentScreen === tabScreens.Flashcards &&
-                    <OptionsModal
+                    <FlashcardsOptsModal
                       fabActionContentRef={fabActionContentRef}
                       fabActionContentRef2={fabActionContentRef2}
                       theme={theme}
@@ -155,32 +150,5 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     </View>
   )
 }
-
-const AntDesignStyled = styled(AntDesign)`
-  margin: 0px 3px;
-  color: ${({ black }) => black ? 'black' : 'white'};
-`;
-const AligningContainer = styled(View)`
-  justify-content: flex-end;
-`;
-const Row = styled(View)`
-  flex-direction: row;
-  align-items: center
-`;
-const RegText = styled<any>(Text)`
-  color: ${({ black }) => black ? 'black' : 'white'};
-  font-family: 'MontserratMed';
-`;
-const BounceAnimationView = styled(Animatable.View)`
-  margin: 8px;
-  align-items: center;
-`;
-const TouchableRippleStyled = styled<any>(TouchableRipple)`
- padding: 0px 10px;
-  background-color: ${({ bgColor }) => bgColor};
-  border-radius: 15px;
-  padding: 5px;
-  elevation: 10px;
-`;
 
 export default FabActionBtn

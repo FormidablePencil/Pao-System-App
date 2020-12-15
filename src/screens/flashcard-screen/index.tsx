@@ -21,7 +21,7 @@ import shuffle from 'shuffle-array'
 import { swipeDirection } from '../../constants/constants';
 import { listItemsT } from '../../reducer/studyReducer';
 import { useCallbackRef } from 'use-callback-ref';
-import FlashcardBtnOpt from './components/options-modal/flashcard-btn-opt';
+import SelectorComp from '../components/fab-action-btns/sharable-opts/SelectorComp';
 
 export const FlashcardsScreen = () => {
   const { showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)
@@ -66,16 +66,10 @@ export const FlashcardsScreen = () => {
     <>
       <View className="w-full h-full flex flex-row justify-center" style={{}} >
         <View className="flex" style={{}}>
-          {/* <StudyStuff /> */}
-
-          <FlashcardBtnOpt
-
-          />
-
-
           <FlashcardSwiper />
         </View>
       </View>
+
       <FabActionBtn
         setGoToUnfilledTrigger={null}
         currentScreen={tabScreens.Flashcards}
@@ -118,53 +112,5 @@ const CardsLeftText = styled<any>(Text)`
   text-align: center;
   z-index: 5;
 `;
-
-// const StudyStuff = () => {
-//   return (
-//     <>
-//        {fabProperties.fabVisibility === false &&
-//             <>
-//               <CardsLeftText color={dynamicTextColor}>{renderCardsLeft()}</CardsLeftText>
-//               {openStudyModalOpts &&
-//                 <Portal>
-//                   <LinearGradientStyled
-//                     end={[.75, .2]} start={[.01, .75]}
-//                     colors={LinearGradientColors}
-
-//                   >
-//                     <Modal visible={openStudyModal}>
-//                       <ModalContainer>
-//                         <InputSpinnerContainer>
-//                           <InputSpinner
-//                             inputStyle={{ ...reusableStyles.whiteText }}
-//                             colorLeft={theme.colors.fabActionColors[1]}
-//                             colorRight={theme.colors.fabActionColors[1]}
-//                             colorPress='#4880A5'
-//                             buttonPressStyle={{ backgroundColor: '#4880A5' }}
-//                             colorMax={'#4880A5'}
-//                             colorMin={'#4880A5'}
-//                             max={30}
-//                             min={2}
-//                             step={2}
-//                             value={studyAmount}
-//                             color='orange'
-//                             onChange={(num) => {
-//                               setStudyAmount(num)
-//                             }}
-//                           >
-//                           </InputSpinner>
-//                         </InputSpinnerContainer>
-//                         <WhiteText>x numbers in total</WhiteText>
-//                         <Button mode='contained' onPress={toggleStudyMode} color={theme.colors.accent}>Selected</Button>
-//                       </ModalContainer>
-//                     </Modal>
-//                   </LinearGradientStyled>
-//                 </Portal>
-//               }
-//             </>
-//           }
-//           </>
-//   )
-// }
 
 export default FlashcardsScreen

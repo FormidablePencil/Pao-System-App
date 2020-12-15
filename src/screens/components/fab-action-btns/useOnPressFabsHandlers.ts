@@ -41,14 +41,14 @@ console.log('qwe')
         console.log('qwe1')
         if (currentScreen === tabScreens.Flashcards) {
           if (!loading) {
-            fabActionContentRef.current.fadeOutUpBig()
-            fabActionContentRef2.current.fadeOutDownBig()
+            // fabActionContentRef.current.fadeOutUpBig()
+            // fabActionContentRef2.current.fadeOutDownBig()
             setLoading(true)
-            await setTimeout(() => {
+            // await setTimeout(() => {
               setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //replace
               // dispatch({ type: TOGGLE_FAB_VISIBILITY_FALSE })
               setShowNavigationIcons(true)
-            }, 500);
+            // }, 500);
             setLoading(false)
           }
         } else {
@@ -64,9 +64,9 @@ console.log('qwe')
           dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
           setShowNavigationIcons(false)
           setLoading(true)
-          setTimeout(() => {
+          // setTimeout(() => {
             setLoading(false)
-          }, 1250);
+          // }, 1250);
         } else {
           setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen }) //REPLACE
           setShowNavigationIcons(false)
