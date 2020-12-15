@@ -96,19 +96,6 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
   const bgColor = usePrimaryControlledColor(WhereToColor.goToUnfilledBtn, theme.colors.accent)
   const themeIsUncontrolled = bgColor === theme.colors.accent
 
-  const RenderOptionsModal = () =>
-    <OptionsModal
-      fabActionContentRef={fabActionContentRef}
-      fabActionContentRef2={fabActionContentRef2}
-      theme={theme}
-      sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
-      currentScreen={currentScreen}
-      flashcardSettings={flashcardSettings}
-      setFlashcardSettings={setFlashcardSettings}
-      setLoading={setLoading}
-      setModalOpen={setModalOpen}
-    />
-
   return (
     <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
       <Provider>
@@ -134,7 +121,17 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
                   }
 
                   {currentScreen === tabScreens.Flashcards &&
-                    <RenderOptionsModal />
+                    <OptionsModal
+                      fabActionContentRef={fabActionContentRef}
+                      fabActionContentRef2={fabActionContentRef2}
+                      theme={theme}
+                      sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
+                      currentScreen={currentScreen}
+                      flashcardSettings={flashcardSettings}
+                      setFlashcardSettings={setFlashcardSettings}
+                      setLoading={setLoading}
+                      setModalOpen={setModalOpen}
+                    />
                   }
                 </>
               </View>

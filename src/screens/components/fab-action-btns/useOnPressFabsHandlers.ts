@@ -21,11 +21,9 @@ const useOnPressFabsHandlers = ({
   const dispatch = useDispatch()
 
   const handleOnPressGeneral = async () => {
-    console.log(currentFabProps, fabConsts.mainBtn.flashcardChangingSettings.icon.settings)
     if (loading) return
     if (currentFabProps.mainFab.icon === fabConsts.mainBtn.flashcardChangingSettings.icon.settings) {
-      console.log('hitt k')
-
+console.log('qwe')
       setLoading(true)
       await setFlashcardSettings(prev => ({
         ...prev, autoPlayFlashcards: {
@@ -38,7 +36,9 @@ const useOnPressFabsHandlers = ({
       setLoading(false)
     }
     switch (currentFabProps.mainFab.mode) {
+      
       case fabOpt.menuOpen.mode:
+        console.log('qwe1')
         if (currentScreen === tabScreens.Flashcards) {
           if (!loading) {
             fabActionContentRef.current.fadeOutUpBig()
@@ -57,7 +57,8 @@ const useOnPressFabsHandlers = ({
           setShowNavigationIcons(true)
         }
         break;
-      case fabOpt.standby.mode:
+        case fabOpt.standby.mode:
+        console.log('qwe2')
         if (currentScreen === tabScreens.Flashcards) {
           setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen }) //REPLACE
           dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
@@ -70,9 +71,10 @@ const useOnPressFabsHandlers = ({
           setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen }) //REPLACE
           setShowNavigationIcons(false)
         }
-
+        
         break;
-      case fabOpt.editMode.mode:
+        case fabOpt.editMode.mode:
+        console.log('qwe2')
         if (currentScreen === tabScreens.Flashcards) dispatch({ type: TOGGLE_EDIT_MODE })
         setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //REPLACE
         // dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
