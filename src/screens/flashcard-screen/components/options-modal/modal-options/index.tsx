@@ -9,10 +9,11 @@ import { capitalizeFirstCharFunc } from '../../../../../components/logic/logic';
 import * as Animatable from 'react-native-animatable';
 import usePrimaryControlledColor, { WhereToColor, textControlledColor } from '../../../../../hooks/usePrimaryControlledColor';
 import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE } from '../../../../../actions/types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CardOpts from './reg-mode-opts/CardOpts';
 import ListOpts from './reg-mode-opts/ListOpts';
 import RandomStudyModeOpts from './random-mode-opts';
+import { RootReducerT } from '../../../../../store';
 
 
 const OptionsModal = ({
@@ -23,6 +24,7 @@ const OptionsModal = ({
   currentScreen, theme,
   fabActionContentRef, fabActionContentRef2 }) => {
   const dispatch = useDispatch()
+  const isRandomStudyMode = useSelector((state: RootReducerT) => state.studyRandomMode.isRandomStudyMode)
 
   const switchSelectorsInfo: any = [
     { name: 'number' },
@@ -102,24 +104,28 @@ const OptionsModal = ({
       <View className='flex-col' style={{ alignItems: 'center', }}>
 
         {/* reg mode */}
-        <CardOpts
-          fabActionContentRef={fabActionContentRef}
-          currentScreen={currentScreen}
-          switchSelectorsInfo={switchSelectorsInfo}
-          flashcardSettings={flashcardSettings}
-          bgColor={bgColor}
-          setWhatSideItemWillDisplay={setWhatSideItemWillDisplay}
-        />
-        <ListOpts
-          bgColor={bgColor}
-          fabActionContentRef2={fabActionContentRef2}
-          flashCardOrderBtnPayload={flashCardOrderBtnPayload}
-          flashcardSettings={flashcardSettings}
-          setFlashcardSettings={setFlashcardSettings}
-        />
+        {!isRandomStudyMode ?
+          <>
+            <CardOpts
+              fabActionContentRef={fabActionContentRef}
+              currentScreen={currentScreen}
+              switchSelectorsInfo={switchSelectorsInfo}
+              flashcardSettings={flashcardSettings}
+              bgColor={bgColor}
+              setWhatSideItemWillDisplay={setWhatSideItemWillDisplay}
+            />
+            <ListOpts
+              bgColor={bgColor}
+              fabActionContentRef2={fabActionContentRef2}
+              flashCardOrderBtnPayload={flashCardOrderBtnPayload}
+              flashcardSettings={flashcardSettings}
+              setFlashcardSettings={setFlashcardSettings}
+            />
+          </>
 
-        {/* study mode */}
-        <RandomStudyModeOpts />
+          :
+          <RandomStudyModeOpts />
+        }
 
       </View>
     </View>
