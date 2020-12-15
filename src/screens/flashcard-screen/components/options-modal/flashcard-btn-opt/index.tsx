@@ -4,12 +4,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useTheme } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { TOGGLE_STUDY_RANDOM_MODE } from '../../../../actions/types'
-import usePrimaryControlledColor, { WhereToColor } from '../../../../hooks/usePrimaryControlledColor'
-import { RootReducerT } from '../../../../store'
-import { WhiteText } from '../../../../styles/global'
-import { PaoThemeType } from '../../../../styles/theming'
-import LogoBtnImg from '../../../../components/LogoBtnImg'
+import { TOGGLE_STUDY_RANDOM_MODE } from '../../../../../actions/types'
+import usePrimaryControlledColor, { WhereToColor } from '../../../../../hooks/usePrimaryControlledColor'
+import { RootReducerT } from '../../../../../store'
+import { WhiteText } from '../../../../../styles/global'
+import { PaoThemeType } from '../../../../../styles/theming'
+import LogoBtnImg from '../../../../../components/LogoBtnImg'
 
 const FlashcardBtnOpt = ({ }) => {
   const theme: PaoThemeType = useTheme()

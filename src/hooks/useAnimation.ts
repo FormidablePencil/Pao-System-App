@@ -1,22 +1,29 @@
+import { useRef } from "react"
 import { Animated, Easing } from "react-native"
 
-interface InterfaceAnim {
-  flipFrontSide,
-  frontSideOpacity,
-  backSideOpacity,
-  flipBackSide,
-  setToggle,
-  toggle
-}
 
 const useAnimation = ({
-  flipFrontSide,
-  frontSideOpacity,
-  backSideOpacity,
-  flipBackSide,
   setToggle,
   toggle
-}: InterfaceAnim) => {
+}) => {
+  let frontInterpolation: any = useRef(new Animated.Value(0)).current
+  let backInterpolation: any = useRef(new Animated.Value(0)).current
+  let flipFrontSide: any = useRef(new Animated.Value(0)).current
+  let flipBackSide: any = useRef(new Animated.Value(0)).current
+  let backSideOpacity: any = useRef(new Animated.Value(1)).current
+  let frontSideOpacity: any = useRef(new Animated.Value(1)).current
+
+  backInterpolation = flipFrontSide.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, -1.57],
+    // extrapolate: 'clamp',
+  })
+  frontInterpolation = flipBackSide.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1.57, 0],
+    // extrapolate: 'clamp',
+  })
+
   const flipCard = () => {
     setToggle(!toggle)
     if (toggle) {
@@ -83,7 +90,13 @@ const useAnimation = ({
     }
   }
 
-  return { flipCard }
+  return {
+    flipCard,
+    frontSideOpacity,
+    backSideOpacity,
+    frontInterpolation,
+    backInterpolation,
+  }
 
 }
 

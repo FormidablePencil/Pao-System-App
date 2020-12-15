@@ -3,9 +3,9 @@ import { Dimensions, Text } from 'react-native'
 import { View } from 'react-native-tailwind'
 import * as Animatable from 'react-native-animatable';
 import { Button, Headline, useTheme } from 'react-native-paper';
-import usePrimaryControlledColor, { textControlledColor, WhereToColor } from '../../../../../hooks/usePrimaryControlledColor';
-import { PaoThemeType } from '../../../../../styles/theming';
-import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE } from '../../../../../actions/types';
+import usePrimaryControlledColor, { textControlledColor, WhereToColor } from '../../../../../../hooks/usePrimaryControlledColor';
+import { PaoThemeType } from '../../../../../../styles/theming';
+import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE } from '../../../../../../actions/types';
 import { useDispatch } from 'react-redux';
 
 const SCREEN_WIDTH = Dimensions.get('window').width

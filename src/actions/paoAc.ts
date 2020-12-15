@@ -1,6 +1,6 @@
 import { UPDATE_PAO_LIST, ADD_TO_PAO_LIST, UPDATE_SPECIFIC_PAO_COLLECION, FAILED_SERVER_CRUD_REQUEST } from './types'
 import { PaoAction } from '../reducerTypes/paoTypes'
-import { ControlledInputsTypes } from '../components/FlashcardItSelf'
+import { ControlledInputsTypes } from '../screens/flashcard-screen/components/options-modal/flashcard-swiper/flashcard-it-self'
 
 export const updatePaoItem = (controlledInput: any, docAlreadyExists: boolean, paoListApprovedByServer) => async (dispatch: any) => {
   // if "there's a document by that number then dispatch only the value that's changed to pao reducer"

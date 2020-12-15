@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux"
-import { TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY_TRUE, UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE } from "../../actions/types"
-import { tabScreens } from "../../constants/constants"
-import { fabActionOptions, fabOpt } from "../../constants/fabConstants"
+import { TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY_TRUE, UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE } from "../../../actions/types"
+import { tabScreens } from "../../../constants/constants"
+import { fabActionOptions, fabOpt } from "../../../constants/fabConstants"
 
 const useOnPressFabsHandlers = ({
   loading,

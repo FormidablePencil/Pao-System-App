@@ -3,12 +3,12 @@ import { View } from 'react-native-tailwind'
 import { Dimensions } from 'react-native';
 import { Button, Text, Headline } from 'react-native-paper'
 import SwitchSelector from "react-native-switch-selector";
-import { arrangmentOpt } from '../../../../reducer/flashcardOptionsReducer';
-import { tabScreens } from '../../../../constants/constants';
-import { capitalizeFirstCharFunc } from '../../../../components/logic/logic';
+import { arrangmentOpt } from '../../../../../reducer/flashcardOptionsReducer';
+import { tabScreens } from '../../../../../constants/constants';
+import { capitalizeFirstCharFunc } from '../../../../../components/logic/logic';
 import * as Animatable from 'react-native-animatable';
-import usePrimaryControlledColor, { WhereToColor, textControlledColor } from '../../../../hooks/usePrimaryControlledColor';
-import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE } from '../../../../actions/types';
+import usePrimaryControlledColor, { WhereToColor, textControlledColor } from '../../../../../hooks/usePrimaryControlledColor';
+import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE } from '../../../../../actions/types';
 import { useDispatch } from 'react-redux';
 import CardOpts from './reg-mode-opts/CardOpts';
 import ListOpts from './reg-mode-opts/ListOpts';

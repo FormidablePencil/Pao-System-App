@@ -4,10 +4,10 @@ import * as Animatable from 'react-native-animatable';
 import { Headline, useTheme } from 'react-native-paper';
 import SwitchSelector from 'react-native-switch-selector';
 import { View } from 'react-native-tailwind'
-import { tabScreens } from '../../../../../constants/constants';
-import usePrimaryControlledColor, { WhereToColor } from '../../../../../hooks/usePrimaryControlledColor';
-import { PaoThemeType } from '../../../../../styles/theming';
-import { capitalizeFirstCharFunc } from '../../../../../components/logic/logic';
+import { tabScreens } from '../../../../../../constants/constants';
+import usePrimaryControlledColor, { WhereToColor } from '../../../../../../hooks/usePrimaryControlledColor';
+import { PaoThemeType } from '../../../../../../styles/theming';
+import { capitalizeFirstCharFunc } from '../../../../../../components/logic/logic';
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 

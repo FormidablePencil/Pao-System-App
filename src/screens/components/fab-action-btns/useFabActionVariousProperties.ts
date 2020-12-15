@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native"
 import { useTheme } from "react-native-paper"
-import { fabActionOptions } from "../../constants/fabConstants"
-import usePrimaryControlledColor, { WhereToColor } from "../../hooks/usePrimaryControlledColor"
-import { PaoThemeType } from "../../styles/theming"
+import { fabActionOptions } from "../../../constants/fabConstants"
+import usePrimaryControlledColor, { WhereToColor } from "../../../hooks/usePrimaryControlledColor"
+import { PaoThemeType } from "../../../styles/theming"
 
 const useFabActionVariousProperties = ({
   fabConsts,

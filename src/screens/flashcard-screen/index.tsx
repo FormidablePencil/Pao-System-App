@@ -3,8 +3,8 @@ import { View } from 'react-native-tailwind';
 import { reusableStyles, WhiteText } from '../../styles/global'
 import { Button, useTheme, TouchableRipple, Modal, Portal } from 'react-native-paper';
 import styled from 'styled-components';
-import FlashcardSwiper from './components/flashcard-swiper';
-import FabActionBtn from '../../components/fab-action-btns';
+import FlashcardSwiper from './components/options-modal/flashcard-swiper';
+import FabActionBtn from '../components/fab-action-btns';
 import { enumFabAction } from '../../constants/fabConstants';
 import { tabScreens } from '../../constants/constants';
 import { TabNavContext } from '../../routes/StackNavigator';
@@ -21,7 +21,7 @@ import shuffle from 'shuffle-array'
 import { swipeDirection } from '../../constants/constants';
 import { listItemsT } from '../../reducer/studyReducer';
 import { useCallbackRef } from 'use-callback-ref';
-import FlashcardBtnOpt from './components/flashcard-btn-opt';
+import FlashcardBtnOpt from './components/options-modal/flashcard-btn-opt';
 
 export const FlashcardsScreen = () => {
   const { showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)

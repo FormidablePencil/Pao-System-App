@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { Portal, Provider, FAB, useTheme, TouchableRipple } from 'react-native-paper'
-import { fabProperties as fabConsts, fabModeOptions, fabActionOptions, fabOpt } from '../../constants/fabConstants'
-import { tabScreens } from '../../constants/constants'
+import { fabProperties as fabConsts, fabModeOptions, fabActionOptions, fabOpt } from '../../../constants/fabConstants'
+import { tabScreens } from '../../../constants/constants'
 import { View, Animated, Text, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
-import { PaoThemeType } from '../../styles/theming'
+import { PaoThemeType } from '../../../styles/theming'
 import { AntDesign } from '@expo/vector-icons';
 import styled from 'styled-components'
 import * as Animatable from 'react-native-animatable';
-import { TabNavContext } from '../../routes/StackNavigator'
-import useCheckAmountOfPaoFilled from '../../hooks/useCheckAmountOfPaoFilled'
-import OptionsModal from '../../screens/flashcard-screen/components/modal-options'
-import { FlashcardSettingsTypes } from '../../reducer/flashcardOptionsReducer'
-import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY_TRUE } from '../../actions/types'
-import { arrangmentOpt } from '../../reducer/flashcardOptionsReducer';
-import usePrimaryControlledColor, { WhereToColor } from '../../hooks/usePrimaryControlledColor'
+import { TabNavContext } from '../../../routes/StackNavigator'
+import useCheckAmountOfPaoFilled from '../../../hooks/useCheckAmountOfPaoFilled'
+import OptionsModal from '../../flashcard-screen/components/options-modal/modal-options'
+import { FlashcardSettingsTypes } from '../../../reducer/flashcardOptionsReducer'
+import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY_TRUE } from '../../../actions/types'
+import { arrangmentOpt } from '../../../reducer/flashcardOptionsReducer';
+import usePrimaryControlledColor, { WhereToColor } from '../../../hooks/usePrimaryControlledColor'
 import useOnPressFabsHandlers from './useOnPressFabsHandlers'
 import useFabActionVariousProperties from './useFabActionVariousProperties'
 
@@ -80,7 +80,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     setShowNavigationIcons,
     setEditModeTrue,
   })
-  
+
   const fabActionVariousProperties = useFabActionVariousProperties({
     fabConsts,
     showHints,
@@ -95,6 +95,19 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     currentFabProps.mainFab.color : controlledColor
   const bgColor = usePrimaryControlledColor(WhereToColor.goToUnfilledBtn, theme.colors.accent)
   const themeIsUncontrolled = bgColor === theme.colors.accent
+
+  const RenderOptionsModal = () =>
+    <OptionsModal
+      fabActionContentRef={fabActionContentRef}
+      fabActionContentRef2={fabActionContentRef2}
+      theme={theme}
+      sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
+      currentScreen={currentScreen}
+      flashcardSettings={flashcardSettings}
+      setFlashcardSettings={setFlashcardSettings}
+      setLoading={setLoading}
+      setModalOpen={setModalOpen}
+    />
 
   return (
     <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
@@ -121,22 +134,13 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
                   }
 
                   {currentScreen === tabScreens.Flashcards &&
-                    <OptionsModal
-                      fabActionContentRef={fabActionContentRef}
-                      fabActionContentRef2={fabActionContentRef2}
-                      theme={theme}
-                      sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
-                      currentScreen={currentScreen}
-                      flashcardSettings={flashcardSettings}
-                      setFlashcardSettings={setFlashcardSettings}
-                      setLoading={setLoading}
-                      setModalOpen={setModalOpen}
-                    />
+                    <RenderOptionsModal />
                   }
                 </>
               </View>
             }
           </Portal>
+
           <FAB.Group
             fabStyle={{ backgroundColor: mainFabBackgroundColor }}
             visible={true}
@@ -148,6 +152,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
             onPress={() => handleOnPressGeneral()} //@
             onPressBackground={() => handleOnPressGeneral()}
           />
+
         </Portal>
       </Provider>
     </View>

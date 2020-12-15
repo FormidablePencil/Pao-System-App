@@ -1,15 +1,16 @@
-import React, { useRef, useState, useEffect } from 'react'
-import { TextInput, Animated, StyleSheet, Dimensions, View } from 'react-native'
-import { useTheme, Text } from 'react-native-paper'
+import React, { useState, useEffect } from 'react'
+import { Dimensions, StyleSheet, View } from 'react-native'
+import { Text } from 'react-native-paper'
 import styled from 'styled-components';
 import { createAnimatableComponent } from 'react-native-animatable';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import useAnimation from '../hooks/useAnimation';
+import useAnimation from '../../../../../../hooks/useAnimation';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveControlledInputsToPao } from '../actions/paoAc';
-import { PaoThemeType } from '../styles/theming';
-import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText } from '../hooks/usePrimaryControlledColor';
-import { RootReducerT } from '../store';
+import { saveControlledInputsToPao } from '../../../../../../actions/paoAc';
+import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText } from '../../../../../../hooks/usePrimaryControlledColor';
+import { RootReducerT } from '../../../../../../store';
+import StudyMode from './StudyMode';
+import RenderPaoItems from './RenderPaoItems';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -26,10 +27,11 @@ export interface ControlledInputsTypes {
       name: string
       value: string
     }
+    filter?: any
   }
 }
 
-const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
+const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
   const isRandomStudyMode = useSelector((state: RootReducerT) => state.studyRandomMode.isRandomStudyMode)
   const flashcardOptions = useSelector((state: any) => state.flashcardOptions)
   const flashcardItemDisplayedFront = useSelector((state: any) => state.flashcardOptions.flashcardItemDisplayedFront)
@@ -37,47 +39,18 @@ const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
   const [controlledInputs, setControlledInputs] = useState<ControlledInputsTypes>({
     data: [{ number: null, name: null, value: null }]
   })
-  const theme: PaoThemeType = useTheme()
   const [frontSideCurrentlyDisplayed, setFrontSideCurrentlyDisplayed] = useState(true)
   const dispatch = useDispatch()
 
-  let frontInterpolation: any = useRef(new Animated.Value(0)).current
-  let backInterpolation: any = useRef(new Animated.Value(0)).current
-
-  let flipFrontSide: any = useRef(new Animated.Value(0)).current
-  let flipBackSide: any = useRef(new Animated.Value(0)).current
-
-  let backSideOpacity: any = useRef(new Animated.Value(1)).current
-  let frontSideOpacity: any = useRef(new Animated.Value(1)).current
 
   const [toggle, setToggle] = useState(true)
-  const { flipCard } = useAnimation({
-    flipFrontSide,
-    frontSideOpacity,
+  const {
+    flipCard,
+    frontInterpolation,
+    backInterpolation,
     backSideOpacity,
-    flipBackSide,
-    setToggle,
-    toggle,
-  })
-
-  useEffect(() => {
-    if (!frontSideCurrentlyDisplayed) {
-      flipCard()
-      setFrontSideCurrentlyDisplayed(true)
-    }
-  }, [flashcardOptions])
-
-  backInterpolation = flipFrontSide.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -1.57],
-    // extrapolate: 'clamp',
-  })
-  frontInterpolation = flipBackSide.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1.57, 0],
-    // extrapolate: 'clamp',
-  })
-
+    frontSideOpacity,
+  } = useAnimation({ setToggle, toggle })
 
   const sides = [
     { side: 'front', interpolation: backInterpolation, opacity: backSideOpacity, symbol: true },
@@ -89,6 +62,13 @@ const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
     flipCard()
     setFrontSideCurrentlyDisplayed(false)
   }
+
+  useEffect(() => {
+    if (!frontSideCurrentlyDisplayed) {
+      flipCard()
+      setFrontSideCurrentlyDisplayed(true)
+    }
+  }, [flashcardOptions])
 
   const onChangeHandler = ({ number, name, value }) => {
     const newControlledInput = { number, name, value }
@@ -139,9 +119,9 @@ const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
           >
             <>
               {isRandomStudyMode ?
-                <StudyMode collection={collection} index={index} side={sidesDocument.side} />
+                <StudyMode index={index} side={sidesDocument.side} />
                 :
-                <RenderItems
+                <RenderPaoItems
                   paoDisplayOrder={paoDisplayOrder}
                   editMode={editMode}
                   flashcardItemDisplayedFront={flashcardItemDisplayedFront}
@@ -162,78 +142,6 @@ const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
   )
 }
 
-const StudyMode = ({ collection, index, side }) => {
-  const studyRandomMode = useSelector((state: RootReducerT) => state.studyRandomMode)
-  console.log(index);
-  return (
-    <Wrapper>
-      {['person', 'action', 'object'].map(name => {
-        return (
-          <StudyCardContainer key={name} side={side}>
-            <StudyCardText>
-              {studyRandomMode[name][index].item}
-            </StudyCardText>
-            {side === 'back' &&
-              <StudyCardText>
-                {studyRandomMode[name][index].number}
-              </StudyCardText>
-            }
-          </StudyCardContainer>
-        )
-      })}
-    </Wrapper>
-  )
-}
-
-const RenderItems = ({
-  paoDisplayOrder, editMode, flashcardItemDisplayedFront, sidesDocument,
-  collection, handleOnBlur, textColor, formatPaoItems, onChangeHandler
-}) => {
-  const theme = useTheme()
-
-  return (
-    <>
-      {paoDisplayOrder.map((name: any, index) => {
-        const gotObjectsByName = flashcardItemDisplayedFront.filter(document => Object.keys(document)[0] === name)[0]
-        // console.log(flashcardItemDisplayedFront);
-        const key = Object.keys(gotObjectsByName)[0]
-        const valuePair = Object.values(gotObjectsByName)[0]
-
-        if (valuePair === sidesDocument.symbol) {
-          return (
-            <Wrapper key={name}>
-              <PaoName color={theme.colors.primary}>{key}</PaoName>
-              <>
-                {editMode ?
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder={'edit'}
-                    value={collection[key] ? `${collection[key]}` : null}
-                    onChangeText={(value) => onChangeHandler({ number: collection.number, name, value })}
-                    onBlur={() => handleOnBlur()}
-                    textAlign={'center'}
-                  />
-                  :
-                  <View style={{ flexDirection: 'row', }}>
-                    <Text style={[styles.textInput,
-                    {
-                      alignSelf: "center",
-                      textAlign: 'center',
-                      color: textColor(key)
-                    }
-                    ]}>
-                      {formatPaoItems(key)}
-                    </Text>
-                  </View>
-                }
-              </>
-            </Wrapper>
-          )
-        } else return null
-      })}
-    </>
-  )
-}
 
 const PaoEmpty = ({ flashcardItemDisplayedFront, symbol }: any) => {
   const arrOfTrues = flashcardItemDisplayedFront.filter(item => Object.values(item)[0] === !symbol)
@@ -244,37 +152,12 @@ const PaoEmpty = ({ flashcardItemDisplayedFront, symbol }: any) => {
   } else return null
 }
 
+
 const styles = StyleSheet.create({
   cardDimensions: { justifyContent: 'center', alignItems: "center", borderRadius: 10, backgroundColor: 'white' },
-  textInput: { height: 40, fontSize: 30, backgroundColor: 'transparent', fontFamily: 'MontserratReg', width: '100%' }
 })
-const StudyCardText = styled(Text)`
-  align-self: center;
-  text-align: center;
-  font-family: MontserratReg; 
-  font-size: 30;
-`
-const StudyCardContainer = styled<any>(View)`
-  height: 60;
-  background-color: transparent;
-  flex-direction: row;
-  width: 100%;
-  justify-content: ${({ side }) => side === 'front' ? 'center' : 'space-between'};
-  padding-horizontal: 10px;
-`
-const PaoName = styled<any>(Text)`
-  color: ${({ color }) => color};
-`;
-const TextInputWrapper = styled(View)`
-   background-color: transparent;
-   flex-direction: row;
-   border-radius: 5;
-   height: 50;
-`;
-const Wrapper = styled(View)`
-  align-items: center; 
-  width: 100%;
-`;
+
+
 const FlashcardView = styled(View)`
   position: absolute;
 `;
