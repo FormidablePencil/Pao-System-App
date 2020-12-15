@@ -10,6 +10,7 @@ import controlledThemeColorReducer from './reducer/controlledThemeColorReducer'
 import studyReducer, { StudyModeT } from './reducer/studyReducer'
 import fabVisibleReducer from './reducer/fabVisibleReducer'
 import fabReducer from './reducer/fabReducer'
+import studyRandomModeReducer, { StudyRandomModeT } from './reducer/studyRandomModeReducer'
 
 export interface RootReducerT {
   pao
@@ -22,6 +23,7 @@ export interface RootReducerT {
   controlledThemeColor
   fabProperties
   study: StudyModeT
+  studyRandomMode: StudyRandomModeT
 }
 
 const rootReducer = combineReducers({
@@ -34,7 +36,8 @@ const rootReducer = combineReducers({
   fabProperties: fabReducer,
   paoListApprovedByServer: paoListApprovedByServerReducer,
   controlledThemeColor: controlledThemeColorReducer,
-  study: studyReducer
+  study: studyReducer,
+  studyRandomMode: studyRandomModeReducer,
 })
 
 const initialState = {}

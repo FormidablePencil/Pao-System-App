@@ -1,21 +1,23 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { Portal, Provider, FAB, useTheme, TouchableRipple } from 'react-native-paper'
-import { fabProperties as fabConsts, fabModeOptions, fabActionOptions, fabOpt } from '../constants/fabConstants'
-import { tabScreens } from '../constants/constants'
+import { fabProperties as fabConsts, fabModeOptions, fabActionOptions, fabOpt } from '../../constants/fabConstants'
+import { tabScreens } from '../../constants/constants'
 import { View, Animated, Text, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
-import { PaoThemeType } from '../styles/theming'
+import { PaoThemeType } from '../../styles/theming'
 import { AntDesign } from '@expo/vector-icons';
 import styled from 'styled-components'
 import * as Animatable from 'react-native-animatable';
-import { TabNavContext } from '../routes/StackNavigator'
-import useCheckAmountOfPaoFilled from '../hooks/useCheckAmountOfPaoFilled'
-import OptionsModal from './OptionsModal'
-import { FlashcardSettingsTypes } from '../reducer/flashcardOptionsReducer'
-import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY_TRUE } from '../actions/types'
-import { arrangmentOpt } from '../reducer/flashcardOptionsReducer';
-import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
+import { TabNavContext } from '../../routes/StackNavigator'
+import useCheckAmountOfPaoFilled from '../../hooks/useCheckAmountOfPaoFilled'
+import OptionsModal from '../../screens/flashcard-screen/components/modal-options'
+import { FlashcardSettingsTypes } from '../../reducer/flashcardOptionsReducer'
+import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY_TRUE } from '../../actions/types'
+import { arrangmentOpt } from '../../reducer/flashcardOptionsReducer';
+import usePrimaryControlledColor, { WhereToColor } from '../../hooks/usePrimaryControlledColor'
+import useOnPressFabsHandlers from './useOnPressFabsHandlers'
+import useFabActionVariousProperties from './useFabActionVariousProperties'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
@@ -27,12 +29,11 @@ interface FabOptTypes {
 
 interface CurrentFabPropsInterface {
   mainFab: FabOptTypes
-  fabActions: any
+  fabActionsVariousProperties: any
 }
 
 const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue, setEditModeTrue, setGoToUnfilledTrigger }) => {
   const { showHints, setShowHints, showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)
-  const navigation = useNavigation()
   const dispatch = useDispatch()
   const theme: PaoThemeType = useTheme()
   const [paoDocumentsFilled, setPaoDocumentsFilled] = useState(null)
@@ -41,32 +42,6 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
   const fabActionContentRef2 = useRef(null)
 
   useCheckAmountOfPaoFilled({ setPaoDocumentsFilled })
-
-  const fabActions = {
-    paoTableFabActions: [
-      {
-        style: { backgroundColor: usePrimaryControlledColor(WhereToColor.fabActionEdit, theme.colors.fabActionColors[0]) },
-        icon: fabConsts.editMode.icon.pencil,
-        label: showHints ? fabConsts.editMode.mesg : null,
-        onPress: () => {
-          handleOnPressFabActions(fabActionOptions.editMode)
-        }
-      },
-    ],
-    flashcardFabActions: [],
-    favListFabActions: [],
-    sharedFabActions: [
-      {
-        style: { backgroundColor: usePrimaryControlledColor(WhereToColor.fabActonProfile, theme.colors.fabActionColors[1]) },
-        icon: fabConsts.accountSettings.icon.accountSettings,
-        label: showHints ? fabConsts.accountSettings.mesg : null,
-        onPress: () => {
-          navigation.navigate('ProfileScreen')
-          handleOnPressGeneral()
-        }
-      },
-    ],
-  }
 
   const [currentFabProps, setCurrentFabProps] = useState({ mainFab: fabOpt.standby })
 
@@ -90,81 +65,28 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
 
   //* solution is to fire a function from parent to toggle fab visibility 
 
-  const handleOnPressGeneral = async () => {
-    if (loading) return
-    if (currentFabProps.mainFab.icon === fabConsts.mainBtn.flashcardChangingSettings.icon.settings) {
-      setLoading(true)
-      await setFlashcardSettings({
-        ...flashcardSettings, autoPlayFlashcards: {
-          ...flashcardSettings.autoPlayFlashcards,
-          duration: sliderValueautoPlayFlashcardsDuration
-        }
-      })
-      await dispatch({ type: UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, payload: flashcardSettings })
-      setLoading(false)
-    }
-    switch (currentFabProps.mainFab.mode) {
-      case fabOpt.menuOpen.mode:
-        if (currentScreen === tabScreens.Flashcards) {
-          if (!loading) {
-            fabActionContentRef.current.fadeOutUpBig()
-            fabActionContentRef2.current.fadeOutDownBig()
-            setLoading(true)
-            await setTimeout(() => {
-              setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //replace
-              // dispatch({ type: TOGGLE_FAB_VISIBILITY_FALSE })
-              setShowNavigationIcons(true)
-            }, 500);
-            setLoading(false)
-          }
-        } else {
-          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //replace 
-          // dispatch({ type: TOGGLE_FAB_VISIBILITY_FALSE })
-          setShowNavigationIcons(true)
-        }
-        break;
-      case fabOpt.standby.mode:
-        if (currentScreen === tabScreens.Flashcards) {
-          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen }) //REPLACE
-          dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
-          setShowNavigationIcons(false)
-          setLoading(true)
-          setTimeout(() => {
-            setLoading(false)
-          }, 1250);
-        } else {
-          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.menuOpen }) //REPLACE
-          setShowNavigationIcons(false)
-        }
-
-        break;
-      case fabOpt.editMode.mode:
-        if (currentScreen === tabScreens.Flashcards) dispatch({ type: TOGGLE_EDIT_MODE })
-        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //REPLACE
-        // dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
-        setEditModeTrue(false)
-        setShowNavigationIcons(true)
-
-      default:
-        break;
-    }
-
-  }
-
-
-  const handleOnPressFabActions = (whatFabAction) => {
-    switch (whatFabAction) {
-      case fabActionOptions.editMode:
-        if (currentScreen === tabScreens.Flashcards) dispatch({ type: TOGGLE_EDIT_MODE })
-        // dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
-        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.editMode }) //REPLACE... OR KEEP
-        setEditModeTrue(true)
-        break;
-
-      default:
-        break;
-    }
-  }
+  const { handleOnPressFabActions, handleOnPressGeneral } = useOnPressFabsHandlers({
+    loading,
+    currentFabProps,
+    fabConsts,
+    setLoading,
+    setFlashcardSettings,
+    flashcardSettings,
+    sliderValueautoPlayFlashcardsDuration,
+    currentScreen,
+    fabActionContentRef,
+    fabActionContentRef2,
+    setCurrentFabProps,
+    setShowNavigationIcons,
+    setEditModeTrue,
+  })
+  
+  const fabActionVariousProperties = useFabActionVariousProperties({
+    fabConsts,
+    showHints,
+    handleOnPressFabActions,
+    handleOnPressGeneral
+  })
 
   const onPressHandler = () => setGoToUnfilledTrigger(true)
 
@@ -221,7 +143,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
             color='white'
             open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
             icon={currentFabProps.mainFab.icon}
-            actions={[...fabActions.sharedFabActions, ...fabActions[whatFabProps]]}
+            actions={[...fabActionVariousProperties.sharedFabActions, ...fabActionVariousProperties[whatFabProps]]}
             onStateChange={() => { }}
             onPress={() => handleOnPressGeneral()} //@
             onPressBackground={() => handleOnPressGeneral()}

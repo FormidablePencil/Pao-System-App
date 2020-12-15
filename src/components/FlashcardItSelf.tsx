@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { TextInput, Animated, StyleSheet, Dimensions, View } from 'react-native'
-import {  useTheme, Text } from 'react-native-paper'
+import { useTheme, Text } from 'react-native-paper'
 import styled from 'styled-components';
 import { createAnimatableComponent } from 'react-native-animatable';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveControlledInputsToPao } from '../actions/paoAc';
 import { PaoThemeType } from '../styles/theming';
 import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText } from '../hooks/usePrimaryControlledColor';
+import { RootReducerT } from '../store';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -29,6 +30,7 @@ export interface ControlledInputsTypes {
 }
 
 const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
+  const isRandomStudyMode = useSelector((state: RootReducerT) => state.studyRandomMode.isRandomStudyMode)
   const flashcardOptions = useSelector((state: any) => state.flashcardOptions)
   const flashcardItemDisplayedFront = useSelector((state: any) => state.flashcardOptions.flashcardItemDisplayedFront)
   const editMode = useSelector((state: any) => state.fabProperties.config.editMode)
@@ -136,10 +138,10 @@ const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
             onPress={() => cardFliperOnPressProp()}
           >
             <>
-              {studyMode ?
+              {isRandomStudyMode ?
                 <StudyMode collection={collection} index={index} side={sidesDocument.side} />
                 :
-                <RegularMode
+                <RenderItems
                   paoDisplayOrder={paoDisplayOrder}
                   editMode={editMode}
                   flashcardItemDisplayedFront={flashcardItemDisplayedFront}
@@ -161,17 +163,19 @@ const FlashcardItSelf = ({ collection, studyMode, index }: FlashcardsTypes) => {
 }
 
 const StudyMode = ({ collection, index, side }) => {
+  const studyRandomMode = useSelector((state: RootReducerT) => state.studyRandomMode)
+  console.log(index);
   return (
     <Wrapper>
       {['person', 'action', 'object'].map(name => {
         return (
           <StudyCardContainer key={name} side={side}>
             <StudyCardText>
-              {collection[name][index].item}
+              {studyRandomMode[name][index].item}
             </StudyCardText>
             {side === 'back' &&
               <StudyCardText>
-                {collection[name][index].number}
+                {studyRandomMode[name][index].number}
               </StudyCardText>
             }
           </StudyCardContainer>
@@ -181,15 +185,17 @@ const StudyMode = ({ collection, index, side }) => {
   )
 }
 
-const RegularMode = ({
+const RenderItems = ({
   paoDisplayOrder, editMode, flashcardItemDisplayedFront, sidesDocument,
-  collection, handleOnBlur, textColor, formatPaoItems, onChangeHandler }) => {
+  collection, handleOnBlur, textColor, formatPaoItems, onChangeHandler
+}) => {
   const theme = useTheme()
 
   return (
     <>
       {paoDisplayOrder.map((name: any, index) => {
         const gotObjectsByName = flashcardItemDisplayedFront.filter(document => Object.keys(document)[0] === name)[0]
+        // console.log(flashcardItemDisplayedFront);
         const key = Object.keys(gotObjectsByName)[0]
         const valuePair = Object.values(gotObjectsByName)[0]
 
@@ -254,6 +260,7 @@ const StudyCardContainer = styled<any>(View)`
   flex-direction: row;
   width: 100%;
   justify-content: ${({ side }) => side === 'front' ? 'center' : 'space-between'};
+  padding-horizontal: 10px;
 `
 const PaoName = styled<any>(Text)`
   color: ${({ color }) => color};

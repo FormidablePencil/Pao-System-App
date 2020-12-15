@@ -4,7 +4,7 @@ import WelcomeScreen from '../screens/WelcomeScreen'
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import ProfileScreen from '../screens/SettingsScreen'
 import { tabScreens } from '../constants/constants';
-import FlashcardsScreen from '../screens/FlashcardsScreen';
+import FlashcardsScreen from '../screens/flashcard-screen';
 import NavigateToPaoTable, { NavigateToFlashcards } from '../components/ScreenHeaderComponents';
 import PaotableScreen from '../screens/PaotableScreen';
 import useHandleSystemMesgAuth from '../hooks/useHandleSystemMesgAuth';

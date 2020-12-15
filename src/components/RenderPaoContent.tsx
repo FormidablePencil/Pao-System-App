@@ -9,11 +9,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { RootReducerT } from '../store'
 
 const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
-  const fabProps = useSelector((state: any) => state.fabProperties)
   const { setTableReady } = useContext(TabNavContext)
   const paoList: any = useSelector((state: RootReducerT) => state.pao)  //@
-  const study: any = useSelector((state: RootReducerT) => state.study.study)  //@
-  const paoStudySets: any = useSelector((state: RootReducerT) => state.study.paoStudySets)  //@
 
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }
@@ -25,7 +22,6 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
   const flatListRef = useRef(null)
 
   const [currentRenderItemsRange, setCurrentRenderItemsRange] = useState(0) //@
-  const [test, setTest] = useState<number>(null)
   const [flatlistItems, setFlatlistItems] = useState(arr) //@ !!!
   const [listSortedInTens, setListSortedInTens] = useState([])
 

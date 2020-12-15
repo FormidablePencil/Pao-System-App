@@ -3,17 +3,19 @@ import styled from 'styled-components';
 import { FAB, Button, Text, Headline } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { StyleSheet } from 'react-native';
-import FlashcardItSelf from './FlashcardItSelf';
+import FlashcardItSelf from '../../../../components/FlashcardItSelf';
 import Swiper from 'react-native-swiper'
 import { LinearGradient } from 'expo-linear-gradient';
-import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor';
-import { RootReducerT } from '../store';
+import usePrimaryControlledColor, { WhereToColor } from '../../../../hooks/usePrimaryControlledColor';
+import { RootReducerT } from '../../../../store';
 import sortBy from 'lodash.sortby'
+import shuffle from 'shuffle-array';
 import {
   LazyloadScrollView,
   LazyloadView,
   LazyloadImage
 } from 'react-native-lazyload';
+import randomlyGeneratedPaoList from '../../functions/randomlyGeneratedPaoList';
 
 
 const defaultFlashcards = [{
@@ -24,8 +26,10 @@ const defaultFlashcards = [{
   person: null,
 }]
 
-const FlashcardSwiper = ({ pao }) => {
+const FlashcardSwiper = () => {
+  const pao = useSelector((state: RootReducerT) => state.pao)
   const study = useSelector((state: RootReducerT) => state.study.study)
+  const studyRandomMode = useSelector((state: RootReducerT) => state.studyRandomMode)
   const studyList = useSelector((state: RootReducerT) => state.study.list)
   const [flashcardOrderAssortment, setFlashcardOrderAssortment] = useState<any>(defaultFlashcards)
   const swiperReff = useRef(null)
@@ -42,6 +46,7 @@ const FlashcardSwiper = ({ pao }) => {
     setFlashcardOrderAssortment(sortBy(pao, 'number'))
     // }
   }, [])
+
 
   return (
     <Container style={{ ...styles2.slide1, }}>
@@ -66,12 +71,12 @@ const FlashcardSwiper = ({ pao }) => {
                     <FlashcardItSelf collection={study.paoStudySets} index={index} studyMode={true} />
                   </AlignCenterWrapper> */}
 
-            {flashcardOrderAssortment.map(item => {
+            {flashcardOrderAssortment.map((item, index) => {
               // console.log(currentDeckOfCard, 'sd');
               if (!study || study && studyList.filter(studyNum => studyNum === item.number)[0])
                 return (
                   <AlignCenterWrapper key={item}>
-                    <FlashcardItSelf collection={item} />
+                    <FlashcardItSelf index={index} collection={item} />
                   </AlignCenterWrapper>
                 )
             })

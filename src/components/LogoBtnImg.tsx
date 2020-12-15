@@ -20,13 +20,13 @@ export default function LogoBtnImg({ btnBgColor, onlyToggleOffAllowed, disableTo
   }
 
   useEffect(() => {
-    if (!disableToggle) {
-      if (study) zoomAnim(cardRef, starRef)
-      else zoomAnim(starRef, cardRef)
-    }
+    if (disableToggle) return
+    if (study) zoomAnim(cardRef, starRef)
+    else zoomAnim(starRef, cardRef)
   }, [study])
 
   const onPressHandlerImg = () => {
+    if (disableToggle) return
     dispatch({ type: STUDY_MODE_TOGGLE })
   }
 

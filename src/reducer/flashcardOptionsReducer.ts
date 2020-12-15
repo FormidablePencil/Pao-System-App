@@ -6,7 +6,8 @@ import { SET_AUTO_PLAY_DURATION, TOGGLE_AUTO_PLAY_DURATION, UPDATE_FLASHCARD_ITE
 export enum arrangmentOpt {
   ascending,
   descending,
-  random
+  random,
+  sorted,
 }
 
 export interface FlashcardSettingsTypes {
