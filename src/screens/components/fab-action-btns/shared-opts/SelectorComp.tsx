@@ -10,8 +10,8 @@ const SelectorComp = ({ onPress, initial, options, title }) => {
   const switchBtnSelected = usePrimaryControlledColor(WhereToColor.switchBtnSelected, theme.colors.primary)
 
   return (
-    <>
-      <Text style={{ ...reusableStyles.lgText, color: 'white' }}>{title}</Text>
+    <View style={styles.container}>
+      <Text style={{ ...reusableStyles.lgText, ...styles.title }}>{title}</Text>
       <SwitchSelector
         style={styles.switchSelector}
         // paddingSwitch={10}
@@ -28,13 +28,19 @@ const SelectorComp = ({ onPress, initial, options, title }) => {
         fontSize={20}
         options={options}
       />
-    </>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+  },
   switchSelector: {
     width: 250,
+  },
+  title: {
+    color: 'white', marginTop: 10, marginBottom: 2
   }
 })
 

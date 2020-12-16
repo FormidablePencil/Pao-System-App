@@ -9,7 +9,7 @@ import paoListApprovedByServerReducer from './routes/paoListApprovedByServerRedu
 import controlledThemeColorReducer from './reducer/controlledThemeColorReducer'
 import studyReducer, { StudyModeT } from './reducer/studyReducer'
 import fabVisibleReducer from './reducer/fabVisibleReducer'
-import fabReducer from './reducer/fabReducer'
+import fabReducer, { fabPropertiesT } from './reducer/fabReducer'
 import studyRandomModeReducer, { StudyRandomModeT } from './reducer/studyRandomModeReducer'
 
 export interface RootReducerT {
@@ -21,7 +21,7 @@ export interface RootReducerT {
   fabVisible: boolean
   paoListApprovedByServer
   controlledThemeColor
-  fabProperties
+  fabProperties: fabPropertiesT
   study: StudyModeT
   studyRandomMode: StudyRandomModeT
 }

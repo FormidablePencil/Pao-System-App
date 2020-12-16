@@ -7,10 +7,12 @@ import { mergePaoArrays } from './logic/sortPaoList'
 import { TabNavContext } from '../routes/StackNavigator'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { RootReducerT } from '../store'
+import ListModeTable from './ListModeTable'
 
 const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
   const { setTableReady } = useContext(TabNavContext)
   const paoList: any = useSelector((state: RootReducerT) => state.pao)  //@
+  const isPagination: any = useSelector((state: RootReducerT) => state.fabProperties.config.pagination)
 
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }
@@ -113,40 +115,49 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
       >
         {/* {tableReady && */}
         <View>
-          {!editModeTrue &&
+          {!editModeTrue && isPagination &&
             <View style={{ position: "absolute", height: '100%', width: '100%', zIndex: 300 }}></View>
           }
-          <KeyboardAwareScrollView style={{height: '100%',}}>
-            <RenderPaoTables
-              listSortedInTens={listSortedInTens}
-              currentRenderItemsRange={currentRenderItemsRange}
-              setFirstUnfilledTextInput={setFirstUnfilledTextInput}
-              firstUnfilledTextInput={firstUnfilledTextInput}
-              firstOfTableTextInput={firstOfTableTextInput}
-              lastOfTableTextInput={lastOfTableTextInput}
-              prevTextInput={prevTextInput}
-              nextTextInput={nextTextInput}
-              currentlyFocusedTextInput={currentlyFocusedTextInput}
-              setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
-              editModeTrue={editModeTrue}
-              tableData={flatlistItems}
-              controlledInput={controlledInput}
-              setControlledInput={setControlledInput}
-              heightOfScrollView={heightOfScrollView}
-            />
+          <KeyboardAwareScrollView style={{ height: '100%', }}>
+            {isPagination ?
+              <RenderPaoTables
+                listSortedInTens={listSortedInTens}
+                currentRenderItemsRange={currentRenderItemsRange}
+                setFirstUnfilledTextInput={setFirstUnfilledTextInput}
+                firstUnfilledTextInput={firstUnfilledTextInput}
+                firstOfTableTextInput={firstOfTableTextInput}
+                lastOfTableTextInput={lastOfTableTextInput}
+                prevTextInput={prevTextInput}
+                nextTextInput={nextTextInput}
+                currentlyFocusedTextInput={currentlyFocusedTextInput}
+                setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
+                editModeTrue={editModeTrue}
+                tableData={flatlistItems}
+                controlledInput={controlledInput}
+                setControlledInput={setControlledInput}
+                heightOfScrollView={heightOfScrollView}
+              />
+              :
+              <ListModeTable
+                heightOfScrollView={heightOfScrollView}
+                controlledInput={controlledInput}
+                setControlledInput={setControlledInput}
+              />
+            }
           </KeyboardAwareScrollView>
         </View>
-        {/* } */}
       </View>
-      <Pagination
-        swiperIndex={swiperIndex}
-        jumpToCertainTable={jumpToCertainTable}
-        currentlyFocusedTextInput={currentlyFocusedTextInput} //! will go
-        navigateTextInputs={navigateTextInputs}
-        currentRenderItemsRange={currentRenderItemsRange}
-        setCurrentRenderItemsRange={setCurrentRenderItemsRange}
-      />
-    </View >
+      {isPagination &&
+        <Pagination
+          swiperIndex={swiperIndex}
+          jumpToCertainTable={jumpToCertainTable}
+          currentlyFocusedTextInput={currentlyFocusedTextInput} //! will go
+          navigateTextInputs={navigateTextInputs}
+          currentRenderItemsRange={currentRenderItemsRange}
+          setCurrentRenderItemsRange={setCurrentRenderItemsRange}
+        />
+      }
+    </View>
   )
 }
 

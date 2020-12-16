@@ -41,7 +41,8 @@ export const PaoTheme: PaoThemeType = {
   },
   fonts: {
     regular: {
-      fontFamily: 'MontserratReg'
+      fontFamily: 'MontserratMed'
+      // MontserratMed
     },
     medium: {
       fontFamily: 'MontserratMed'

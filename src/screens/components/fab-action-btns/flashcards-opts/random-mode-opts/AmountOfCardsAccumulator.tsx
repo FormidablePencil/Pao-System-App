@@ -1,11 +1,27 @@
-import React, { useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import InputSpinner from 'react-native-input-spinner'
+import { useDispatch, useSelector } from "react-redux"
+import { SET_STUDY_RANDOM_AMOUNT, TOGGLE_STUDY_RANDOM_MODE_TRUE } from "../../../../../actions/types"
+import { RootReducerT } from "../../../../../store"
 
-
-const localStorage = 40
 
 const AmountOfCardsAccumulator = () => {
-  const [amountOfCards, setAmountOfCards] = useState(localStorage)
+  const studyAmount = useSelector((state: RootReducerT) => state.studyRandomMode.studyAmount)
+  const pao = useSelector((state: RootReducerT) => state.pao)
+  const dispatch = useDispatch()
+  let changed = useRef(false).current
+
+  useEffect(() => {
+    return () => {
+      dispatch({ type: TOGGLE_STUDY_RANDOM_MODE_TRUE, payload: pao })
+      changed = false
+    }
+  }, [])
+
+  const onChangeHandler = (payload) => {
+    dispatch({ type: SET_STUDY_RANDOM_AMOUNT, payload })
+    changed = true
+  }
 
   return (
     <InputSpinner
@@ -19,13 +35,10 @@ const AmountOfCardsAccumulator = () => {
       max={30}
       min={2}
       step={2}
-      value={amountOfCards}
+      value={studyAmount}
       color='orange'
-      onChange={(num) => {
-        setAmountOfCards(num)
-      }}
-    >
-    </InputSpinner>
+      onChange={onChangeHandler}
+    />
   )
 }
 

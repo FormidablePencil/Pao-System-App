@@ -18,8 +18,8 @@ import usePrimaryControlledColor, { WhereToColor } from '../../../hooks/usePrima
 import useOnPressFabsHandlers from './useOnPressFabsHandlers'
 import useFabActionVariousProperties from './useFabActionVariousProperties'
 import PaoTableOptsModal from './paotable-opts/PaoTableOptsModal'
-import SelectorComp from './sharable-opts/SelectorComp'
-import SharableOptions from './sharable-opts'
+import SelectorComp from './shared-opts/SelectorComp'
+import SharableOptions from './shared-opts'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
@@ -139,7 +139,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
             color='white'
             open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
             icon={currentFabProps.mainFab.icon}
-            actions={[...fabActionVariousProperties.sharedFabActions, ...fabActionVariousProperties[whatFabProps]]}
+            actions={[...fabActionVariousProperties[whatFabProps], ...fabActionVariousProperties.sharedFabActions]}
             onStateChange={() => { }}
             onPress={() => handleOnPressGeneral()} //@
             onPressBackground={() => handleOnPressGeneral()}

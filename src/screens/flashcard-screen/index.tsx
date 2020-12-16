@@ -21,7 +21,7 @@ import shuffle from 'shuffle-array'
 import { swipeDirection } from '../../constants/constants';
 import { listItemsT } from '../../reducer/studyReducer';
 import { useCallbackRef } from 'use-callback-ref';
-import SelectorComp from '../components/fab-action-btns/sharable-opts/SelectorComp';
+import SelectorComp from '../components/fab-action-btns/shared-opts/SelectorComp';
 
 export const FlashcardsScreen = () => {
   const { showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)

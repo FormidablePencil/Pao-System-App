@@ -46,7 +46,7 @@ const StackNavigator = () => {
           <Stack.Screen options={{
             headerShown: false,
           }}
-            name='ProfileScreen' component={ProfileScreen} />
+            name={tabScreens.ProfileScreen} component={ProfileScreen} />
           <Stack.Screen
             options={{ headerShown: false }}
             name={tabScreens.WelcomeScreen} component={WelcomeScreen} />
