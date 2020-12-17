@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { Portal, Provider, FAB, useTheme, TouchableRipple } from 'react-native-paper'
-import { fabProperties as fabConsts, fabModeOptions, fabActionOptions, fabOpt } from '../../../constants/fabConstants'
+import { fabProperties as fabConsts, fabModeOptions, fabActionOptions, fabOpt, enumFabAction } from '../../../constants/fabConstants'
 import { tabScreens } from '../../../constants/constants'
-import { View, Animated, Text, Dimensions } from 'react-native'
+import { View, Animated, Text, Dimensions, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { PaoThemeType } from '../../../styles/theming'
 import { AntDesign } from '@expo/vector-icons';
 import styled from 'styled-components'
@@ -16,12 +16,12 @@ import { UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, TOGGLE_EDIT_MODE, TOGGLE_FA
 import { arrangmentOpt } from '../../../reducer/flashcardOptionsReducer';
 import usePrimaryControlledColor, { WhereToColor } from '../../../hooks/usePrimaryControlledColor'
 import useOnPressFabsHandlers from './useOnPressFabsHandlers'
-import useFabActionVariousProperties from './useFabActionVariousProperties'
+import useFabActionVariousProperties, { navigationRef } from './useFabActionVariousProperties'
 import PaoTableOptsModal from './paotable-opts/PaoTableOptsModal'
 import SelectorComp from './shared-opts/SelectorComp'
-import SharableOptions from './shared-opts'
+import { RootReducerT } from '../../../store'
+import OptsMenus from './OptsMenus'
 
-const SCREEN_WIDTH = Dimensions.get('window').width
 
 interface FabOptTypes {
   mode: number
@@ -34,24 +34,44 @@ interface CurrentFabPropsInterface {
   fabActionsVariousProperties: any
 }
 
-const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue, setEditModeTrue, setGoToUnfilledTrigger }) => {
+const getWhatFabPropsKey = (currentScreen: tabScreens) => {
+  if (currentScreen === tabScreens.Paotable)
+    return enumFabAction.paoTableFabActions
+  else if (currentScreen === tabScreens.Flashcards)
+    return enumFabAction.flashcardFabActions
+  else
+    return ''
+
+}
+
+const FabActionBtn = ({
+  currentScreen,
+  setCurrentScreen,
+  // currentScreensetModalOpen,
+  setModalOpen,
+  // editModeTrue,
+  // setEditModeTrue,
+}) => {
   const { showHints, setShowHints, showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)
   const dispatch = useDispatch()
   const theme: PaoThemeType = useTheme()
-  const [paoDocumentsFilled, setPaoDocumentsFilled] = useState(null)
   const actionBtnsFadeAnim = useRef(new Animated.Value(1)).current
   const fabActionContentRef = useRef(null)
   const fabActionContentRef2 = useRef(null)
+  // const [currentScreen, setCurrentScreen] = useState(navigationRef.current?.getCurrentRoute().name)
+  const editModeTrue = useSelector((state: RootReducerT) => state.fabProperties.config.editMode)
+  const [whatFabProps, setWhatFabProps] = useState(() =>
+    getWhatFabPropsKey(navigationRef.current?.getCurrentRoute().name))
 
-  useCheckAmountOfPaoFilled({ setPaoDocumentsFilled })
 
   const [currentFabProps, setCurrentFabProps] = useState({ mainFab: fabOpt.standby })
+  // toggleEditMode
 
   useEffect(() => {
-    if (editModeTrue === true) setCurrentFabProps({ mainFab: fabOpt.editMode })
-  }, [editModeTrue])
+    setWhatFabProps(getWhatFabPropsKey(navigationRef.current?.getCurrentRoute().name))
+  }, [currentScreen])
 
-  //~ settings for flashcard screen
+  // //~ settings for flashcard screen
   const [loading, setLoading] = useState(false)
   const [sliderValueautoPlayFlashcardsDuration, setSliderValueautoPlayFlashcardsDuration] = useState()
   const [flashcardSettings, setFlashcardSettings] = useState<FlashcardSettingsTypes>({
@@ -65,7 +85,7 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     flashcardOrder: arrangmentOpt.ascending
   })
 
-  //* solution is to fire a function from parent to toggle fab visibility 
+  // //* solution is to fire a function from parent to toggle fab visibility 
 
   const { handleOnPressFabActions, handleOnPressGeneral } = useOnPressFabsHandlers({
     loading,
@@ -80,75 +100,61 @@ const FabActionBtn = ({ currentScreen, whatFabProps, setModalOpen, editModeTrue,
     fabActionContentRef2,
     setCurrentFabProps,
     setShowNavigationIcons,
-    setEditModeTrue,
   })
 
   const fabActionVariousProperties = useFabActionVariousProperties({
+    setCurrentScreen,
     fabConsts,
     showHints,
     handleOnPressFabActions,
     handleOnPressGeneral
   })
 
-
   const controlledColor = usePrimaryControlledColor(WhereToColor.primaryColor, theme.colors.primary)
   const mainFabBackgroundColor = currentFabProps.mainFab.mode === fabModeOptions.editing ?
     currentFabProps.mainFab.color : controlledColor
   const bgColor = usePrimaryControlledColor(WhereToColor.goToUnfilledBtn, theme.colors.accent)
-  const themeIsUncontrolled = bgColor === theme.colors.accent
 
   return (
-    <View style={{ position: 'absolute', height: '100%', width: '100%' }}>
+    <View style={styles.container}>
       <Provider>
         <Portal>
-          <Portal>
-            {currentFabProps.mainFab.mode === fabModeOptions.menuOpen &&
-              <View style={{ height: '100%', width: SCREEN_WIDTH / 1.8, alignSelf: "center", flex: 1, justifyContent: 'center', }}>
-                <SharableOptions />
-                <>
-                  {currentScreen === tabScreens.Paotable &&
-                    <PaoTableOptsModal
-                      paoDocumentsFilled={paoDocumentsFilled}
-                      bgColor={bgColor}
-                      setGoToUnfilledTrigger={setGoToUnfilledTrigger}
-                      themeIsUncontrolled={themeIsUncontrolled}
-                    />
-                  }
-
-                  {currentScreen === tabScreens.Flashcards &&
-                    <FlashcardsOptsModal
-                      fabActionContentRef={fabActionContentRef}
-                      fabActionContentRef2={fabActionContentRef2}
-                      theme={theme}
-                      sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
-                      currentScreen={currentScreen}
-                      flashcardSettings={flashcardSettings}
-                      setFlashcardSettings={setFlashcardSettings}
-                      setLoading={setLoading}
-                      setModalOpen={setModalOpen}
-                    />
-                  }
-                </>
-              </View>
-            }
-          </Portal>
-
-          <FAB.Group
-            fabStyle={{ backgroundColor: mainFabBackgroundColor }}
-            visible={true}
-            color='white'
-            open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
-            icon={currentFabProps.mainFab.icon}
-            actions={[...fabActionVariousProperties[whatFabProps], ...fabActionVariousProperties.sharedFabActions]}
-            onStateChange={() => { }}
-            onPress={() => handleOnPressGeneral()} //@
-            onPressBackground={() => handleOnPressGeneral()}
+          <OptsMenus
+            currentFabProps={currentFabProps}
+            currentScreen={currentScreen}
+            bgColor={bgColor}
+            fabActionContentRef={fabActionContentRef}
+            fabActionContentRef2={fabActionContentRef2}
+            sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
+            flashcardSettings={flashcardSettings}
+            setFlashcardSettings={setFlashcardSettings}
+            setLoading={setLoading}
+            setModalOpen={setModalOpen}
           />
+
+          {whatFabProps.length > 1 &&
+            <FAB.Group
+              fabStyle={{ backgroundColor: mainFabBackgroundColor }}
+              visible={true}
+              color='white'
+              open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
+              icon={currentFabProps.mainFab.icon}
+              actions={[...fabActionVariousProperties[whatFabProps], ...fabActionVariousProperties.sharedFabActions]}
+              onStateChange={() => { }}
+              onPress={() => handleOnPressGeneral()}
+              onPressBackground={() => handleOnPressGeneral()}
+            />
+          }
 
         </Portal>
       </Provider>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: { position: 'absolute', height: '100%', width: '100%' },
+})
+
 
 export default FabActionBtn

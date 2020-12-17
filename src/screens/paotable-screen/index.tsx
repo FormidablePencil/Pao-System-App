@@ -1,12 +1,12 @@
 import React, { useState, useEffect, createContext, useRef } from 'react'
-import TableHeader from '../components/TableHeader'
-import RenderPaoContent from '../components/RenderPaoContent'
+import TableHeader from '../../components/TableHeader'
+import RenderPaoContent from './components'
 import { useSelector } from 'react-redux'
-import FabActionBtn from './components/fab-action-btns'
-import { enumFabAction, fabOpt } from '../constants/fabConstants'
-import { tabScreens } from '../constants/constants'
+import FabActionBtn from '../components/fab-action-btns'
+import { enumFabAction, fabOpt } from '../../constants/fabConstants'
+import { tabScreens } from '../../constants/constants'
 import { Keyboard, View, LayoutAnimation } from 'react-native'
-import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
+import usePrimaryControlledColor, { WhereToColor } from '../../hooks/usePrimaryControlledColor'
 
 export const PaoTableScreenContext = createContext()
 
@@ -52,14 +52,6 @@ export const PaotableScreen = ({ navigation }) => {
             setGoToUnfilledTrigger={setGoToUnfilledTrigger}
             editModeTrue={editModeTrue}
             />
-          <FabActionBtn
-            setGoToUnfilledTrigger={setGoToUnfilledTrigger}
-            currentScreen={tabScreens.Paotable}
-            editModeTrue={editModeTrue}
-            setEditModeTrue={setEditModeTrue}
-            setModalOpen={setModalOpen}
-            whatFabProps={enumFabAction.paoTableFabActions}
-          />
       </View>
     </PaoTableScreenContext.Provider>
   )

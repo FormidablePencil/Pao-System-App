@@ -1,27 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ItemInRow, Row, FirstItemInRow } from '../styles/paoTableStyles'
+import { ItemInRow, Row, FirstItemInRow } from '../../../../../styles/paoTableStyles'
 import { useTheme } from 'react-native-paper'
-import useTextInputHandler, { Control } from '../hooks/useTextInputHandler'
-import { listMode } from '../constants/constants'
+import useTextInputHandler, { Control } from '../../../../../hooks/useTextInputHandler'
+import { listMode } from '../../../../../constants/constants'
 import styled from 'styled-components'
-import { PaoThemeType } from '../styles/theming'
-import usePrimaryControlledColor, { WhereToColor, textControlledColor, placeholderControlledColor } from '../hooks/usePrimaryControlledColor'
+import { PaoThemeType } from '../../../../../styles/theming'
+import usePrimaryControlledColor, { WhereToColor, textControlledColor, placeholderControlledColor } from '../../../../../hooks/usePrimaryControlledColor'
 import { Dimensions, FlatList, LayoutAnimation, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/FontAwesome"
-import { RootReducerT } from '../store'
-import { ADD_ITEM_TO_STUDY, ADD_OR_REMOVE_ITEM_STUDY } from '../actions/types'
-import DisplayNoStarted from './DisplayNoStarted'
-import { TableHeaderHeight } from './TableHeader'
+import { RootReducerT } from '../../../../../store'
+import { ADD_ITEM_TO_STUDY, ADD_OR_REMOVE_ITEM_STUDY } from '../../../../../actions/types'
+import DisplayNoStarted from '../../../../../components/DisplayNoStarted'
+import { tableHeaderHeight } from '../../../../../components/TableHeader'
+import { getPaoNumber } from '../../../../flashcard-screen/functions/various'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
-const RenderPaoTables = ({
+const ListModePagination = ({
   listSortedInTens,
   currentRenderItemsRange,
-  heightOfScrollView,
   controlledInput,
   setControlledInput,
   tableData,
@@ -37,7 +37,6 @@ const RenderPaoTables = ({
 }: {
   listSortedInTens
   currentRenderItemsRange
-  heightOfScrollView: number | undefined
   controlledInput: Control
   setControlledInput: any
   tableData: any
@@ -69,6 +68,7 @@ const RenderPaoTables = ({
   const study = useSelector((state: RootReducerT) => state.study.study)
   const studyList = useSelector((state: RootReducerT) => state.study.list)
   const controlledThemeColor = useSelector((state: RootReducerT) => state.controlledThemeColor)
+  const paoTableRowHeight = useSelector((state: RootReducerT) => state.misc.paoTableRowHeight)
   const [editOn, setEditOn] = useState(false)
   const coloredRowRef = useRef(false)
 
@@ -129,10 +129,7 @@ const RenderPaoTables = ({
     saveControlledInputToReduxPaoList()
   }
   const onPressHandlerTextChange = () => editModeTrue && setEditOn(true)
-  const getPaoNumber = (index) => {
-    return currentRenderItemsRange + index >= 0 && currentRenderItemsRange + index <= 9 ?
-      `0${currentRenderItemsRange + index}` : currentRenderItemsRange + index
-  }
+
 
   const starPaoItemHandler = (paoNumber) => {
     // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -141,7 +138,7 @@ const RenderPaoTables = ({
 
 
   return (
-    <View style={{ height: SCREEN_HEIGHT - (TableHeaderHeight * 2), width: '100%' }}>
+    <View style={{ height: SCREEN_HEIGHT - (tableHeaderHeight * 2), width: '100%' }}>
       <DisplayNoStarted
         itemExistsInFavOfCurrentRange={itemExistsInFavOfCurrentRange}
         currentRenderItemsRange={currentRenderItemsRange} />
@@ -161,15 +158,13 @@ const RenderPaoTables = ({
                   key={item}
                   style={{
                     backgroundColor: coloredRowRef.current ? rowEvenBgColor : rowOddBgColor,
-                    height: heightOfScrollView, alignItems: 'center', position: 'relative'
+                    height: paoTableRowHeight, alignItems: 'center', position: 'relative'
                   }}
                 >
                   <View style={{ alignItems: 'center', justifyContent: "center", zIndex: 3, flexDirection: 'row' }}>
-
                     <Icon name={stared ? 'star' : 'star-o'} size={13} color={stared ? '#D9BF14' : "#CDC78E"} />
                     <FirstItemInRow color={paoNumText}>
-                      {/* <Icon name='star-o' size={20} color='#D9BF14' /> */}
-                      {getPaoNumber(item)}
+                      {getPaoNumber(item, currentRenderItemsRange)}
                     </FirstItemInRow>
                   </View>
                   {['person', 'action', 'object'].map((name: string, whatIndex) => {
@@ -177,7 +172,7 @@ const RenderPaoTables = ({
                     const textInputValue = returnValueDependingOnWeatherItemsAreSame({ index: currentRenderItemsRange + item, name, mode: listMode.pagination })
 
                     return (
-                      <View style={styles.itemInRow} key={currentRenderItemsRange + whatIndex}>
+                      <View style={paoTableStyles.itemInRow} key={currentRenderItemsRange + whatIndex}>
                         {/* <TextInput
                             textAlignVertical='center'
                           /> */}
@@ -218,14 +213,8 @@ const RenderPaoTables = ({
   )
 }
 
-const StyledText = styled.Text`
-  align-self: center;
-`;
 const PaoText = styled(Text)`
   textAlign: center;
-`;
-const TextInputContainer = styled<any>(Animatable.View)`
-
 `;
 const TextInputStyled = styled<any>(TextInput)`
   /* align-self: center; */
@@ -233,7 +222,7 @@ const TextInputStyled = styled<any>(TextInput)`
   width: 100%;
 `;
 
-const styles = StyleSheet.create({
+export const paoTableStyles = StyleSheet.create({
   itemInRow: {
     width: '33%',
     height: '80%',
@@ -247,4 +236,4 @@ const styles = StyleSheet.create({
 
 
 
-export default RenderPaoTables
+export default ListModePagination

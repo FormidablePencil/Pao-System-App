@@ -4,11 +4,11 @@ import { Text } from 'react-native-paper'
 import styled from 'styled-components';
 import { createAnimatableComponent } from 'react-native-animatable';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import useAnimation from '../../../../../../hooks/useAnimation';
+import useAnimation from '../../../../../hooks/useAnimation';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveControlledInputsToPao } from '../../../../../../actions/paoAc';
-import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText } from '../../../../../../hooks/usePrimaryControlledColor';
-import { RootReducerT } from '../../../../../../store';
+import { saveControlledInputsToPao } from '../../../../../actions/paoAc';
+import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText } from '../../../../../hooks/usePrimaryControlledColor';
+import { RootReducerT } from '../../../../../store';
 import StudyMode from './StudyMode';
 import RenderPaoItems from './RenderPaoItems';
 

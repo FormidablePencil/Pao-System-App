@@ -70,10 +70,10 @@ export default (state: StudyRandomModeT = initialState, { type, payload }) => {
       return { ...state, displayNumberInFront: true }
     case DISPLAY_NUMBERS_IN_FRONT_FALSE:
       return { ...state, displayNumberInFront: false }
-      
-      case SET_STUDY_RANDOM_AMOUNT: 
+
+    case SET_STUDY_RANDOM_AMOUNT:
       return { ...state, studyAmount: payload }
-      
+
 
     default:
       return state

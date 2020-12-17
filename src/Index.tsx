@@ -10,10 +10,8 @@ import { Provider as PaperProvider } from 'react-native-paper'
 import { PaoTheme } from './styles/theming';
 
 const store = configureStore()
-
 //~ fav a card/collection
 //~ CRUD to the backend
-
 
 const Index = () => {
   const [appReady, setAppReady] = useState(false)
@@ -49,7 +47,7 @@ const Index = () => {
 
   return (
     <PaperProvider theme={PaoTheme}>
-      <StatusBar translucent={true} backgroundColor={'transparent'}  />
+      <StatusBar translucent={true} backgroundColor={'transparent'} />
       <StoreProvider store={store}>
         <ErrorBoundary>
           {appReady ?

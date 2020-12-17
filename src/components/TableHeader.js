@@ -2,11 +2,11 @@ import React from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { View, StatusBar } from 'react-native'
 import playingCards from './../assets/playing-cards-png-11-original.png'
-import { Row, FirstItemInRowImage, ItemInRow, StyledTextInRowItem } from '../styles/paoTableStyles'
+import { Row, FirstItemInRowImage, ItemInRow, StyledTextInRowItemStudyMode } from '../styles/paoTableStyles'
 import { useTheme } from 'react-native-paper'
 import usePrimaryControlledColor, { WhereToColor } from '../hooks/usePrimaryControlledColor'
 
-export const TableHeaderHeight = 60 + StatusBar.currentHeight
+export const tableHeaderHeight = 60 + StatusBar.currentHeight
 
 const TableHeader = () => {
   const theme = useTheme()
@@ -15,20 +15,20 @@ const TableHeader = () => {
     <LinearGradient
       start={[.8, 0.8]}
       colors={[usePrimaryControlledColor(WhereToColor.tableHeader), usePrimaryControlledColor(WhereToColor.tableHeader2)]}
-      style={{ height: TableHeaderHeight }}>
+      style={{ height: tableHeaderHeight }}>
       <View style={{ height: 20 }}></View>
       <Row>
         <FirstItemInRowImage>
           {/* <Image style={{ resizeMode: 'contain', height: 20, width: 20 }} source={playingCards} /> */}
         </FirstItemInRowImage>
         <ItemInRow>
-          <StyledTextInRowItem>P</StyledTextInRowItem>
+          <StyledTextInRowItemStudyMode>P</StyledTextInRowItemStudyMode>
         </ItemInRow>
         <ItemInRow>
-          <StyledTextInRowItem>A</StyledTextInRowItem>
+          <StyledTextInRowItemStudyMode>A</StyledTextInRowItemStudyMode>
         </ItemInRow>
         <ItemInRow>
-          <StyledTextInRowItem>O</StyledTextInRowItem>
+          <StyledTextInRowItemStudyMode>O</StyledTextInRowItemStudyMode>
         </ItemInRow>
       </Row>
     </LinearGradient>

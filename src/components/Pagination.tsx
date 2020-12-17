@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { PaoThemeType } from '../styles/theming';
 import { Animated, Dimensions } from 'react-native';
 import usePrimaryControlledColor, { WhereToColor, textControlledColorPagination } from '../hooks/usePrimaryControlledColor';
-import { PaoTableScreenContext } from '../screens/PaotableScreen'
+import { PaoTableScreenContext } from '../screens/paotable-screen'
 import { useSelector } from 'react-redux';
 
 const SCREEN_WIDTH = Dimensions.get("window").width

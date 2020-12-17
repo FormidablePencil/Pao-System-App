@@ -11,6 +11,7 @@ import studyReducer, { StudyModeT } from './reducer/studyReducer'
 import fabVisibleReducer from './reducer/fabVisibleReducer'
 import fabReducer, { fabPropertiesT } from './reducer/fabReducer'
 import studyRandomModeReducer, { StudyRandomModeT } from './reducer/studyRandomModeReducer'
+import miscReducer, { MiscT } from './reducer/miscReducer'
 
 export interface RootReducerT {
   pao
@@ -24,6 +25,7 @@ export interface RootReducerT {
   fabProperties: fabPropertiesT
   study: StudyModeT
   studyRandomMode: StudyRandomModeT
+  misc: MiscT
 }
 
 const rootReducer = combineReducers({
@@ -38,6 +40,7 @@ const rootReducer = combineReducers({
   controlledThemeColor: controlledThemeColorReducer,
   study: studyReducer,
   studyRandomMode: studyRandomModeReducer,
+  misc: miscReducer,
 })
 
 const initialState = {}

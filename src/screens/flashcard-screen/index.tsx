@@ -3,7 +3,7 @@ import { View } from 'react-native-tailwind';
 import { reusableStyles, WhiteText } from '../../styles/global'
 import { Button, useTheme, TouchableRipple, Modal, Portal } from 'react-native-paper';
 import styled from 'styled-components';
-import FlashcardSwiper from './components/options-modal/flashcard-swiper';
+import FlashcardSwiper from './components/flashcard-swiper';
 import FabActionBtn from '../components/fab-action-btns';
 import { enumFabAction } from '../../constants/fabConstants';
 import { tabScreens } from '../../constants/constants';
@@ -70,14 +70,14 @@ export const FlashcardsScreen = () => {
         </View>
       </View>
 
-      <FabActionBtn
+      {/* <FabActionBtn
         setGoToUnfilledTrigger={null}
         currentScreen={tabScreens.Flashcards}
         editModeTrue={editModeTrue}
         setEditModeTrue={setEditModeTrue}
         setModalOpen={setModalOpen}
         whatFabProps={enumFabAction.flashcardFabActions}
-      />
+      /> */}
     </>
   )
 }

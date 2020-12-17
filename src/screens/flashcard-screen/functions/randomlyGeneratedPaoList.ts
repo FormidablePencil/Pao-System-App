@@ -17,9 +17,9 @@ const randomlyGeneratedPaoList = ({ pao, studyAmount }) => {
   const shuffledActionList = shuffle(unshuffledActionList)
   const shuffledObjectList = shuffle(unshuffledObjectList)
 
-  shuffledPersonList.splice(0, studyAmount)
-  shuffledActionList.splice(0, studyAmount)
-  shuffledObjectList.splice(0, studyAmount)
+  // shuffledPersonList.splice(0, studyAmount)
+  // shuffledActionList.splice(0, studyAmount)
+  // shuffledObjectList.splice(0, studyAmount)
 
   return {
     person: shuffledPersonList,

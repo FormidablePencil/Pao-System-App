@@ -6,8 +6,8 @@ import { StyleSheet } from 'react-native';
 import FlashcardItSelf from './flashcard-it-self';
 import Swiper from 'react-native-swiper'
 import { LinearGradient } from 'expo-linear-gradient';
-import usePrimaryControlledColor, { WhereToColor } from '../../../../../hooks/usePrimaryControlledColor';
-import { RootReducerT } from '../../../../../store';
+import usePrimaryControlledColor, { WhereToColor } from '../../../../hooks/usePrimaryControlledColor';
+import { RootReducerT } from '../../../../store';
 import sortBy from 'lodash.sortby'
 import shuffle from 'shuffle-array';
 import {
@@ -15,7 +15,7 @@ import {
   LazyloadView,
   LazyloadImage
 } from 'react-native-lazyload';
-import randomlyGeneratedPaoList from '../../../functions/randomlyGeneratedPaoList';
+import randomlyGeneratedPaoList from '../../functions/randomlyGeneratedPaoList';
 
 
 const defaultFlashcards = [{

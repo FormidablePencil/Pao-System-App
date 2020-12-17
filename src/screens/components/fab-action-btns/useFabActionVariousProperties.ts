@@ -1,18 +1,24 @@
 import { useNavigation } from "@react-navigation/native"
+import { createRef } from "react"
 import { useTheme } from "react-native-paper"
 import { tabScreens } from "../../../constants/constants"
 import { fabActionOptions } from "../../../constants/fabConstants"
 import usePrimaryControlledColor, { WhereToColor } from "../../../hooks/usePrimaryControlledColor"
 import { PaoThemeType } from "../../../styles/theming"
 
+export const navigationRef: any = createRef();
+
 const useFabActionVariousProperties = ({
+  setCurrentScreen,
   fabConsts,
   showHints,
   handleOnPressFabActions,
-  handleOnPressGeneral
+  handleOnPressGeneral,
 }) => {
   const theme: PaoThemeType = useTheme()
-  const navigation = useNavigation()
+  const navigation = navigationRef.current
+
+  const haveNavigated = (page) => setCurrentScreen(page)
 
   const fabActionsVariousProperties = {
     paoTableFabActions: [
@@ -24,6 +30,7 @@ const useFabActionVariousProperties = ({
         label: showHints ? fabConsts.accountSettings.mesg : null,
         onPress: () => {
           navigation.navigate(tabScreens.Flashcards)
+          haveNavigated(tabScreens.Flashcards)
           handleOnPressGeneral()
         }
       },
@@ -35,6 +42,7 @@ const useFabActionVariousProperties = ({
         label: showHints ? fabConsts.accountSettings.mesg : null,
         onPress: () => {
           navigation.navigate(tabScreens.Paotable)
+          haveNavigated(tabScreens.Paotable)
           handleOnPressGeneral()
         }
       },
@@ -47,11 +55,12 @@ const useFabActionVariousProperties = ({
         label: showHints ? fabConsts.accountSettings.mesg : null,
         onPress: () => {
           navigation.navigate(tabScreens.ProfileScreen)
+          haveNavigated(tabScreens.ProfileScreen)
           handleOnPressGeneral()
         }
       },
       {
-        style: { backgroundColor: usePrimaryControlledColor(WhereToColor.fabActionEdit, theme.colors.fabActionColors[0]) },
+        style: { backgroundColor: usePrimaryControlledColor(WhereToColor.fabActionEdit, theme.colors.accent) },
         icon: fabConsts.editMode.icon.pencil,
         label: showHints ? fabConsts.editMode.mesg : null,
         onPress: () => {

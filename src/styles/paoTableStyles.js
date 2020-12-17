@@ -24,7 +24,7 @@ export const ItemInRow = styled.View`
   justify-content: center;
   align-items: center;
 `;
-export const StyledTextInRowItem = styled.Text`
+export const StyledTextInRowItemStudyMode = styled.Text`
   text-align: center;
   color: ${({ color }) => color ?? 'white'};
   font-size: 20px;

@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { RootReducerT } from '../../../../../../store';
+import { RootReducerT } from '../../../../../store';
 
 const StudyMode = ({ index, side }) => {
   const studyRandomMode = useSelector((state: RootReducerT) => state.studyRandomMode)

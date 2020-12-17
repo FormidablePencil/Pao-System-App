@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, LayoutAnimation } from 'react-native'
+import React, { useState, useEffect, useRef, useContext, Suspense, lazy } from 'react'
+import { View, LayoutAnimation, Text, Dimensions } from 'react-native'
 import { useSelector } from 'react-redux'
-import Pagination, { paginateDirection } from './Pagination'
-import RenderPaoTables from './RenderPaoTables'
-import { mergePaoArrays } from './logic/sortPaoList'
-import { TabNavContext } from '../routes/StackNavigator'
+import Pagination, { paginateDirection } from '../../../components/Pagination'
+import { mergePaoArrays } from '../../../components/logic/sortPaoList'
+import { TabNavContext } from '../../../routes/StackNavigator'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { RootReducerT } from '../store'
-import ListModeTable from './ListModeTable'
+import { RootReducerT } from '../../../store'
+import ListModeScroll from './lists'
+const LazyLoadListModePagination = lazy(() => import('./lists/list-mode-pagination'));
 
 const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
   const { setTableReady } = useContext(TabNavContext)
@@ -20,8 +20,6 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
 
   const [tenPaoItemsArr, setTenPaoItemsArr]: any = useState([null, null, null,])
   const [controlledInput, setControlledInput] = useState<Control>({ number: null, name: null, value: null }) //~ 
-  const [heightOfScrollView, setheightOfScrollView] = useState<number>()
-  const flatListRef = useRef(null)
 
   const [currentRenderItemsRange, setCurrentRenderItemsRange] = useState(0) //@
   const [flatlistItems, setFlatlistItems] = useState(arr) //@ !!!
@@ -102,52 +100,38 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
         keyboardDismissMode={'none'}
         blurOnSubmit={false}
         keyboardShouldPersistTaps={'always'}
-        onLayout={(event) => {
-          const { height } = event.nativeEvent.layout
-          if (!heightOfScrollView) {
-            setheightOfScrollView(height / 10)
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-            if (setTableReady !== null) setTableReady(true)
-          }
-        }}
-        ref={flatListRef}
-        style={{ flex: 1, height: "80%" }}
+        style={{ flex: 1, height: "0%" }}
       >
         {/* {tableReady && */}
         <View>
-          {!editModeTrue && isPagination &&
-            <View style={{ position: "absolute", height: '100%', width: '100%', zIndex: 300 }}></View>
-          }
           <KeyboardAwareScrollView style={{ height: '100%', }}>
             {isPagination ?
-              <RenderPaoTables
-                listSortedInTens={listSortedInTens}
-                currentRenderItemsRange={currentRenderItemsRange}
-                setFirstUnfilledTextInput={setFirstUnfilledTextInput}
-                firstUnfilledTextInput={firstUnfilledTextInput}
-                firstOfTableTextInput={firstOfTableTextInput}
-                lastOfTableTextInput={lastOfTableTextInput}
-                prevTextInput={prevTextInput}
-                nextTextInput={nextTextInput}
-                currentlyFocusedTextInput={currentlyFocusedTextInput}
-                setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
-                editModeTrue={editModeTrue}
-                tableData={flatlistItems}
-                controlledInput={controlledInput}
-                setControlledInput={setControlledInput}
-                heightOfScrollView={heightOfScrollView}
-              />
+              <Suspense fallback={<Text>wtf</Text>}>
+                <LazyLoadListModePagination
+                  listSortedInTens={listSortedInTens}
+                  currentRenderItemsRange={currentRenderItemsRange}
+                  setFirstUnfilledTextInput={setFirstUnfilledTextInput}
+                  firstUnfilledTextInput={firstUnfilledTextInput}
+                  firstOfTableTextInput={firstOfTableTextInput}
+                  lastOfTableTextInput={lastOfTableTextInput}
+                  prevTextInput={prevTextInput}
+                  nextTextInput={nextTextInput}
+                  currentlyFocusedTextInput={currentlyFocusedTextInput}
+                  setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
+                  editModeTrue={editModeTrue}
+                  tableData={flatlistItems}
+                  controlledInput={controlledInput}
+                  setControlledInput={setControlledInput}
+                />
+              </Suspense>
               :
-              <ListModeTable
-                heightOfScrollView={heightOfScrollView}
-                controlledInput={controlledInput}
-                setControlledInput={setControlledInput}
-              />
+              <ListModeScroll />
             }
           </KeyboardAwareScrollView>
         </View>
       </View>
-      {isPagination &&
+      {
+        isPagination &&
         <Pagination
           swiperIndex={swiperIndex}
           jumpToCertainTable={jumpToCertainTable}
@@ -157,13 +141,13 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
           setCurrentRenderItemsRange={setCurrentRenderItemsRange}
         />
       }
-    </View>
+    </View >
   )
 }
 
 
 // {/* :
-// <ListModeTable
+// <ListModeScroll
 //  /> */}
 export default RenderPaoContent
 

@@ -13,6 +13,7 @@ const AmountOfCardsAccumulator = () => {
 
   useEffect(() => {
     return () => {
+      if (changed)
       dispatch({ type: TOGGLE_STUDY_RANDOM_MODE_TRUE, payload: pao })
       changed = false
     }
