@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
+import { StyleSheet, View } from "react-native"
 import InputSpinner from 'react-native-input-spinner'
 import { useDispatch, useSelector } from "react-redux"
 import { SET_STUDY_RANDOM_AMOUNT, TOGGLE_STUDY_RANDOM_MODE_TRUE } from "../../../../actions/types"
@@ -14,7 +15,7 @@ const AmountOfCardsAccumulator = () => {
   useEffect(() => {
     return () => {
       if (changed)
-      dispatch({ type: TOGGLE_STUDY_RANDOM_MODE_TRUE, payload: pao })
+        dispatch({ type: TOGGLE_STUDY_RANDOM_MODE_TRUE, payload: pao })
       changed = false
     }
   }, [])
@@ -25,21 +26,21 @@ const AmountOfCardsAccumulator = () => {
   }
 
   return (
-    <InputSpinner
-      // inputStyle={{ ...reusableStyles.whiteText }}
-      // colorLeft={theme.colors.fabActionColors[1]}
-      // colorRight={theme.colors.fabActionColors[1]}
-      colorPress='#4880A5'
-      buttonPressStyle={{ backgroundColor: '#4880A5' }}
-      colorMax={'#4880A5'}
-      colorMin={'#4880A5'}
-      max={30}
-      min={2}
-      step={2}
-      value={studyAmount}
-      color='orange'
-      onChange={onChangeHandler}
-    />
+      <InputSpinner
+        // inputStyle={{ ...reusableStyles.whiteText }}
+        // colorLeft={theme.colors.fabActionColors[1]}
+        // colorRight={theme.colors.fabActionColors[1]}
+        colorPress='#4880A5'
+        buttonPressStyle={{ backgroundColor: '#4880A5' }}
+        colorMax={'#4880A5'}
+        colorMin={'#4880A5'}
+        max={30}
+        min={2}
+        step={2}
+        value={studyAmount}
+        color='orange'
+        onChange={onChangeHandler}
+      />
   )
 }
 

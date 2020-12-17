@@ -65,7 +65,7 @@ const PaoTableOptsModal = ({ paoDocumentsFilled, bgColor, setGoToUnfilledTrigger
       <SelectorComp
         initial={toggleRow}
         onPress={toggleToggleRowHandler}
-        title={'toggle'}
+        title={'Toggle'}
         options={[
           { value: 0, label: 'item' },
           { value: 1, label: 'row' }
@@ -75,7 +75,7 @@ const PaoTableOptsModal = ({ paoDocumentsFilled, bgColor, setGoToUnfilledTrigger
       <SelectorComp
         initial={displayNumberInFront}
         onPress={toggleDisplayNumberInFront}
-        title={'display in front'}
+        title={'Front'}
         options={[
           { value: 0, label: 'pao' },
           { value: 1, label: 'number' }
@@ -89,8 +89,9 @@ const PaoTableOptsModal = ({ paoDocumentsFilled, bgColor, setGoToUnfilledTrigger
   )
 }
 
-const ButtonSave = styled(Button)`
+export const ButtonSave = styled(Button)`
   margin-top: 20px;
+  width: 90%;
 `;
 
 const AntDesignStyled = styled(AntDesign)`
@@ -102,7 +103,7 @@ const AligningContainer = styled(View)`
 `;
 const Row = styled(View)`
   flex-direction: row;
-  align-items: center
+  align-items: center;
 `;
 const RegText = styled<any>(Text)`
   color: ${({ black }) => black ? 'black' : 'white'};
@@ -110,7 +111,11 @@ const RegText = styled<any>(Text)`
 `;
 const BounceAnimationView = styled(Animatable.View)`
   margin: 8px;
+  flex-direction: column;
+  width: 100%;
   align-items: center;
+  /* justify-content: space-between; */
+  /* align-items: flex-end; */
 `;
 const TouchableRippleStyled = styled<any>(TouchableRipple)`
   width: 150;

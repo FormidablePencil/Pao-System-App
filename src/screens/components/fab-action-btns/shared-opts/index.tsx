@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { STUDY_MODE_TOGGLE, TOGGLE_STUDY_RANDOM_MODE } from '../../../../actions/types'
 import { RootReducerT } from '../../../../store'
-import AmountOfCardsAccumulator from './AmountOfCardsAccumulator'
 import SelectorComp from '../SelectorComp'
 
 const SharedOptions = () => {
@@ -11,8 +9,6 @@ const SharedOptions = () => {
   const pao = useSelector((state: RootReducerT) => state.pao)
   const study = useSelector((state: RootReducerT) => state.study.study)
   const isRandomStudyMode = useSelector((state: RootReducerT) => state.studyRandomMode.isRandomStudyMode)
-  const studyAmount = useSelector((state: RootReducerT) => state.studyRandomMode.studyAmount)
-  const [amountOfCards, setAmountOfCards] = useState(studyAmount)
 
   const toggleStaredList = () => dispatch({ type: STUDY_MODE_TOGGLE })
   const toggleStudyRandomMode = () => dispatch({ type: TOGGLE_STUDY_RANDOM_MODE, payload: pao })
@@ -37,10 +33,6 @@ const SharedOptions = () => {
           { value: 1, label: 'study' }
         ]}
       />
-      <AmountOfCardsAccumulator />
-      {/* <ToggleStaredListSelector /> */}
-      {/* navigation fab */}
-      {/* list  */}
     </>
   )
 }

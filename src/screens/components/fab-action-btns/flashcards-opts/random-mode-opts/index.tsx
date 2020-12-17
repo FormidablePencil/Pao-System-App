@@ -17,9 +17,8 @@ const RandomStudyModeOpts = () => {
     invertCard: isFlipped ? 1 : 0,
   }))
   const switchSelectors = [
-
     {
-      title: 'display number', leftLabel: 'back', rightLabel: 'front',
+      title: 'front', leftLabel: 'back', rightLabel: 'front',
       toggleState: switchSelectorValues.invertCard,
       onPress: toggle => setSwitchSelectorValues(prev => ({ ...prev, invertCard: toggle }))
     },
@@ -34,23 +33,21 @@ const RandomStudyModeOpts = () => {
   return (
     <>
       {switchSelectors.map(switchSelectorItem => {
-        const switchBtnSelected = usePrimaryControlledColor(WhereToColor.switchBtnSelected, theme.colors.primary)
         return (
           <>
             <SelectorComp
-              initial={switchSelectorItem.toggleState}
-              onPress={whatSide => switchSelectorItem.onPress(whatSide)}
-              title={'Table'}
+              initial={'front'}
+              onPress={toggle => setSwitchSelectorValues(prev => ({ ...prev, invertCard: toggle }))}
+              title={switchSelectorItem.title}
               options={[
                 { value: 0, label: switchSelectorItem.leftLabel },
                 { value: 1, label: switchSelectorItem.rightLabel }
               ]}
             />
-            <Text style={{ ...reusableStyles.lgText, color: 'white' }}>{switchSelectorItem.title}</Text>
           </>
         )
       })}
-      <Button onPress={onPressSaveBtn}>Save - always</Button>
+      <Button  onPress={onPressSaveBtn}>Save - always</Button>
     </>
   )
 }

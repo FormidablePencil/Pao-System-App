@@ -38,14 +38,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 3,
+    marginBottom: 3,
   },
   switchSelector: {
-    width: 250,
+    width: 235,
   },
   title: {
-    color: 'white', marginBottom: 2
+    color: 'white', marginBottom: 2, 
   }
 })
 

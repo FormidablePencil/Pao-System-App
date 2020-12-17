@@ -8,6 +8,9 @@ import ListOpts from './reg-mode-opts/ListOpts';
 import RandomStudyModeOpts from './random-mode-opts';
 import { RootReducerT } from '../../../../store';
 import RegModeOpts from './reg-mode-opts';
+import { ButtonSave } from '../paotable-opts/PaoTableOptsModal';
+import { Text } from 'react-native';
+import { Button } from 'react-native-paper';
 
 
 const FlashcardsOptsModal = ({
@@ -38,6 +41,18 @@ const FlashcardsOptsModal = ({
         :
         <RandomStudyModeOpts />
       }
+      <ButtonSave labelStyle={{color: 'white'}}  onPress={() => console.log('save')} mode='contained'>
+        Save
+      </ButtonSave>
+      <ButtonSave labelStyle={{color: 'white'}}  onPress={() => console.log('save')} mode='contained'>
+        Save
+      </ButtonSave>
+      <ButtonSave labelStyle={{color: 'white'}}  onPress={() => console.log('save')} mode='contained'>
+        Save
+      </ButtonSave>
+      <ButtonSave labelStyle={{color: 'white'}}  onPress={() => console.log('save')} mode='contained'>
+        Save
+      </ButtonSave>
     </>
   )
 }

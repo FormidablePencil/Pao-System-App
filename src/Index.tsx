@@ -47,8 +47,9 @@ const Index = () => {
 
   return (
     <PaperProvider theme={PaoTheme}>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
       <StoreProvider store={store}>
+        <StatusBar translucent={true} backgroundColor={'transparent'} />
+
         <ErrorBoundary>
           {appReady ?
             <StackNavigator />

@@ -21,7 +21,9 @@ import PaoTableOptsModal from './paotable-opts/PaoTableOptsModal'
 import SelectorComp from './SelectorComp'
 import { RootReducerT } from '../../../store'
 import OptsMenus from './OptsMenus'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { FadeInTransitionGroup } from '../Transition-group'
+import TouchableBackdrop from './TouchableBackdrop'
 
 
 interface FabOptTypes {
@@ -115,9 +117,8 @@ const FabActionBtn = ({
 
   return (
     <View style={styles.container}>
-      <Provider>
-
-        {whatFabProps.length > 1 &&
+      {whatFabProps.length > 1 &&
+        <Provider>
           <Portal>
             <FAB.Group
               fabStyle={{ backgroundColor: mainFabBackgroundColor }}
@@ -132,23 +133,27 @@ const FabActionBtn = ({
               theme={{ colors: { backdrop: 'transparent' } }}
             />
           </Portal>
-        }
+          <TouchableBackdrop
+            onPress={() => setCurrentFabProps({ mainFab: fabOpt.standby })}
+            currentFabPropsMode={currentFabProps.mainFab.mode}
+          />
+        </Provider>
+      }
 
-        <OptsMenus
-          currentFabProps={currentFabProps}
-          currentScreen={currentScreen}
-          bgColor={bgColor}
-          fabActionContentRef={fabActionContentRef}
-          fabActionContentRef2={fabActionContentRef2}
-          sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
-          flashcardSettings={flashcardSettings}
-          setFlashcardSettings={setFlashcardSettings}
-          setLoading={setLoading}
-          setModalOpen={setModalOpen}
-          handleOnPressGeneral={handleOnPressGeneral}
-        />
+      <OptsMenus
+        currentFabProps={currentFabProps}
+        currentScreen={currentScreen}
+        bgColor={bgColor}
+        fabActionContentRef={fabActionContentRef}
+        fabActionContentRef2={fabActionContentRef2}
+        sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
+        flashcardSettings={flashcardSettings}
+        setFlashcardSettings={setFlashcardSettings}
+        setLoading={setLoading}
+        setModalOpen={setModalOpen}
+        handleOnPressGeneral={handleOnPressGeneral}
+      />
 
-      </Provider>
     </View>
   )
 }
@@ -156,6 +161,5 @@ const FabActionBtn = ({
 const styles = StyleSheet.create({
   container: { position: 'absolute', height: '100%', width: '100%' },
 })
-
 
 export default FabActionBtn
