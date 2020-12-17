@@ -41,16 +41,7 @@ const FlashcardsOptsModal = ({
         :
         <RandomStudyModeOpts />
       }
-      <ButtonSave labelStyle={{color: 'white'}}  onPress={() => console.log('save')} mode='contained'>
-        Save
-      </ButtonSave>
-      <ButtonSave labelStyle={{color: 'white'}}  onPress={() => console.log('save')} mode='contained'>
-        Save
-      </ButtonSave>
-      <ButtonSave labelStyle={{color: 'white'}}  onPress={() => console.log('save')} mode='contained'>
-        Save
-      </ButtonSave>
-      <ButtonSave labelStyle={{color: 'white'}}  onPress={() => console.log('save')} mode='contained'>
+      <ButtonSave labelStyle={{ color: 'white' }} onPress={() => console.log('save')} mode='contained'>
         Save
       </ButtonSave>
     </>

@@ -7,9 +7,9 @@ import { FadeInTransitionGroup } from '../Transition-group'
 const TouchableBackdrop = ({ currentFabPropsMode, onPress }) => {
   return (
     <>
-      <FadeInTransitionGroup appearCondition={currentFabPropsMode === fabModeOptions.menuOpen}>
+      {/* <FadeInTransitionGroup appearCondition={currentFabPropsMode === fabModeOptions.menuOpen}>
         <View style={{ ...styles.backdrop }} />
-      </FadeInTransitionGroup>
+      </FadeInTransitionGroup> */}
       <TouchableWithoutFeedback style={{
         display: currentFabPropsMode === fabModeOptions.menuOpen ? 'flex' : 'none',
         ...styles.btn,

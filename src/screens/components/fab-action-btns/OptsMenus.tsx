@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { View, StyleSheet, Dimensions, Animated, TouchableHighlight, Easing, LayoutAnimation, TouchableOpacity, Text } from 'react-native'
-import { Portal, TouchableRipple, useTheme } from 'react-native-paper'
+import { Portal, Provider, TouchableRipple, useTheme } from 'react-native-paper'
 import { tabScreens } from '../../../constants/constants'
 import { fabModeOptions } from '../../../constants/fabConstants'
 import useCheckAmountOfPaoFilled from '../../../hooks/useCheckAmountOfPaoFilled'
@@ -39,7 +39,7 @@ const OptsMenu = ({
       <FadeInTransitionGroup
         style={styles.outerContainer}
         appearCondition={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}>
-        <View style={styles.innerContainer}>
+        <View style={{...styles.innerContainer, }}>
           <SharedOptions />
 
           <View style={styles.divider} />
@@ -67,11 +67,11 @@ const OptsMenu = ({
 
         </View>
       </FadeInTransitionGroup>
-      <FadeInTransitionGroup
-        style={styles.amountOfCardsAccumulator}
-        appearCondition={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}>
-        <AmountOfCardsAccumulator />
-      </FadeInTransitionGroup>
+      {/* // <FadeInTransitionGroup
+      //   style={styles.amountOfCardsAccumulator}
+      //   appearCondition={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}>
+      //   <AmountOfCardsAccumulator />
+      // </FadeInTransitionGroup> */}
     </>
   )
 }
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute',
+    // position: 'absolute',
     zIndex: 10
   },
   innerContainer: {

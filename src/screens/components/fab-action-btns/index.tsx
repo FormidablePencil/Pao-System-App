@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { Portal, Provider, FAB, useTheme, TouchableRipple } from 'react-native-paper'
+import { Portal, Provider, FAB, useTheme, TouchableRipple, Button } from 'react-native-paper'
 import { fabProperties as fabConsts, fabModeOptions, fabActionOptions, fabOpt, enumFabAction } from '../../../constants/fabConstants'
 import { tabScreens } from '../../../constants/constants'
 import { View, Animated, Text, Dimensions, StyleSheet } from 'react-native'
@@ -118,41 +118,46 @@ const FabActionBtn = ({
   return (
     <View style={styles.container}>
       {whatFabProps.length > 1 &&
-        <Provider>
-          <Portal>
-            <FAB.Group
-              fabStyle={{ backgroundColor: mainFabBackgroundColor }}
-              visible={true}
-              color='white'
-              open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
-              icon={currentFabProps.mainFab.icon}
-              actions={[...fabActionVariousProperties[whatFabProps], ...fabActionVariousProperties.sharedFabActions]}
-              onStateChange={() => { }}
-              onPress={() => handleOnPressGeneral()}
-              onPressBackground={() => { }}
-              theme={{ colors: { backdrop: 'transparent' } }}
-            />
-          </Portal>
-          <TouchableBackdrop
+        <>
+          <OptsMenus
+            currentFabProps={currentFabProps}
+            currentScreen={currentScreen}
+            bgColor={bgColor}
+            fabActionContentRef={fabActionContentRef}
+            fabActionContentRef2={fabActionContentRef2}
+            sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
+            flashcardSettings={flashcardSettings}
+            setFlashcardSettings={setFlashcardSettings}
+            setLoading={setLoading}
+            setModalOpen={setModalOpen}
+            handleOnPressGeneral={handleOnPressGeneral}
+          />
+          <Provider>
+            <Portal>
+              <FAB.Group
+                fabStyle={{ backgroundColor: mainFabBackgroundColor }}
+                style={{ top: 0, }}
+                visible={true}
+                color='white'
+                open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
+                icon={currentFabProps.mainFab.icon}
+                actions={[...fabActionVariousProperties[whatFabProps], ...fabActionVariousProperties.sharedFabActions]}
+                onStateChange={() => { }}
+                onPress={() => handleOnPressGeneral()}
+                onPressBackground={() => { }}
+                theme={{ colors: { /* backdrop: 'transparent' */ } }}
+              />
+            </Portal>
+          </Provider>
+          {/* <TouchableBackdrop
             onPress={() => setCurrentFabProps({ mainFab: fabOpt.standby })}
             currentFabPropsMode={currentFabProps.mainFab.mode}
-          />
-        </Provider>
+          /> */}
+
+        </>
       }
 
-      <OptsMenus
-        currentFabProps={currentFabProps}
-        currentScreen={currentScreen}
-        bgColor={bgColor}
-        fabActionContentRef={fabActionContentRef}
-        fabActionContentRef2={fabActionContentRef2}
-        sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
-        flashcardSettings={flashcardSettings}
-        setFlashcardSettings={setFlashcardSettings}
-        setLoading={setLoading}
-        setModalOpen={setModalOpen}
-        handleOnPressGeneral={handleOnPressGeneral}
-      />
+
 
     </View>
   )
