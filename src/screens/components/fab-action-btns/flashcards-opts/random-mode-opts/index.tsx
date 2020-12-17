@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootReducerT } from '../../../../../store'
 import { FLIP_STUDY_RANDOM_MODE_CARDS_FALSE, FLIP_STUDY_RANDOM_MODE_CARDS_TRUE } from '../../../../../actions/types'
 import { reusableStyles } from '../../../../../styles/global'
-import AmountOfCardsAccumulator from './AmountOfCardsAccumulator'
+import AmountOfCardsAccumulator from '../../shared-opts/AmountOfCardsAccumulator'
 import SwitchSelector from 'react-native-switch-selector'
 import usePrimaryControlledColor, { WhereToColor } from '../../../../../hooks/usePrimaryControlledColor'
+import SelectorComp from '../../SelectorComp'
 
 
 const RandomStudyModeOpts = () => {
@@ -31,38 +32,26 @@ const RandomStudyModeOpts = () => {
   }
 
   return (
-    <View style={styles.container}>
-
+    <>
       {switchSelectors.map(switchSelectorItem => {
         const switchBtnSelected = usePrimaryControlledColor(WhereToColor.switchBtnSelected, theme.colors.primary)
         return (
           <>
-            <Text style={{ ...reusableStyles.lgText, color: 'white' }}>{switchSelectorItem.title}</Text>
-            <SwitchSelector
-              // paddingSwitch={10}
-              selectedTextStyle={{ height: 30, fontFamily: 'MontserratReg' }}
-              textStyle={{ height: 30, fontFamily: 'MontserratReg', color: switchBtnSelected }}
-              height={30}
+            <SelectorComp
               initial={switchSelectorItem.toggleState}
               onPress={whatSide => switchSelectorItem.onPress(whatSide)}
-              // textControlledColor={theme.colors.primary}
-              buttonColor={switchBtnSelected}
-              borderColor={switchBtnSelected}
-              animationDuration={500}
-              hasPadding
-              fontSize={20}
+              title={'Table'}
               options={[
                 { value: 0, label: switchSelectorItem.leftLabel },
                 { value: 1, label: switchSelectorItem.rightLabel }
               ]}
             />
+            <Text style={{ ...reusableStyles.lgText, color: 'white' }}>{switchSelectorItem.title}</Text>
           </>
         )
       })}
-      <AmountOfCardsAccumulator />
-
       <Button onPress={onPressSaveBtn}>Save - always</Button>
-    </View>
+    </>
   )
 }
 

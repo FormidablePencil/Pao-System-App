@@ -2,8 +2,8 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import SwitchSelector from 'react-native-switch-selector'
-import usePrimaryControlledColor, { WhereToColor } from '../../../../hooks/usePrimaryControlledColor'
-import { reusableStyles } from '../../../../styles/global'
+import usePrimaryControlledColor, { WhereToColor } from '../../../hooks/usePrimaryControlledColor'
+import { reusableStyles } from '../../../styles/global'
 
 const SelectorComp = ({ onPress, initial, options, title }) => {
   const theme = useTheme()
@@ -17,7 +17,7 @@ const SelectorComp = ({ onPress, initial, options, title }) => {
         // paddingSwitch={10}
         selectedTextStyle={{ height: 30, fontFamily: 'MontserratReg' }}
         textStyle={{ height: 30, fontFamily: 'MontserratReg', color: switchBtnSelected }}
-        height={30}
+        height={40}
         initial={initial ? 0 : 1}
         onPress={onPress}
         // textControlledColor={theme.colors.primary}
@@ -34,13 +34,18 @@ const SelectorComp = ({ onPress, initial, options, title }) => {
 
 const styles = StyleSheet.create({
   container: {
+    width: '90%',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginTop: 5,
+    marginBottom: 5,
   },
   switchSelector: {
     width: 250,
   },
   title: {
-    color: 'white', marginTop: 10, marginBottom: 2
+    color: 'white', marginBottom: 2
   }
 })
 

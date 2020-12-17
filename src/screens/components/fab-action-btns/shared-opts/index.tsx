@@ -3,8 +3,8 @@ import { View, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { STUDY_MODE_TOGGLE, TOGGLE_STUDY_RANDOM_MODE } from '../../../../actions/types'
 import { RootReducerT } from '../../../../store'
-import AmountOfCardsAccumulator from '../flashcards-opts/random-mode-opts/AmountOfCardsAccumulator'
-import SelectorComp from './SelectorComp'
+import AmountOfCardsAccumulator from './AmountOfCardsAccumulator'
+import SelectorComp from '../SelectorComp'
 
 const SharedOptions = () => {
   const dispatch = useDispatch()
@@ -18,7 +18,7 @@ const SharedOptions = () => {
   const toggleStudyRandomMode = () => dispatch({ type: TOGGLE_STUDY_RANDOM_MODE, payload: pao })
 
   return (
-    <View style={styles.container}>
+    <>
       <SelectorComp
         initial={!study}
         onPress={toggleStaredList}
@@ -27,7 +27,7 @@ const SharedOptions = () => {
           { value: 0, label: 'all' },
           { value: 1, label: 'started' }
         ]}
-        />
+      />
       <SelectorComp
         initial={!isRandomStudyMode}
         onPress={toggleStudyRandomMode}
@@ -37,25 +37,14 @@ const SharedOptions = () => {
           { value: 1, label: 'study' }
         ]}
       />
-
       <AmountOfCardsAccumulator />
       {/* <ToggleStaredListSelector /> */}
       {/* navigation fab */}
       {/* list  */}
-    </View>
+    </>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    zIndex: 100,
-    position: 'absolute',
-    top: '10%',
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
+
 
 export default SharedOptions

@@ -7,9 +7,7 @@ import useCheckAmountOfPaoFilled from '../../../hooks/useCheckAmountOfPaoFilled'
 import { PaoThemeType } from '../../../styles/theming'
 import FlashcardsOptsModal from './flashcards-opts'
 import PaoTableOptsModal from './paotable-opts/PaoTableOptsModal'
-import SharableOptions from './shared-opts'
-
-const SCREEN_WIDTH = Dimensions.get('window').width
+import SharedOptions from './shared-opts'
 
 const OptsMenu = ({
   currentFabProps,
@@ -31,43 +29,66 @@ const OptsMenu = ({
   useCheckAmountOfPaoFilled({ setPaoDocumentsFilled })
 
   return (
-    <Portal>
+    <>
       {currentFabProps.mainFab.mode === fabModeOptions.menuOpen &&
         <View style={styles.optsContainer}>
-          <SharableOptions />
-          <>
-            {currentScreen === tabScreens.Paotable &&
-              <PaoTableOptsModal
-                paoDocumentsFilled={paoDocumentsFilled}
-                bgColor={bgColor}
-                setGoToUnfilledTrigger={setGoToUnfilledTrigger}
-                themeIsUncontrolled={themeIsUncontrolled}
-              />
-            }
+          <View style={styles.container}>
+            <View style={styles.innerContainer}>
 
-            {currentScreen === tabScreens.Flashcards &&
-              <FlashcardsOptsModal
-                fabActionContentRef={fabActionContentRef}
-                fabActionContentRef2={fabActionContentRef2}
-                theme={theme}
-                sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
-                currentScreen={currentScreen}
-                flashcardSettings={flashcardSettings}
-                setFlashcardSettings={setFlashcardSettings}
-                setLoading={setLoading}
-                setModalOpen={setModalOpen}
-              />
-            }
-          </>
+              <SharedOptions />
+
+              <View style={styles.divider} />
+
+              {currentScreen === tabScreens.Paotable ?
+                <PaoTableOptsModal
+                  paoDocumentsFilled={paoDocumentsFilled}
+                  bgColor={bgColor}
+                  setGoToUnfilledTrigger={setGoToUnfilledTrigger}
+                  themeIsUncontrolled={themeIsUncontrolled}
+                />
+                : currentScreen === tabScreens.Flashcards &&
+                <FlashcardsOptsModal
+                  fabActionContentRef={fabActionContentRef}
+                  fabActionContentRef2={fabActionContentRef2}
+                  theme={theme}
+                  sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
+                  currentScreen={currentScreen}
+                  flashcardSettings={flashcardSettings}
+                  setFlashcardSettings={setFlashcardSettings}
+                  setLoading={setLoading}
+                  setModalOpen={setModalOpen}
+                />
+              }
+
+            </View>
+          </View>
         </View>
       }
-    </Portal>
+    </>
 
   )
 }
 
 const styles = StyleSheet.create({
-  optsContainer: { height: '100%', width: SCREEN_WIDTH / 1.8, alignSelf: "center", flex: 1, justifyContent: 'center', }
+  container: {
+    width: '100%',
+    top: '10%',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  innerContainer: {
+    borderRadius: 10,
+    paddingTop: 15,
+    paddingBottom: 15,
+    backgroundColor: 'rgba(36,40,118,.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '90%',
+  },
+  optsContainer: { height: '100%', width: '100%', },
+  divider: { backgroundColor: 'white', width: '70%', height: .5, margin: 20 }
 })
 
 export default OptsMenu

@@ -18,7 +18,7 @@ import usePrimaryControlledColor, { WhereToColor } from '../../../hooks/usePrima
 import useOnPressFabsHandlers from './useOnPressFabsHandlers'
 import useFabActionVariousProperties, { navigationRef } from './useFabActionVariousProperties'
 import PaoTableOptsModal from './paotable-opts/PaoTableOptsModal'
-import SelectorComp from './shared-opts/SelectorComp'
+import SelectorComp from './SelectorComp'
 import { RootReducerT } from '../../../store'
 import OptsMenus from './OptsMenus'
 
@@ -118,21 +118,9 @@ const FabActionBtn = ({
   return (
     <View style={styles.container}>
       <Provider>
-        <Portal>
-          <OptsMenus
-            currentFabProps={currentFabProps}
-            currentScreen={currentScreen}
-            bgColor={bgColor}
-            fabActionContentRef={fabActionContentRef}
-            fabActionContentRef2={fabActionContentRef2}
-            sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
-            flashcardSettings={flashcardSettings}
-            setFlashcardSettings={setFlashcardSettings}
-            setLoading={setLoading}
-            setModalOpen={setModalOpen}
-          />
 
-          {whatFabProps.length > 1 &&
+        {whatFabProps.length > 1 &&
+          <Portal>
             <FAB.Group
               fabStyle={{ backgroundColor: mainFabBackgroundColor }}
               visible={true}
@@ -143,10 +131,25 @@ const FabActionBtn = ({
               onStateChange={() => { }}
               onPress={() => handleOnPressGeneral()}
               onPressBackground={() => handleOnPressGeneral()}
+              theme={{ colors: { backdrop: 'transparent' } }}
             />
-          }
+          </Portal>
+        }
 
-        </Portal>
+        {/* <Portal> */}
+        <OptsMenus
+          currentFabProps={currentFabProps}
+          currentScreen={currentScreen}
+          bgColor={bgColor}
+          fabActionContentRef={fabActionContentRef}
+          fabActionContentRef2={fabActionContentRef2}
+          sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
+          flashcardSettings={flashcardSettings}
+          setFlashcardSettings={setFlashcardSettings}
+          setLoading={setLoading}
+          setModalOpen={setModalOpen}
+        />
+        {/* </Portal> */}
       </Provider>
     </View>
   )

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
 import InputSpinner from 'react-native-input-spinner'
 import { useDispatch, useSelector } from "react-redux"
-import { SET_STUDY_RANDOM_AMOUNT, TOGGLE_STUDY_RANDOM_MODE_TRUE } from "../../../../../actions/types"
-import { RootReducerT } from "../../../../../store"
+import { SET_STUDY_RANDOM_AMOUNT, TOGGLE_STUDY_RANDOM_MODE_TRUE } from "../../../../actions/types"
+import { RootReducerT } from "../../../../store"
 
 
 const AmountOfCardsAccumulator = () => {

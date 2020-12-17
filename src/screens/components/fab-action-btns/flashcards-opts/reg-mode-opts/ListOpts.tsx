@@ -39,7 +39,6 @@ const ListOpts = ({
           {flashCardOrderBtnPayload.map((collection, index) => {
             //~ could have avoided this inline theming mess if simply used useTheme.
             const btnSelectedColor = usePrimaryControlledColor(WhereToColor.orderBtnSelected, theme.colors.primary)
-            const btnArrangmentColor = flashcardSettings.flashcardOrder === collection.arrangementOption ? btnSelectedColor : 'white'
             const uncontrolledTextColor = flashcardSettings.flashcardOrder === collection.arrangementOption ? 'white' : theme.colors.primary
             const controlledTextColor = textControlledColor().color
             const controlledTextColorSwitchBetweenWhiteBlack = flashcardSettings.flashcardOrder === collection.arrangementOption ? 'white' : controlledTextColor

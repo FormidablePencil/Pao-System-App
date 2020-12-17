@@ -4,7 +4,7 @@ import { Button, TouchableRipple } from 'react-native-paper'
 import { AntDesign } from '@expo/vector-icons';
 import styled from 'styled-components'
 import * as Animatable from 'react-native-animatable';
-import SelectorComp from '../shared-opts/SelectorComp';
+import SelectorComp from '../SelectorComp';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootReducerT } from '../../../../store';
 import { DISPLAY_NUMBERS_IN_FRONT_FALSE, DISPLAY_NUMBERS_IN_FRONT_TRUE, ROW_TO_DISPLAY_FALSE, ROW_TO_DISPLAY_TRUE, TOGGLE_PAGINATION_MODE, TOGGLE_PAGINATION_MODE_FALSE, TOGGLE_PAGINATION_MODE_TRUE, TOGGLE_ROW_TO_DISPLAY } from '../../../../actions/types';
