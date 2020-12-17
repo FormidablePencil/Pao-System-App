@@ -21,6 +21,7 @@ import PaoTableOptsModal from './paotable-opts/PaoTableOptsModal'
 import SelectorComp from './SelectorComp'
 import { RootReducerT } from '../../../store'
 import OptsMenus from './OptsMenus'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 
 interface FabOptTypes {
@@ -55,15 +56,12 @@ const FabActionBtn = ({
   const { showHints, setShowHints, showNavigationIcons, setShowNavigationIcons } = useContext(TabNavContext)
   const dispatch = useDispatch()
   const theme: PaoThemeType = useTheme()
-  const actionBtnsFadeAnim = useRef(new Animated.Value(1)).current
   const fabActionContentRef = useRef(null)
   const fabActionContentRef2 = useRef(null)
   // const [currentScreen, setCurrentScreen] = useState(navigationRef.current?.getCurrentRoute().name)
   const editModeTrue = useSelector((state: RootReducerT) => state.fabProperties.config.editMode)
   const [whatFabProps, setWhatFabProps] = useState(() =>
     getWhatFabPropsKey(navigationRef.current?.getCurrentRoute().name))
-
-
   const [currentFabProps, setCurrentFabProps] = useState({ mainFab: fabOpt.standby })
   // toggleEditMode
 
@@ -130,13 +128,12 @@ const FabActionBtn = ({
               actions={[...fabActionVariousProperties[whatFabProps], ...fabActionVariousProperties.sharedFabActions]}
               onStateChange={() => { }}
               onPress={() => handleOnPressGeneral()}
-              onPressBackground={() => handleOnPressGeneral()}
+              onPressBackground={() => { }}
               theme={{ colors: { backdrop: 'transparent' } }}
             />
           </Portal>
         }
 
-        {/* <Portal> */}
         <OptsMenus
           currentFabProps={currentFabProps}
           currentScreen={currentScreen}
@@ -148,8 +145,9 @@ const FabActionBtn = ({
           setFlashcardSettings={setFlashcardSettings}
           setLoading={setLoading}
           setModalOpen={setModalOpen}
+          handleOnPressGeneral={handleOnPressGeneral}
         />
-        {/* </Portal> */}
+
       </Provider>
     </View>
   )
