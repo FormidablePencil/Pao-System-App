@@ -1,34 +1,30 @@
-import React from 'react'
-import { View } from 'react-native-tailwind'
-import { arrangmentOpt } from '../../../../reducer/flashcardOptionsReducer';
-import usePrimaryControlledColor, { WhereToColor, textControlledColor } from '../../../../hooks/usePrimaryControlledColor';
-import { useDispatch, useSelector } from 'react-redux';
-import CardOpts from './reg-mode-opts/CardOpts';
-import ListOpts from './reg-mode-opts/ListOpts';
-import RandomStudyModeOpts from './random-mode-opts';
-import { RootReducerT } from '../../../../store';
-import RegModeOpts from './reg-mode-opts';
-import { ButtonSave } from '../paotable-opts/PaoTableOptsModal';
-import { Text } from 'react-native';
-import { Button } from 'react-native-paper';
-
+import React from "react";
+import { useSelector } from "react-redux";
+import RandomStudyModeOpts from "./random-mode-opts";
+import { RootReducerT } from "../../../../store";
+import RegModeOpts from "./reg-mode-opts";
 
 const FlashcardsOptsModal = ({
   sliderValueautoPlayFlashcardsDuration,
   setModalOpen,
-  setFlashcardSettings, flashcardSettings,
+  setFlashcardSettings,
+  flashcardSettings,
   setLoading,
-  currentScreen, theme,
-  fabActionContentRef, fabActionContentRef2
+  currentScreen,
+  theme,
+  fabActionContentRef,
+  fabActionContentRef2,
 }) => {
-  const isRandomStudyMode = useSelector((state: RootReducerT) => state.studyRandomMode.isRandomStudyMode)
-
-
+  const isRandomStudyMode = useSelector(
+    (state: RootReducerT) => state.studyRandomMode.isRandomStudyMode
+  );
   return (
     <>
-      {!isRandomStudyMode ?
+      {!isRandomStudyMode ? (
         <RegModeOpts
-          sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
+          sliderValueautoPlayFlashcardsDuration={
+            sliderValueautoPlayFlashcardsDuration
+          }
           setModalOpen={setModalOpen}
           setFlashcardSettings={setFlashcardSettings}
           flashcardSettings={flashcardSettings}
@@ -38,14 +34,11 @@ const FlashcardsOptsModal = ({
           fabActionContentRef={fabActionContentRef}
           fabActionContentRef2={fabActionContentRef2}
         />
-        :
+      ) : (
         <RandomStudyModeOpts />
-      }
-      <ButtonSave labelStyle={{ color: 'white' }} onPress={() => console.log('save')} mode='contained'>
-        Save
-      </ButtonSave>
+      )}
     </>
-  )
-}
+  );
+};
 
-export default FlashcardsOptsModal
+export default FlashcardsOptsModal;
