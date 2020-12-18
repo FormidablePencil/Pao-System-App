@@ -119,7 +119,7 @@ const FabActionBtn = ({
     <View style={styles.container}>
       {whatFabProps.length > 1 &&
         <>
-          <OptsMenus
+          {/* <OptsMenus
             currentFabProps={currentFabProps}
             currentScreen={currentScreen}
             bgColor={bgColor}
@@ -131,7 +131,7 @@ const FabActionBtn = ({
             setLoading={setLoading}
             setModalOpen={setModalOpen}
             handleOnPressGeneral={handleOnPressGeneral}
-          />
+          /> */}
           <Provider>
             <Portal>
               <FAB.Group
@@ -142,11 +142,14 @@ const FabActionBtn = ({
                 open={currentFabProps.mainFab.mode === fabModeOptions.menuOpen}
                 icon={currentFabProps.mainFab.icon}
                 actions={[...fabActionVariousProperties[whatFabProps], ...fabActionVariousProperties.sharedFabActions]}
-                onStateChange={() => { }}
+                onStateChange={() => handleOnPressGeneral()}
                 onPress={() => handleOnPressGeneral()}
-                onPressBackground={() => { }}
                 theme={{ colors: { /* backdrop: 'transparent' */ } }}
+                // childre={<TouchableOpacity style={{ position: 'absolute', top: 0, backgroundColor: 'pink', width: 100, height: 200 }}><Text>dsddd</Text></TouchableOpacity>}
+                childreww={<TouchableOpacity style={{ position: 'absolute', top: 0, backgroundColor: 'pink', width: 100, height: 200 }}><Text>dsddd</Text></TouchableOpacity>}
               />
+                {/* <TouchableOpacity style={{ position: 'absolute', top: 0, backgroundColor: 'pink', width: 100, height: 200 }}><Text>dsddd</Text></TouchableOpacity> */}
+
             </Portal>
           </Provider>
           {/* <TouchableBackdrop

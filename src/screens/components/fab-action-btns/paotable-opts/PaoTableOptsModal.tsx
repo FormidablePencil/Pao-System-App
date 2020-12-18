@@ -83,7 +83,7 @@ const PaoTableOptsModal = ({ paoDocumentsFilled, bgColor, setGoToUnfilledTrigger
       />
 
       <ButtonSave onPress={onPressSave} mode='contained'>
-        <Text>Save</Text>
+        <Text style={{color: 'white'}}>Save</Text>
       </ButtonSave>
     </BounceAnimationView>
   )
