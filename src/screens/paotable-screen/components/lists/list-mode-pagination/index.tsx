@@ -5,12 +5,25 @@ import useTextInputHandler, { Control } from '../../../../../hooks/useTextInputH
 import { listMode } from '../../../../../constants/constants'
 import styled from 'styled-components'
 import { PaoThemeType } from '../../../../../styles/theming'
-import usePrimaryControlledColor, { WhereToColor, textControlledColor, placeholderControlledColor } from '../../../../../hooks/usePrimaryControlledColor'
-import { Dimensions, FlatList, LayoutAnimation, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
+import usePrimaryControlledColor, {
+  WhereToColor,
+  textControlledColor,
+  placeholderControlledColor,
+} from '../../../../../hooks/usePrimaryControlledColor'
+import {
+  Dimensions,
+  FlatList,
+  LayoutAnimation,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useDispatch, useSelector } from 'react-redux'
-import * as Animatable from 'react-native-animatable';
-import Icon from "react-native-vector-icons/FontAwesome"
+import * as Animatable from 'react-native-animatable'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { RootReducerT } from '../../../../../store'
 import { ADD_ITEM_TO_STUDY, ADD_OR_REMOVE_ITEM_STUDY } from '../../../../../actions/types'
 import DisplayNoStarted from '../../../../../components/DisplayNoStarted'
@@ -25,7 +38,6 @@ const ListModePagination = ({
   controlledInput,
   setControlledInput,
   tableData,
-  editModeTrue,
   prevTextInput,
   nextTextInput,
   currentlyFocusedTextInput,
@@ -40,14 +52,13 @@ const ListModePagination = ({
   controlledInput: Control
   setControlledInput: any
   tableData: any
-  editModeTrue
   prevTextInput
   nextTextInput
   currentlyFocusedTextInput
   setCurrentlyFocusedTextInput
   firstOfTableTextInput
   lastOfTableTextInput
-  firstUnfilledTextInput,
+  firstUnfilledTextInput
   setFirstUnfilledTextInput
 }) => {
   // console.log(tableData, 'tableDatatableData');
@@ -60,6 +71,7 @@ const ListModePagination = ({
     setControlledInput,
     tableData,
   })
+  const editModeTrue = useSelector((state: RootReducerT) => state.fabProperties.config.editMode)
   const theme: PaoThemeType = useTheme()
   const rowEvenBgColor = usePrimaryControlledColor(WhereToColor.rowEven)
   const rowOddBgColor = usePrimaryControlledColor(WhereToColor.rowOdd)
@@ -72,18 +84,21 @@ const ListModePagination = ({
   const [editOn, setEditOn] = useState(false)
   const coloredRowRef = useRef(false)
 
-
   const controlledTextColor = textControlledColor().color
   const textColor = controlledThemeColor ? controlledTextColor : theme.colors.text
   const placeholderColor = placeholderControlledColor().color
   const dispatch = useDispatch()
 
   const toggleItemExistsInFavOfCurrentRange = () => {
-    if (studyList.filter(studyNumber =>
-      studyNumber >= currentRenderItemsRange && studyNumber <= currentRenderItemsRange + 9).length > 0) {
+    if (
+      studyList.filter(
+        (studyNumber) =>
+          studyNumber >= currentRenderItemsRange && studyNumber <= currentRenderItemsRange + 9
+      ).length > 0
+    ) {
       setTimeout(() => {
         setItemExistsInFavOfCurrentRange(true)
-      }, 500);
+      }, 500)
     } else setItemExistsInFavOfCurrentRange(false)
   }
 
@@ -97,26 +112,32 @@ const ListModePagination = ({
     if (name === 'object' && index === 9) lastOfTableTextInput.current = input
     switch (true) {
       case currentlyFocusedTextInput.name === 'person':
-        /* */if (name === 'person' && currentlyFocusedTextInput.index === index) return
-        else if (name === 'action' && currentlyFocusedTextInput.index === index) nextTextInput.current = input
-        else if (name === 'object' && currentlyFocusedTextInput.index === index + 1) prevTextInput.current = input
+        if (name === 'person' && currentlyFocusedTextInput.index === index) return
+        else if (name === 'action' && currentlyFocusedTextInput.index === index)
+          nextTextInput.current = input
+        else if (name === 'object' && currentlyFocusedTextInput.index === index + 1)
+          prevTextInput.current = input
 
-        break;
+        break
       case currentlyFocusedTextInput.name === 'action':
-          /* */if (name === 'person' && currentlyFocusedTextInput.index === index) prevTextInput.current = input
+        if (name === 'person' && currentlyFocusedTextInput.index === index)
+          prevTextInput.current = input
         else if (name === 'action' && currentlyFocusedTextInput.index === index) return
-        else if (name === 'object' && currentlyFocusedTextInput.index === index) nextTextInput.current = input
+        else if (name === 'object' && currentlyFocusedTextInput.index === index)
+          nextTextInput.current = input
 
-        break;
+        break
       case currentlyFocusedTextInput.name === 'object':
-            /* */if (name === 'person' && currentlyFocusedTextInput.index === index - 1) nextTextInput.current = input
-        else if (name === 'action' && currentlyFocusedTextInput.index === index) prevTextInput.current = input
+        if (name === 'person' && currentlyFocusedTextInput.index === index - 1)
+          nextTextInput.current = input
+        else if (name === 'action' && currentlyFocusedTextInput.index === index)
+          prevTextInput.current = input
         else if (name === 'object' && currentlyFocusedTextInput.index === index) return
 
-        break;
+        break
 
       default:
-        break;
+        break
     }
   }
 
@@ -130,27 +151,28 @@ const ListModePagination = ({
   }
   const onPressHandlerTextChange = () => editModeTrue && setEditOn(true)
 
-
   const starPaoItemHandler = (paoNumber) => {
     // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     dispatch({ type: ADD_OR_REMOVE_ITEM_STUDY, payload: paoNumber })
   }
 
-
   return (
-    <View style={{ height: SCREEN_HEIGHT - (tableHeaderHeight * 2), width: '100%' }}>
+    <View style={{ height: SCREEN_HEIGHT - tableHeaderHeight * 2, width: '100%' }}>
       <DisplayNoStarted
         itemExistsInFavOfCurrentRange={itemExistsInFavOfCurrentRange}
-        currentRenderItemsRange={currentRenderItemsRange} />
+        currentRenderItemsRange={currentRenderItemsRange}
+      />
       <FlatList
         data={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
-        keyExtractor={item => item.toString()}
+        keyExtractor={(item) => item.toString()}
         renderItem={({ item, index }: any) => {
           const bgColor = item % 2 == 1 ? rowEvenBgColor : rowOddBgColor
           const paoNumText = textColor ?? theme.colors.text
-          const stared = studyList.filter(studyNumber => studyNumber === currentRenderItemsRange + item)[0]
+          const stared = studyList.filter(
+            (studyNumber) => studyNumber === currentRenderItemsRange + item
+          )[0]
           // * if no stared items then display msg
-          if (!study || study && stared) {
+          if (!study || (study && stared)) {
             coloredRowRef.current = !coloredRowRef.current
             return (
               <TouchableOpacity onPress={() => starPaoItemHandler(currentRenderItemsRange + item)}>
@@ -158,51 +180,69 @@ const ListModePagination = ({
                   key={item}
                   style={{
                     backgroundColor: coloredRowRef.current ? rowEvenBgColor : rowOddBgColor,
-                    height: paoTableRowHeight, alignItems: 'center', position: 'relative'
+                    height: paoTableRowHeight,
+                    alignItems: 'center',
+                    position: 'relative',
                   }}
                 >
-                  <View style={{ alignItems: 'center', justifyContent: "center", zIndex: 3, flexDirection: 'row' }}>
-                    <Icon name={stared ? 'star' : 'star-o'} size={13} color={stared ? '#D9BF14' : "#CDC78E"} />
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      zIndex: 3,
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <Icon
+                      name={stared ? 'star' : 'star-o'}
+                      size={13}
+                      color={stared ? '#D9BF14' : '#CDC78E'}
+                    />
                     <FirstItemInRow color={paoNumText}>
                       {getPaoNumber(item, currentRenderItemsRange)}
                     </FirstItemInRow>
                   </View>
                   {['person', 'action', 'object'].map((name: string, whatIndex) => {
-
-                    const textInputValue = returnValueDependingOnWeatherItemsAreSame({ index: currentRenderItemsRange + item, name, mode: listMode.pagination })
+                    const textInputValue = returnValueDependingOnWeatherItemsAreSame({
+                      index: currentRenderItemsRange + item,
+                      name,
+                      mode: listMode.pagination,
+                    })
 
                     return (
-                      <View style={paoTableStyles.itemInRow} key={currentRenderItemsRange + whatIndex}>
-                        {/* <TextInput
-                            textAlignVertical='center'
-                          /> */}
-                        {editOn ?
-                          <TouchableWithoutFeedback onPress={() => onPressHandlerTextChange()}>
-                            <PaoText>tap</PaoText>
-                          </TouchableWithoutFeedback>
-                          :
-                          <TextInputStyled
-                            style={editModeTrue ? { height: '100%' } : {}}
-                            selectTextOnFocus={true}
-                            autoFocus={true}
-                            onFocus={() => onFocusHandler(whatIndex, name)}
-                            blurOnSubmit={false}
-                            ref={(input) => { assignRef(input, whatIndex, name) }}
-                            editable={editModeTrue}
-                            onBlur={() => onBlurHandler()}
-                            placeholder={name}
-                            placeholderTextColor={bgColor ? textColor : placeholderColor}
-                            // textAlignVertical='top'
-                            textAlign='center'
-                            textColor={textColor}
-                            value={textInputValue}
-                            onChangeText={text => onChangeTextHandler({ text, number: currentRenderItemsRange + item, name })}
-                          />
-                        }
+                      <View
+                        pointerEvents="none"
+                        style={paoTableStyles.itemInRow}
+                        key={currentRenderItemsRange + whatIndex}
+                      >
+                        <TextInputStyled
+                          style={editModeTrue ? { height: '100%' } : {}}
+                          selectTextOnFocus={true}
+                          autoFocus={true}
+                          onFocus={() => onFocusHandler(whatIndex, name)}
+                          blurOnSubmit={false}
+                          ref={(input) => {
+                            assignRef(input, whatIndex, name)
+                          }}
+                          editable={editModeTrue}
+                          onBlur={() => onBlurHandler()}
+                          placeholder={name}
+                          placeholderTextColor={bgColor ? textColor : placeholderColor}
+                          // textAlignVertical='top'
+                          textAlign="center"
+                          textColor={textColor}
+                          value={textInputValue}
+                          onChangeText={(text) =>
+                            onChangeTextHandler({
+                              text,
+                              number: currentRenderItemsRange + item,
+                              name,
+                            })
+                          }
+                        />
                       </View>
                     )
-                  }
-                  )}
+                  })}
                 </Row>
               </TouchableOpacity>
             )
@@ -214,13 +254,13 @@ const ListModePagination = ({
 }
 
 const PaoText = styled(Text)`
-  textAlign: center;
-`;
+  textalign: center;
+`
 const TextInputStyled = styled<any>(TextInput)`
   /* align-self: center; */
   color: ${({ textColor }) => textColor};
   width: 100%;
-`;
+`
 
 export const paoTableStyles = StyleSheet.create({
   itemInRow: {
@@ -231,9 +271,7 @@ export const paoTableStyles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     marginRight: 2,
-  }
+  },
 })
-
-
 
 export default ListModePagination

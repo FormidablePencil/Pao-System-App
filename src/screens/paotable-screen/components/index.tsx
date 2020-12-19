@@ -9,7 +9,7 @@ import { RootReducerT } from '../../../store'
 import ListModeScroll from './lists'
 const LazyLoadListModePagination = lazy(() => import('./lists/list-mode-pagination'));
 
-const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
+const RenderPaoContent = ({ goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
   const { setTableReady } = useContext(TabNavContext)
   const paoList: any = useSelector((state: RootReducerT) => state.pao)  //@
   const isPagination: any = useSelector((state: RootReducerT) => state.fabProperties.config.pagination)
@@ -118,7 +118,6 @@ const RenderPaoContent = ({ editModeTrue, goToUnfilledTrigger, setGoToUnfilledTr
                   nextTextInput={nextTextInput}
                   currentlyFocusedTextInput={currentlyFocusedTextInput}
                   setCurrentlyFocusedTextInput={setCurrentlyFocusedTextInput}
-                  editModeTrue={editModeTrue}
                   tableData={flatlistItems}
                   controlledInput={controlledInput}
                   setControlledInput={setControlledInput}

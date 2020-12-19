@@ -1,8 +1,13 @@
-import { useDispatch } from "react-redux"
-import { TOGGLE_EDIT_MODE, TOGGLE_FAB_VISIBILITY_TRUE, UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE } from "../../../actions/types"
-import { tabScreens } from "../../../constants/constants"
-import { fabActionOptions, fabOpt } from "../../../constants/fabConstants"
-import { navigationRef } from "./useFabActionVariousProperties"
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  TOGGLE_EDIT_MODE,
+  TOGGLE_FAB_VISIBILITY_TRUE,
+  UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE,
+} from '../../../actions/types'
+import { tabScreens } from '../../../constants/constants'
+import { fabActionOptions, fabOpt } from '../../../constants/fabConstants'
+import { RootReducerT } from '../../../store'
+import { navigationRef } from './useFabActionVariousProperties'
 
 const useOnPressFabsHandlers = ({
   loading,
@@ -19,24 +24,30 @@ const useOnPressFabsHandlers = ({
   setShowNavigationIcons,
 }) => {
   const dispatch = useDispatch()
+  const editMode = useSelector((state: RootReducerT) => state.fabProperties.config.editMode)
 
   const handleOnPressGeneral = async () => {
+    if (editMode) return dispatch({ type: TOGGLE_EDIT_MODE })
     if (loading) return
-    if (currentFabProps.mainFab.icon === fabConsts.mainBtn.flashcardChangingSettings.icon.settings) {
+    if (
+      currentFabProps.mainFab.icon === fabConsts.mainBtn.flashcardChangingSettings.icon.settings
+    ) {
       console.log('qwe')
       setLoading(true)
-      await setFlashcardSettings(prev => ({
-        ...prev, autoPlayFlashcards: {
+      await setFlashcardSettings((prev) => ({
+        ...prev,
+        autoPlayFlashcards: {
           ...prev.autoPlayFlashcards,
-          duration: sliderValueautoPlayFlashcardsDuration
-        }
-      }
-      ))
-      await dispatch({ type: UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, payload: flashcardSettings })
+          duration: sliderValueautoPlayFlashcardsDuration,
+        },
+      }))
+      await dispatch({
+        type: UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE,
+        payload: flashcardSettings,
+      })
       setLoading(false)
     }
     switch (currentFabProps.mainFab.mode) {
-
       case fabOpt.menuOpen.mode:
         console.log('qwe1')
         if (currentScreen === tabScreens.Flashcards) {
@@ -52,11 +63,11 @@ const useOnPressFabsHandlers = ({
             setLoading(false)
           }
         } else {
-          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //replace 
+          setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.standby }) //replace
           // dispatch({ type: TOGGLE_FAB_VISIBILITY_FALSE })
           setShowNavigationIcons(true)
         }
-        break;
+        break
       case fabOpt.standby.mode:
         console.log('qwe2')
         if (currentScreen === tabScreens.Flashcards) {
@@ -72,7 +83,7 @@ const useOnPressFabsHandlers = ({
           setShowNavigationIcons(false)
         }
 
-        break;
+        break
       case fabOpt.editMode.mode:
         console.log('qwe2')
         if (currentScreen === tabScreens.Flashcards) dispatch({ type: TOGGLE_EDIT_MODE })
@@ -81,27 +92,11 @@ const useOnPressFabsHandlers = ({
         setShowNavigationIcons(true)
 
       default:
-        break;
-    }
-
-  }
-
-
-  const handleOnPressFabActions = (whatFabAction) => {
-    switch (whatFabAction) {
-      case fabActionOptions.editMode:
-        if (currentScreen === tabScreens.Flashcards) dispatch({ type: TOGGLE_EDIT_MODE })
-        // dispatch({ type: TOGGLE_FAB_VISIBILITY_TRUE })
-        setCurrentFabProps({ ...currentFabProps, mainFab: fabOpt.editMode }) //REPLACE... OR KEEP
-        break;
-
-      default:
-        break;
+        break
     }
   }
 
-  return { handleOnPressGeneral, handleOnPressFabActions }
+  return { handleOnPressGeneral }
 }
 
 export default useOnPressFabsHandlers
-

@@ -1,14 +1,17 @@
 import React, { useContext } from 'react'
-import styled from 'styled-components';
-import { Button, IconButton, useTheme, Text } from 'react-native-paper';
-import { LinearGradient } from 'expo-linear-gradient';
-import { PaoThemeType } from '../styles/theming';
-import { Animated, Dimensions } from 'react-native';
-import usePrimaryControlledColor, { WhereToColor, textControlledColorPagination } from '../hooks/usePrimaryControlledColor';
-import { PaoTableScreenContext } from '../screens/paotable-screen'
-import { useSelector } from 'react-redux';
+import styled from 'styled-components'
+import { Button, IconButton, useTheme, Text } from 'react-native-paper'
+import { LinearGradient } from 'expo-linear-gradient'
+import { PaoThemeType } from '../styles/theming'
+import { Animated, Dimensions } from 'react-native'
+import usePrimaryControlledColor, {
+  WhereToColor,
+  textControlledColorPagination,
+} from '../hooks/usePrimaryControlledColor'
+import { useSelector } from 'react-redux'
+import { RootReducerT } from '../store'
 
-const SCREEN_WIDTH = Dimensions.get("window").width
+const SCREEN_WIDTH = Dimensions.get('window').width
 
 interface PaginationType {
   currentRenderItemsRange
@@ -26,13 +29,15 @@ export enum paginateDirection {
 }
 
 const Pagination = ({
-  currentRenderItemsRange, setCurrentRenderItemsRange,
+  currentRenderItemsRange,
+  setCurrentRenderItemsRange,
   navigateTextInputs,
   currentlyFocusedTextInput,
   jumpToCertainTable,
-  swiperIndex
+  swiperIndex,
 }: PaginationType) => {
-  const { keyboardPresent, editModeTrue } = useContext(PaoTableScreenContext)
+  const keyboardPresent = useSelector((state: RootReducerT) => state.misc.keyboardPresent)
+  const editModeTrue = useSelector((state: RootReducerT) => state.fabProperties.config.editMode)
   const theme: PaoThemeType = useTheme()
 
   // console.log(swiperIndex.current, 'swiperIndex from pagination');
@@ -44,7 +49,7 @@ const Pagination = ({
 
   const renderItemsToCurrentPage = (selected: number) => {
     if (selected === paginateDirection.next) {
-      setCurrentRenderItemsRange((prevState: any) => prevState < 89 ? prevState + 10 : prevState)
+      setCurrentRenderItemsRange((prevState: any) => (prevState < 89 ? prevState + 10 : prevState))
     } else if (selected === paginateDirection.previous) {
       if (currentRenderItemsRange <= 0) return
       setCurrentRenderItemsRange((prevState: any) => prevState - 10)
@@ -53,13 +58,15 @@ const Pagination = ({
 
   const paginationBtnOnPressHandler = (direction) => {
     let atTheBeginningOrEndOfTable = false
-    if (currentlyFocusedTextInput.index === 0 &&
-      currentlyFocusedTextInput.name === 'person' &&
-      direction === paginateDirection.previous ||
-      currentlyFocusedTextInput.index === 9 &&
-      currentlyFocusedTextInput.name === 'object' &&
-      direction === paginateDirection.next
-    ) atTheBeginningOrEndOfTable = true
+    if (
+      (currentlyFocusedTextInput.index === 0 &&
+        currentlyFocusedTextInput.name === 'person' &&
+        direction === paginateDirection.previous) ||
+      (currentlyFocusedTextInput.index === 9 &&
+        currentlyFocusedTextInput.name === 'object' &&
+        direction === paginateDirection.next)
+    )
+      atTheBeginningOrEndOfTable = true
     //Todo - focus in on the first/last (depending on where your at) of the table when navigated there
     //~ idea: pass a type and handle it in paoTextInputs accordingly
     if (direction === paginateDirection.previous) {
@@ -79,31 +86,52 @@ const Pagination = ({
 
   const controlledPgColor = usePrimaryControlledColor(WhereToColor.paginationSideBtn)
   const paginationBtnColor = editModeTrue ? theme.colors.accent : controlledPgColor
+  const state = useSelector((state) => state.state)
 
   return (
     <LinearGradient
-      colors={[usePrimaryControlledColor(WhereToColor.pagination), usePrimaryControlledColor(WhereToColor.pagination2)]}
+      colors={[
+        usePrimaryControlledColor(WhereToColor.pagination),
+        usePrimaryControlledColor(WhereToColor.pagination2),
+      ]}
       // colors={[theme.colors.linearGradientBgColors.first, theme.colors.linearGradientBgColors.second]}
-      start={[.8, 0.8]}
+      start={[0.8, 0.8]}
     >
       <PaginationContainer>
         <PaginationBtnAnimated
           style={{
             backgroundColor: paginationBtnColor,
             marginRight: SCREEN_WIDTH > 380 ? 4 : 0,
-            width: SCREEN_WIDTH > 380 ? 50 : 40
+            width: SCREEN_WIDTH > 380 ? 50 : 40,
           }}
-          icon='menu-left'
+          icon="menu-left"
           size={35}
-          color='white'
+          color="white"
           onPress={() => paginationBtnOnPressHandler(paginateDirection.previous)}
-          mode="contained" />
+          mode="contained"
+        />
         <Column>
           <Row>
-            {[0, 1, 2, 3, 4].map((num) => <PaginationBtnComponent key={num} num={num} currentRenderItemsRange={currentRenderItemsRange} paginateTo={paginateTo} theme={theme} />)}
+            {[0, 1, 2, 3, 4].map((num) => (
+              <PaginationBtnComponent
+                key={num}
+                num={num}
+                currentRenderItemsRange={currentRenderItemsRange}
+                paginateTo={paginateTo}
+                theme={theme}
+              />
+            ))}
           </Row>
           <Row>
-            {[5, 6, 7, 8, 9].map((num) => <PaginationBtnComponent key={num} num={num} currentRenderItemsRange={currentRenderItemsRange} paginateTo={paginateTo} theme={theme} />)}
+            {[5, 6, 7, 8, 9].map((num) => (
+              <PaginationBtnComponent
+                key={num}
+                num={num}
+                currentRenderItemsRange={currentRenderItemsRange}
+                paginateTo={paginateTo}
+                theme={theme}
+              />
+            ))}
           </Row>
         </Column>
         <Row style={{ justifyContent: 'space-around' }}>
@@ -111,16 +139,17 @@ const Pagination = ({
             style={{
               backgroundColor: paginationBtnColor,
               marginLeft: SCREEN_WIDTH > 380 ? 4 : 0,
-              width: SCREEN_WIDTH > 380 ? 50 : 40
+              width: SCREEN_WIDTH > 380 ? 50 : 40,
             }}
-            icon='menu-right'
+            icon="menu-right"
             size={35}
-            color='white'
+            color="white"
             onPress={() => paginationBtnOnPressHandler(paginateDirection.next)}
-            mode="contained" />
+            mode="contained"
+          />
         </Row>
       </PaginationContainer>
-    </LinearGradient >
+    </LinearGradient>
   )
 }
 
@@ -128,9 +157,16 @@ const PaginationBtnComponent = ({ num, currentRenderItemsRange, paginateTo, them
   const controlledThemeColor = useSelector((state: any) => state.controlledThemeColor)
   const active = currentRenderItemsRange.toString()[0] === num.toString()
   const textColor = active ? 'white' : textControlledColorPagination()
-  const dynamicBackgroundColor = active && { backgroundColor: usePrimaryControlledColor(WhereToColor.paginationBtns, theme.colors.primary) }
+  const dynamicBackgroundColor = active && {
+    backgroundColor: usePrimaryControlledColor(WhereToColor.paginationBtns, theme.colors.primary),
+  }
   return (
-    <Button style={controlledThemeColor ? dynamicBackgroundColor : null} onPress={() => paginateTo(num)} key={num} compact={true}>
+    <Button
+      style={controlledThemeColor ? dynamicBackgroundColor : null}
+      onPress={() => paginateTo(num)}
+      key={num}
+      compact={true}
+    >
       <PaginationBtnText style={textColor}>{`${num}0`}</PaginationBtnText>
     </Button>
   )
@@ -138,30 +174,30 @@ const PaginationBtnComponent = ({ num, currentRenderItemsRange, paginateTo, them
 
 const PaginationBtnText = styled(Text)`
   color: white;
-`;
+`
 const PaginationBtn = styled(IconButton)`
   border-radius: 3px;
   /* background-color: rgba(27,27,27,.2); */
   elevation: 0;
   margin: 0px;
-`;
-const PaginationBtnAnimated = Animated.createAnimatedComponent(PaginationBtn)/* this is what show that 'functions cannot be given refs.' warning */
-
+`
+const PaginationBtnAnimated = Animated.createAnimatedComponent(
+  PaginationBtn
+) /* this is what show that 'functions cannot be given refs.' warning */
 
 const Column = styled.View`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-`;
+`
 const Row = styled.View`
   flex-direction: row;
-`;
+`
 const PaginationContainer = styled.View`
-/* height: ${({ height }) => height}; */
+  /* height: ${({ height }) => height}; */
   flex-direction: row;
   align-items: center;
   padding: 5px 0px 5px 25px;
-`;
-
+`
 
 export default Pagination

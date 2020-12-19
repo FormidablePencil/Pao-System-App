@@ -1,59 +1,57 @@
 import React, { useState, useEffect, createContext, useRef } from 'react'
 import TableHeader from '../../components/TableHeader'
 import RenderPaoContent from './components'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import FabActionBtn from '../components/fab-action-btns'
 import { enumFabAction, fabOpt } from '../../constants/fabConstants'
 import { tabScreens } from '../../constants/constants'
 import { Keyboard, View, LayoutAnimation } from 'react-native'
 import usePrimaryControlledColor, { WhereToColor } from '../../hooks/usePrimaryControlledColor'
-
-export const PaoTableScreenContext = createContext()
+import {
+  KEYBOARD_PRESENT_FALSE,
+  KEYBOARD_PRESENT_TRUE,
+  TOGGLE_EDIT_MODE,
+} from '../../actions/types'
+import { RootReducerT } from '../../store'
 
 export const PaotableScreen = ({ navigation }) => {
+  const keyboardPresent = useSelector((state: RootReducerT) => state.misc.keyboardPresent)
   const controlledThemeColor = useSelector((state: any) => state.controlledThemeColor)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [editModeTrue, setEditModeTrue] = useState(false)
-  const [keyboardPresent, setKeyboardPresent] = useState(false)
   const [goToUnfilledTrigger, setGoToUnfilledTrigger] = useState(false)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    if (goToUnfilledTrigger === true) setEditModeTrue(true)
+    if (goToUnfilledTrigger === true) dispatch({ type: TOGGLE_EDIT_MODE })
   }, [goToUnfilledTrigger])
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-      setKeyboardPresent(true)
+      dispatch({ type: KEYBOARD_PRESENT_TRUE })
     })
     Keyboard.addListener('keyboardDidHide', () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-      setKeyboardPresent(false)
+      dispatch({ type: KEYBOARD_PRESENT_FALSE })
     })
 
     return () => {
-      Keyboard.removeListener('keyboardDidShow', () => { })
-      Keyboard.removeListener('keyboardDidHide', () => { })
+      Keyboard.removeListener('keyboardDidShow', () => {})
+      Keyboard.removeListener('keyboardDidHide', () => {})
     }
   })
 
-  const controlledBgColor = controlledThemeColor > .5 ? 'black' : 'white'
+  const controlledBgColor = controlledThemeColor > 0.5 ? 'black' : 'white'
   const rowEvenColor = usePrimaryControlledColor(WhereToColor.rowEven)
   const bgColor = controlledThemeColor ? controlledBgColor : rowEvenColor
 
   return (
-    <PaoTableScreenContext.Provider value={{ keyboardPresent, editModeTrue }}>
       <View style={{ backgroundColor: bgColor, flex: 1 }}>
-        {!keyboardPresent &&
-          <TableHeader />
-        }
-          <RenderPaoContent
-            goToUnfilledTrigger={goToUnfilledTrigger}
-            setGoToUnfilledTrigger={setGoToUnfilledTrigger}
-            editModeTrue={editModeTrue}
-            />
+        {!keyboardPresent && <TableHeader />}
+        <RenderPaoContent
+          goToUnfilledTrigger={goToUnfilledTrigger}
+          setGoToUnfilledTrigger={setGoToUnfilledTrigger}
+        />
       </View>
-    </PaoTableScreenContext.Provider>
   )
 }
 
