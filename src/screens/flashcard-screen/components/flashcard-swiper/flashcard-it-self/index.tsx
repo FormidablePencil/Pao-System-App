@@ -11,6 +11,7 @@ import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRes
 import { RootReducerT } from '../../../../../store';
 import StudyModeTxt from './StudyModeTxt';
 import RenderPaoItems from './RenderPaoItems';
+import GuessingFeature from '../guessing-feature';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -105,40 +106,43 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
   return (
     <>
       {sides.map((sidesDocument: any) =>
-        <AnimatedFlashcard
-          key={sidesDocument.side}
-          style={{ opacity: sidesDocument.opacity, transform: [{ rotateY: sidesDocument.interpolation }] }}
-        >
-          <TouchableWithoutFeedback
-            style={{
-              ...styles.cardDimensions,
-              width: SCREEN_WIDTH / 1.5,
-              height: SCREEN_HEIGHT / 1.8,
-              backgroundColor: bgColor,
-            }}
-            onPress={() => cardFliperOnPressProp()}
+        <>
+          <AnimatedFlashcard
+            key={sidesDocument.side}
+            style={{ opacity: sidesDocument.opacity, transform: [{ rotateY: sidesDocument.interpolation }] }}
           >
-            <>
-              {isRandomStudyMode ?
-                <StudyModeTxt isFlipped={isFlipped} index={index} side={sidesDocument.side} />
+            <TouchableWithoutFeedback
+              style={{
+                ...styles.cardDimensions,
+                width: SCREEN_WIDTH / 1.5,
+                height: SCREEN_HEIGHT / 1.8,
+                backgroundColor: bgColor,
+              }}
+              onPress={() => cardFliperOnPressProp()}
+            >
+              <>
+                {isRandomStudyMode ?
+                  <StudyModeTxt isFlipped={isFlipped} index={index} side={sidesDocument.side} />
 
-                :
-                <RenderPaoItems
-                  paoDisplayOrder={paoDisplayOrder}
-                  editMode={editMode}
-                  flashcardItemDisplayedFront={flashcardItemDisplayedFront}
-                  sidesDocument={sidesDocument}
-                  collection={collection}
-                  handleOnBlur={handleOnBlur}
-                  textColor={textColor}
-                  formatPaoItems={formatPaoItems}
-                  onChangeHandler={onChangeHandler}
-                />
-              }
-            </>
-            <PaoEmpty flashcardItemDisplayedFront={flashcardItemDisplayedFront} symbol={sidesDocument.symbol} />
-          </TouchableWithoutFeedback>
-        </AnimatedFlashcard>
+                  :
+                  <RenderPaoItems
+                    paoDisplayOrder={paoDisplayOrder}
+                    editMode={editMode}
+                    flashcardItemDisplayedFront={flashcardItemDisplayedFront}
+                    sidesDocument={sidesDocument}
+                    collection={collection}
+                    handleOnBlur={handleOnBlur}
+                    textColor={textColor}
+                    formatPaoItems={formatPaoItems}
+                    onChangeHandler={onChangeHandler}
+                  />
+                }
+              </>
+              <PaoEmpty flashcardItemDisplayedFront={flashcardItemDisplayedFront} symbol={sidesDocument.symbol} />
+            </TouchableWithoutFeedback>
+          </AnimatedFlashcard>
+          {sidesDocument.side === 'back' && <GuessingFeature />}
+        </>
       )}
     </>
   )
