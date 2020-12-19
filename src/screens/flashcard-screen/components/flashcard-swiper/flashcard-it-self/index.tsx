@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveControlledInputsToPao } from '../../../../../actions/paoAc';
 import usePrimaryControlledColor, { WhereToColor, distinguishingTextColorFromRestOfText } from '../../../../../hooks/usePrimaryControlledColor';
 import { RootReducerT } from '../../../../../store';
-import StudyMode from './StudyMode';
+import StudyModeTxt from './StudyModeTxt';
 import RenderPaoItems from './RenderPaoItems';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
@@ -33,6 +33,7 @@ export interface ControlledInputsTypes {
 
 const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
   const isRandomStudyMode = useSelector((state: RootReducerT) => state.studyRandomMode.isRandomStudyMode)
+  const isFlipped = useSelector((state: RootReducerT) => state.studyRandomMode.isFlipped)
   const flashcardOptions = useSelector((state: any) => state.flashcardOptions)
   const flashcardItemDisplayedFront = useSelector((state: any) => state.flashcardOptions.flashcardItemDisplayedFront)
   const editMode = useSelector((state: any) => state.fabProperties.config.editMode)
@@ -119,7 +120,8 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
           >
             <>
               {isRandomStudyMode ?
-                <StudyMode index={index} side={sidesDocument.side} />
+                <StudyModeTxt isFlipped={isFlipped} index={index} side={sidesDocument.side} />
+
                 :
                 <RenderPaoItems
                   paoDisplayOrder={paoDisplayOrder}

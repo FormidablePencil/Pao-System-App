@@ -19,7 +19,7 @@ const RandomStudyModeOpts = () => {
   }));
   const switchSelectors = [
     {
-      title: "front",
+      title: "Pao",
       leftLabel: "back",
       rightLabel: "front",
       toggleState: switchSelectorValues.invertCard,
@@ -34,7 +34,7 @@ const RandomStudyModeOpts = () => {
     dispatch({
       type: switchSelectorValues.invertCard
         ? FLIP_STUDY_RANDOM_MODE_CARDS_TRUE
-        : FLIP_STUDY_RANDOM_MODE_CARDS_FALSE,
+        : FLIP_STUDY_RANDOM_MODE_CARDS_FALSE
     });
   };
 
@@ -43,7 +43,7 @@ const RandomStudyModeOpts = () => {
       {switchSelectors.map((switchSelectorItem) => {
         return (
           <SelectorComp
-            initial={"front"}
+            initial={isFlipped ? "front" : "back"}
             onPress={(toggle) =>
               setSwitchSelectorValues((prev) => ({
                 ...prev,

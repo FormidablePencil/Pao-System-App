@@ -53,12 +53,7 @@ const OptsMenus = ({
           />
         )
       )}
-      <GoToUnfilled
-        paoDocumentsFilled={paoDocumentsFilled}
-        setGoToUnfilledTrigger={setGoToUnfilledTrigger}
-        themeIsUncontrolled={themeIsUncontrolled}
-        bgColor={bgColor}
-      />
+      <Text style={styles.rowFilledText}>Rows filled: {paoDocumentsFilled}/100</Text>
     </View>
   )
 }
@@ -93,6 +88,9 @@ const styles = StyleSheet.create({
     bottom: 50,
     // backgroundColor: 'orange',
   },
+  rowFilledText: {
+    marginTop: 10
+  }
 })
 
 export default OptsMenus
