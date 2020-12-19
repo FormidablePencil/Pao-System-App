@@ -52,5 +52,3 @@ export const mergePaoArrays = (firstArray: any, secondArray: any) => { //seperat
   })
   return margedArr
 }
-
-export default sortPaoList

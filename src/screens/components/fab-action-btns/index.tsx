@@ -20,6 +20,7 @@ import useFabActionVariousProperties, { navigationRef } from './useFabActionVari
 import { RootReducerT } from '../../../store'
 import OptsMenus from './OptsMenus'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
+import { SAVED_FLASHCARD_SETTINGS_FROM_MODAL } from '../../../actions/types'
 
 interface FabOptTypes {
   mode: number
@@ -44,6 +45,7 @@ const FabActionBtn = ({ currentScreen, setCurrentScreen, setModalOpen }) => {
   )
   const editMode = useSelector((state: RootReducerT) => state.fabProperties.config.editMode)
   const theme: PaoThemeType = useTheme()
+  const dispatch = useDispatch()
   const fabActionContentRef = useRef(null)
   const fabActionContentRef2 = useRef(null)
   const [loading, setLoading] = useState(false)
@@ -63,7 +65,7 @@ const FabActionBtn = ({ currentScreen, setCurrentScreen, setModalOpen }) => {
       { object: false },
     ],
     autoPlayFlashcards: { play: false, duration: 5 },
-    flashcardOrder: arrangmentOpt.ascending,
+    flashcardOrder: arrangmentOpt.sorted,
   })
   const controlledColor = usePrimaryControlledColor(WhereToColor.primaryColor, theme.colors.primary)
   const bgColor = usePrimaryControlledColor(WhereToColor.goToUnfilledBtn, theme.colors.accent)
@@ -122,17 +124,10 @@ const FabActionBtn = ({ currentScreen, setCurrentScreen, setModalOpen }) => {
                 contentStyles={styles.contentStyles}
               >
                 <OptsMenus
-                  currentFabProps={currentFabProps}
                   currentScreen={currentScreen}
                   bgColor={bgColor}
-                  fabActionContentRef={fabActionContentRef}
-                  fabActionContentRef2={fabActionContentRef2}
-                  sliderValueautoPlayFlashcardsDuration={sliderValueautoPlayFlashcardsDuration}
                   flashcardSettings={flashcardSettings}
                   setFlashcardSettings={setFlashcardSettings}
-                  setLoading={setLoading}
-                  setModalOpen={setModalOpen}
-                  handleOnPressGeneral={handleOnPressGeneral}
                 />
               </FAB.Group>
             </Portal>

@@ -227,7 +227,7 @@ const ListModePagination = ({
                           editable={editModeTrue}
                           onBlur={() => onBlurHandler()}
                           placeholder={name}
-                          placeholderTextColor={bgColor ? textColor : placeholderColor}
+                          // placeholderTextColor={bgColor ? textColor : placeholderColor}
                           // textAlignVertical='top'
                           textAlign="center"
                           textColor={textColor}

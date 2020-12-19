@@ -2,17 +2,19 @@ import React, { useState, useEffect, useRef, useContext, Suspense, lazy } from '
 import { View, LayoutAnimation, Text, Dimensions } from 'react-native'
 import { useSelector } from 'react-redux'
 import Pagination, { paginateDirection } from '../../../components/Pagination'
-import { mergePaoArrays } from '../../../components/logic/sortPaoList'
+import { mergePaoArrays, sortPaoList } from '../../../components/logic/sortPaoList'
 import { TabNavContext } from '../../../routes/StackNavigator'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { RootReducerT } from '../../../store'
 import ListModeScroll from './lists'
+import { arrangmentOpt } from '../../../reducer/flashcardOptionsReducer'
 const LazyLoadListModePagination = lazy(() => import('./lists/list-mode-pagination'));
 
 const RenderPaoContent = ({ goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
   const { setTableReady } = useContext(TabNavContext)
   const paoList: any = useSelector((state: RootReducerT) => state.pao)  //@
   const isPagination: any = useSelector((state: RootReducerT) => state.fabProperties.config.pagination)
+  const flashcardOrder = useSelector((state: RootReducerT) => state.flashcardOptions.flashcardOrder)
 
   const arr = Array.from({ length: 100 }).map((collection, index) => {
     return { id: null, number: index, person: null, action: null, object: null }

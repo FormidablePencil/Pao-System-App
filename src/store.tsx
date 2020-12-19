@@ -4,7 +4,7 @@ import paoReducer from './reducer/paoReducer'
 import authReducer from './reducer/authReducer'
 import systemMesgReducer from './reducer/systemMesgReducer'
 import favListReducer from './reducer/favListReducer'
-import flashcardOptionsReducer from './reducer/flashcardOptionsReducer'
+import flashcardOptionsReducer, { FlashcardSettingsTypes } from './reducer/flashcardOptionsReducer'
 import paoListApprovedByServerReducer from './routes/paoListApprovedByServerReducer'
 import controlledThemeColorReducer from './reducer/controlledThemeColorReducer'
 import studyReducer, { StudyModeT } from './reducer/studyReducer'
@@ -18,7 +18,7 @@ export interface RootReducerT {
   auth
   systemMessages
   favList
-  flashcardOptions
+  flashcardOptions: FlashcardSettingsTypes
   fabVisible: boolean
   paoListApprovedByServer
   controlledThemeColor

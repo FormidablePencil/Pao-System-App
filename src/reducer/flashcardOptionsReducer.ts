@@ -1,7 +1,12 @@
-
 //~ true means front side and false means back
 
-import { SET_AUTO_PLAY_DURATION, TOGGLE_AUTO_PLAY_DURATION, UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE, SAVED_FLASHCARD_SETTINGS_FROM_MODAL, UPDATE_FLASHCARD_ORDER } from "../actions/types"
+import {
+  SET_AUTO_PLAY_DURATION,
+  TOGGLE_AUTO_PLAY_DURATION,
+  UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE,
+  SAVED_FLASHCARD_SETTINGS_FROM_MODAL,
+  UPDATE_FLASHCARD_ORDER,
+} from '../actions/types'
 
 export enum arrangmentOpt {
   ascending,
@@ -15,11 +20,11 @@ export interface FlashcardSettingsTypes {
     [index: number]: {
       [index: string]: boolean
     }
-  },
+  }
   autoPlayFlashcards: {
-    play: boolean,
+    play: boolean
     duration: number
-  },
+  }
   flashcardOrder: arrangmentOpt
 }
 
@@ -31,22 +36,18 @@ const initialState: FlashcardSettingsTypes = {
     { object: false },
   ],
   autoPlayFlashcards: { play: false, duration: 5 },
-  flashcardOrder: arrangmentOpt.ascending
+  flashcardOrder: arrangmentOpt.sorted,
 }
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-
-    case UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE:
-      return payload
-
     case SET_AUTO_PLAY_DURATION:
       return {
         ...state,
         autoPlayFlashcards: {
           ...state.autoPlayFlashcards,
-          duration: payload
-        }
+          duration: payload,
+        },
       }
 
     case TOGGLE_AUTO_PLAY_DURATION:
@@ -54,26 +55,24 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         autoPlayFlashcards: {
           ...state.autoPlayFlashcards,
-          play: !state.autoPlayFlashcards.play
-        }
+          play: !state.autoPlayFlashcards.play,
+        },
       }
 
     case UPDATE_FLASHCARD_ORDER:
       return {
         ...state,
-        flashcardOrder: payload
+        flashcardOrder: payload,
       }
 
+    case UPDATE_FLASHCARD_ITEM_DISPLAY_ON_WHAT_SIDE:
     case SAVED_FLASHCARD_SETTINGS_FROM_MODAL:
-
       return payload
 
     default:
       return state
   }
 }
-
-
 
 // const [flashcardItemDisplayedFront, setflashcardItemDisplayedFront] = useState([
 //   { number: true },
@@ -82,4 +81,3 @@ export default (state = initialState, { type, payload }) => {
 //   { object: false },
 // ])
 // const [autoPlayFlashcards, setautoPlayFlashcards] = useState( { play: false, duration: 5 } ) //rename to flashcard related
-

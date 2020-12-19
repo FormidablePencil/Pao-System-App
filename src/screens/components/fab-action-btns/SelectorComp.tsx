@@ -19,7 +19,7 @@ const SelectorComp = ({ onPress, initial, options, title }) => {
         selectedTextStyle={{ height: 30, fontFamily: 'MontserratReg' }}
         textStyle={{ height: 30, fontFamily: 'MontserratReg', color: switchBtnSelected }}
         height={40}
-        initial={initial ? 0 : 1}
+        initial={initial ? 1 : 0}
         onPress={onPress}
         // textControlledColor={theme.colors.primary}
         buttonColor={switchBtnSelected}

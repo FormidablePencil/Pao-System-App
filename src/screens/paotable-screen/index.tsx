@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useRef } from 'react'
 import TableHeader from '../../components/TableHeader'
-import RenderPaoContent from './components'
+import RenderPaoContent from './components/RenderPaoContent'
 import { useDispatch, useSelector } from 'react-redux'
 import FabActionBtn from '../components/fab-action-btns'
 import { enumFabAction, fabOpt } from '../../constants/fabConstants'

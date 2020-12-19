@@ -1,54 +1,52 @@
-import React from "react";
+import React from 'react'
 import usePrimaryControlledColor, {
   WhereToColor,
   textControlledColor,
-} from "../../../../../hooks/usePrimaryControlledColor";
-import SelectorComp from "../../SelectorComp";
-import ButtonSave from "../../ButtonSave";
+} from '../../../../../hooks/usePrimaryControlledColor'
+import SelectorComp from '../../SelectorComp'
+import ButtonSave from '../../ButtonSave'
+import { useDispatch } from 'react-redux'
+import { SAVED_FLASHCARD_SETTINGS_FROM_MODAL } from '../../../../../actions/types'
+import { arrangmentOpt } from '../../../../../reducer/flashcardOptionsReducer'
 
-const RegModeOpts = ({
-  sliderValueautoPlayFlashcardsDuration,
-  setModalOpen,
-  setFlashcardSettings,
-  flashcardSettings,
-  setLoading,
-  currentScreen,
-  theme,
-  fabActionContentRef,
-  fabActionContentRef2,
-}) => {
+const RegModeOpts = ({ setFlashcardSettings, flashcardSettings, theme }) => {
+  const dispatch = useDispatch()
   const bgColor = usePrimaryControlledColor(
     WhereToColor.fabActionContentBg,
     theme.colors.background
-  );
+  )
+
+  const onChangeArrangementSelector = (value: arrangmentOpt) =>
+    setFlashcardSettings((prev) => ({ ...prev, flashcardOrder: value }))
+    
   const setWhatSideItemWillDisplay = (name: any, value: string) => {
-    let boolean = true;
-    if (value === "back") boolean = false;
-    const updatedState = flashcardSettings.flashcardItemDisplayedFront.map(
-      (item) => {
-        if (Object.keys(item)[0] === name) return { [name]: boolean };
-        else return item;
-      }
-    );
+    let boolean = true
+    if (value === 'back') boolean = false
     setFlashcardSettings((prev) => ({
       ...prev,
-      flashcardItemDisplayedFront: updatedState,
-    }));
-  };
+      flashcardItemDisplayedFront: prev.flashcardItemDisplayedFront.map((item) => {
+        if (Object.keys(item)[0] === name)
+          return {
+            [name]: boolean,
+          }
+        else return item
+      }),
+    }))
+  }
 
   const onPressHandler = (name, whatSide) =>
-    setWhatSideItemWillDisplay(name, whatSide);
-  const onChangeArrangementSelector = (value) =>
-    console.log(value, "onChangeArrangementSelector");
+    setWhatSideItemWillDisplay(name.toLowerCase(), whatSide)
 
-  const switchSelectorsInfo = ["Number", "Person", "Action", "Object"];
+  const switchSelectorsInfo = ['Number', 'Person', 'Action', 'Object']
 
   const checkSpecificItem = (name) => {
-    flashcardSettings.flashcardItemDisplayedFront.filter(
-      (item) => Object.keys(item)[0] === name
-    )[0];
-    return Object.values(checkSpecificItem)[0] ? 0 : 1;
-  };
+    flashcardSettings.flashcardItemDisplayedFront.filter((item) => Object.keys(item)[0] === name)[0]
+    return Object.values(checkSpecificItem)[0] ? 0 : 1
+  }
+
+  const save = () =>
+    dispatch({ type: SAVED_FLASHCARD_SETTINGS_FROM_MODAL, payload: flashcardSettings })
+
   // const toggle = Object.values(checkSpecificItem)[0]
 
   return (
@@ -62,25 +60,25 @@ const RegModeOpts = ({
             onPress={(whatSide) => onPressHandler(name, whatSide)}
             title={name}
             options={[
-              { value: "front", label: "front" },
-              { value: "back", label: "back" },
+              { value: 'front', label: 'front' },
+              { value: 'back', label: 'back' },
             ]}
           />
         ))}
         <SelectorComp
-          initial={0}
+          initial={arrangmentOpt.random}
           onPress={onChangeArrangementSelector}
-          title={"Order"}
+          title={'Order'}
           options={[
-            { value: 0, label: "sorted" },
-            { value: 1, label: "random" },
+            { value: arrangmentOpt.sorted, label: 'sorted' },
+            { value: arrangmentOpt.random, label: 'random' },
           ]}
         />
       </>
-      <ButtonSave onPress={() => console.log("btn save")} />
+      <ButtonSave onPress={save} />
       {/* } */}
     </>
-  );
-};
+  )
+}
 
-export default RegModeOpts;
+export default RegModeOpts
