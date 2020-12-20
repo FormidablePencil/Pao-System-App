@@ -58,7 +58,6 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
     { side: 'front', interpolation: backInterpolation, opacity: backSideOpacity, symbol: true },
     { side: 'back', interpolation: frontInterpolation, opacity: frontSideOpacity, symbol: false }
   ]
-  const paoDisplayOrder = ['number', 'person', 'action', 'object']
 
   const cardFliperOnPressProp = () => {
     flipCard()
@@ -102,7 +101,6 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
     return typeof collection[key] === 'number' || typeof collection[key] === 'string' ? textColorRenderConditionally : 'rgba(51,51,51,.2)'
   }
 
-
   return (
     <>
       {sides.map((sidesDocument: any) =>
@@ -123,10 +121,8 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
               <>
                 {isRandomStudyMode ?
                   <StudyModeTxt isFlipped={isFlipped} index={index} side={sidesDocument.side} />
-
                   :
                   <RenderPaoItems
-                    paoDisplayOrder={paoDisplayOrder}
                     editMode={editMode}
                     flashcardItemDisplayedFront={flashcardItemDisplayedFront}
                     sidesDocument={sidesDocument}
@@ -141,7 +137,7 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
               <PaoEmpty flashcardItemDisplayedFront={flashcardItemDisplayedFront} symbol={sidesDocument.symbol} />
             </TouchableWithoutFeedback>
           </AnimatedFlashcard>
-          {sidesDocument.side === 'back' && <GuessingFeature />}
+          {sidesDocument.side === 'back' && <GuessingFeature index={index} />}
         </>
       )}
     </>

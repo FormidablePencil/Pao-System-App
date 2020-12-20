@@ -5,10 +5,11 @@ import styled from 'styled-components'
 
 
 const RenderPaoItems = ({
-  paoDisplayOrder, editMode, flashcardItemDisplayedFront, sidesDocument,
+  editMode, flashcardItemDisplayedFront, sidesDocument,
   collection, handleOnBlur, textColor, formatPaoItems, onChangeHandler
 }) => {
   const theme = useTheme()
+  const paoDisplayOrder = ['number', 'person', 'action', 'object']
 
   return (
     <>

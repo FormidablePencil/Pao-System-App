@@ -1,21 +1,13 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { amber50 } from 'react-native-paper/lib/typescript/styles/colors';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { RootReducerT } from '../../../../../store';
+import useGetStudyModeRandom from '../../../functions/useGetStudyModeRandom';
 
 const StudyModeTxt = ({ isFlipped, index, side }) => {
-  const studyRandomMode = useSelector((state: RootReducerT) => state.studyRandomMode)
+  const { getNumberRandomMode, getPaoItemRandomMode } = useGetStudyModeRandom()
+
   const showNumber = !isFlipped && side === 'front' || side === 'back'
   const showPaoItem = isFlipped && side === 'front' || side === 'back'
-  const paoItem = (name) => studyRandomMode[name][index]?.item
-  const number = (name) => {
-    let num = studyRandomMode[name][index]?.number.toString()
-    if (!num) return
-    if (num.length === 1) num = `0${num}`
-    return num
-  }
 
   return (
     <Wrapper>
@@ -26,12 +18,12 @@ const StudyModeTxt = ({ isFlipped, index, side }) => {
               styles.numbers,
               !showNumber ? styles.hiddenNumber : styles.visibleNumber
             ]}>
-              {showNumber ? number(name) : ''}
+              {showNumber ? getNumberRandomMode(name, index) : ''}
             </StudyCardText>
             <StudyCardText style={[
               !showPaoItem && styles.hiddenPaoText
             ]}>
-              {showPaoItem ? paoItem(name) : ''}
+              {showPaoItem ? getPaoItemRandomMode(name, index) : ''}
             </StudyCardText>
           </StudyCardContainer>
         )
