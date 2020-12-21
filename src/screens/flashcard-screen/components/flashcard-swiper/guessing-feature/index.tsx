@@ -2,7 +2,6 @@ import { LinearGradient } from 'expo-linear-gradient'
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { useTheme } from 'react-native-paper'
 import { useSelector } from 'react-redux'
 import { RootReducerT } from '../../../../../store'
 import useGetStudyModeRandom from '../../../functions/useGetStudyModeRandom'
@@ -15,37 +14,26 @@ import paoItemsForGuessingFeature from './paoItemsForGuessingFeature'
 
 
 const GuessingFeature = ({ index }) => {
+  const isFlipped = useSelector((state: RootReducerT) => state.studyRandomMode.isFlipped)
   const [arrOfNumbersToGuess, setArrOfNumbersToGuess] = useState<number[]>([])
   const [selected, setSelected] = useState<number[]>([])
-  const theme = useTheme()
-  const { getPaoItemRandomMode, getNumberRandomMode } = useGetStudyModeRandom()
+  const { getNumberRandomMode } = useGetStudyModeRandom()
   const correctNumbers = [
     parseInt(getNumberRandomMode('person', index)),
     parseInt(getNumberRandomMode('action', index)),
     parseInt(getNumberRandomMode('object', index)),
   ]
-  const { arrOfPaoItemTextToGuess } = paoItemsForGuessingFeature({ correctNumbers, arrOfNumbersToGuess, index })
   const getTheColorIfCorrect = getColorIfCorrect({ selected, correctNumbers })
-  const isFlipped = useSelector((state: RootReducerT) => state.studyRandomMode.isFlipped)
-
-  useEffect(() => {
-    // console.log(arrOfPaoItemTextToGuess)
-  }, [arrOfPaoItemTextToGuess])
-  
-  useEffect(() => {
-  // console.log(selected, correctNumbers)
-  }, [selected])
+  const { arrOfPaoItemTextToGuess } = paoItemsForGuessingFeature({
+    correctNumbers, arrOfNumbersToGuess, index
+  })
 
   useEffect(() => {
     const generatedGuessingFeatureArr = generateGuessingFeatureArr({ correctNumbers })
     setArrOfNumbersToGuess(generatedGuessingFeatureArr)
   }, [])
 
-
-  const onPressHandler = (number: number) => {
-    console.log(typeof number)
-    setSelected(prev => prev.concat(number))
-  }
+  const onPressHandler = (number: number) => setSelected(prev => prev.concat(number))
 
   return (
     <View style={styles.container}>
@@ -59,15 +47,13 @@ const GuessingFeature = ({ index }) => {
             linearGradientStyles={getTheColorIfCorrect(number).color}
           />
         ) : arrOfPaoItemTextToGuess.map(paoArr =>
-          <></>
-          // <ButtonComp
-          //   text={paoArr}
-          //   ifFlippedText={paoArr}
-          //   // onPressHandler={() => onPressHandler(paoArr)}
-          //   onPressHandler={console.log('object')}
-          //   flippedTxtStyles={getTheColorIfCorrect(paoArr)?.textProps}
-          //   linearGradientStyles={getTheColorIfCorrect(paoArr).color}
-          // />
+          <ButtonComp
+            text={paoArr[1]}
+            ifFlippedText={paoArr[0]}
+            onPressHandler={() => onPressHandler(paoArr[0])}
+            flippedTxtStyles={getTheColorIfCorrect(paoArr[0])?.textProps}
+            linearGradientStyles={getTheColorIfCorrect(paoArr[0]).color}
+          />
         )
       }
     </View>
@@ -79,7 +65,7 @@ const ButtonComp = ({
   onPressHandler,
   flippedTxtStyles,
   text,
-  ifFlippedText
+  ifFlippedText,
 }) => {
   const isFlipped = useSelector((state: RootReducerT) => state.studyRandomMode.isFlipped)
 
@@ -98,7 +84,7 @@ const ButtonComp = ({
           </Text>
           :
           <Text style={styles.textColor}>
-            {text}
+            {text?.substr(0, 6)}
             {/* {number} */}
           </Text>
         }

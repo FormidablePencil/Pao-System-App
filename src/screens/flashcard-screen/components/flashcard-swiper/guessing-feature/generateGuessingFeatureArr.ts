@@ -1,46 +1,34 @@
 import shuffle from "shuffle-array"
+import { generateRandomNumEqualToCertain } from "./paoItemsForGuessingFeature"
 
 export const totalPaoItemsToGuess = 9
 
 const generateGuessingFeatureArr = ({ correctNumbers }: { correctNumbers: number[] }) => {
   let generatedArrOfNumbers: number[] = []
 
-
   const generateGuessingFeatureMethods = {
-    searchGeneratedNumbers(search) {
-      return generatedArrOfNumbers.find(generatedNumb => search === generatedNumb)
-    },
-
     generateArrOfNumbers() {
-      for (let i = 0; i < totalPaoItemsToGuess - 3; i++)
-        generatedArrOfNumbers.push(Math.floor(Math.random() * 100))
+      for (let i = 0; i < totalPaoItemsToGuess - 3; i++) {
+        const number = generateRandomNumEqualToCertain({
+          correctNumbers,
+          arrToCompareForEquality: generatedArrOfNumbers
+        })
+        generatedArrOfNumbers.push(number)
+      }
     },
-
-    getArrOfCorrectNumbersNotExistentInGeneratedArr() {
-      const arrOfCorrectNumbersNotExistentInGeneratedArr = []
-      correctNumbers.map(correctNum => {
-        const found = generateGuessingFeatureMethods.searchGeneratedNumbers(correctNum)
-        if (typeof found !== 'number') arrOfCorrectNumbersNotExistentInGeneratedArr.push(correctNum)
-      })
-      return arrOfCorrectNumbersNotExistentInGeneratedArr
-    },
-
-    mergeCorrectNumbersToGeneratedArr({ arrOfCorrectNumbers }) {
-      const merged = [...generatedArrOfNumbers, ...arrOfCorrectNumbers]
+    mergeCorrectNumbersToGeneratedArr() {
+      const merged = [...generatedArrOfNumbers, ...correctNumbers]
       generatedArrOfNumbers = merged
     },
   }
 
   const {
     generateArrOfNumbers,
-    getArrOfCorrectNumbersNotExistentInGeneratedArr,
     mergeCorrectNumbersToGeneratedArr,
   } = generateGuessingFeatureMethods
 
   generateArrOfNumbers()
-  mergeCorrectNumbersToGeneratedArr({
-    arrOfCorrectNumbers: getArrOfCorrectNumbersNotExistentInGeneratedArr()
-  })
+  mergeCorrectNumbersToGeneratedArr()
   shuffle(generatedArrOfNumbers)
 
   return generatedArrOfNumbers
