@@ -35,24 +35,24 @@ const OptsMenus = ({
 
       <View style={styles.divider} />
 
-      {isRandomStudyMode && (
+      {/* {isRandomStudyMode && (
         <>
           <AmountOfCardsAccumulator />
           <View style={styles.divider} />
         </>
-      )}
+      )} */}
 
       {currentScreen === tabScreens.Paotable ? (
         <PaoTableOptsModal />
       ) : (
-        currentScreen === tabScreens.Flashcards && (
-          <FlashcardsOptsModal
-            theme={theme}
-            flashcardSettings={flashcardSettings}
-            setFlashcardSettings={setFlashcardSettings}
-          />
-        )
-      )}
+          currentScreen === tabScreens.Flashcards && (
+            <FlashcardsOptsModal
+              theme={theme}
+              flashcardSettings={flashcardSettings}
+              setFlashcardSettings={setFlashcardSettings}
+            />
+          )
+        )}
       <Text style={styles.rowFilledText}>Rows filled: {paoDocumentsFilled}/100</Text>
     </View>
   )
@@ -61,7 +61,7 @@ const OptsMenus = ({
 const styles = StyleSheet.create({
   container: {
     borderRadius: 10,
-    paddingTop: 15,
+    paddingTop: 25,
     paddingBottom: 15,
     justifyContent: 'center',
     alignItems: 'center',
@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
     // backgroundColor: 'orange',
   },
   rowFilledText: {
-    marginTop: 10
+    marginTop: 10,
+    color: 'white'
   }
 })
 

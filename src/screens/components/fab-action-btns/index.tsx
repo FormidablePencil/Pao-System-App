@@ -44,6 +44,7 @@ const FabActionBtn = ({ currentScreen, setCurrentScreen, setModalOpen }) => {
     TabNavContext
   )
   const editMode = useSelector((state: RootReducerT) => state.fabProperties.config.editMode)
+  const flashcardOptions = useSelector((state: RootReducerT) => state.flashcardOptions)
   const theme: PaoThemeType = useTheme()
   const dispatch = useDispatch()
   const fabActionContentRef = useRef(null)
@@ -57,16 +58,7 @@ const FabActionBtn = ({ currentScreen, setCurrentScreen, setModalOpen }) => {
     sliderValueautoPlayFlashcardsDuration,
     setSliderValueautoPlayFlashcardsDuration,
   ] = useState()
-  const [flashcardSettings, setFlashcardSettings] = useState<FlashcardSettingsTypes>({
-    flashcardItemDisplayedFront: [
-      { number: true },
-      { person: false },
-      { action: true },
-      { object: false },
-    ],
-    autoPlayFlashcards: { play: false, duration: 5 },
-    flashcardOrder: arrangmentOpt.sorted,
-  })
+  const [flashcardSettings, setFlashcardSettings] = useState<FlashcardSettingsTypes>(flashcardOptions)
   const controlledColor = usePrimaryControlledColor(WhereToColor.primaryColor, theme.colors.primary)
   const bgColor = usePrimaryControlledColor(WhereToColor.goToUnfilledBtn, theme.colors.accent)
   const mainFabBackgroundColor =
@@ -139,12 +131,16 @@ const FabActionBtn = ({ currentScreen, setCurrentScreen, setModalOpen }) => {
 }
 
 const styles = StyleSheet.create({
-  container: { position: 'absolute', height: '100%', width: '100%' },
+  container: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%'
+  },
   contentStyles: {
     backgroundColor: Colors.purple900,
     borderRadius: 10,
     position: 'absolute',
-    top: 50,
+    top: 100,
     width: '90%',
     // height: '25%',
     // width: '50%',

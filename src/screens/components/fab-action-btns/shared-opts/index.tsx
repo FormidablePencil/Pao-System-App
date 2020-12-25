@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { STUDY_MODE_TOGGLE, TOGGLE_STUDY_RANDOM_MODE } from '../../../../actions/types'
+import { STUDY_MODE_FALSE, STUDY_MODE_TOGGLE, STUDY_MODE_TRUE, TOGGLE_STUDY_RANDOM_MODE } from '../../../../actions/types'
 import { RootReducerT } from '../../../../store'
 import SelectorComp from '../SelectorComp'
 
@@ -12,8 +12,16 @@ const SharedOptions = () => {
     (state: RootReducerT) => state.studyRandomMode.isRandomStudyMode
   )
 
-  const toggleStaredList = () => dispatch({ type: STUDY_MODE_TOGGLE })
-  const toggleStudyRandomMode = () => dispatch({ type: TOGGLE_STUDY_RANDOM_MODE, payload: pao })
+  const toggleStaredList = (value) => {
+
+    dispatch({ type: value ? STUDY_MODE_TRUE : STUDY_MODE_FALSE })
+  }
+  const toggleStudyRandomMode = (value) => {
+    if (value === 0 && isRandomStudyMode === true)
+      dispatch({ type: TOGGLE_STUDY_RANDOM_MODE, payload: pao })
+    if (value === 1 && isRandomStudyMode === false)
+      dispatch({ type: TOGGLE_STUDY_RANDOM_MODE, payload: pao })
+  }
 
   return (
     <>

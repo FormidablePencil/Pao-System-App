@@ -31,8 +31,8 @@ export interface FlashcardSettingsTypes {
 const initialState: FlashcardSettingsTypes = {
   flashcardItemDisplayedFront: [
     { number: true },
-    { person: false },
-    { action: false },
+    { person: true },
+    { action: true },
     { object: false },
   ],
   autoPlayFlashcards: { play: false, duration: 5 },

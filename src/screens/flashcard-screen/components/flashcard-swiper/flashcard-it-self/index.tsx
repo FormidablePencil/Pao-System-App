@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Dimensions, StyleSheet, View } from 'react-native'
+import { Dimensions, StyleSheet, View, TouchableWithoutFeedback } from 'react-native'
 import { Text } from 'react-native-paper'
 import styled from 'styled-components';
 import { createAnimatableComponent } from 'react-native-animatable';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import useAnimation from '../../../../../hooks/useAnimation';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveControlledInputsToPao } from '../../../../../actions/paoAc';
@@ -37,7 +36,8 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
   const isFlipped = useSelector((state: RootReducerT) => state.studyRandomMode.isFlipped)
   const flashcardOptions = useSelector((state: any) => state.flashcardOptions)
   const flashcardItemDisplayedFront = useSelector((state: any) => state.flashcardOptions.flashcardItemDisplayedFront)
-  const editMode = useSelector((state: any) => state.fabProperties.config.editMode)
+  const editMode = useSelector((state: RootReducerT) => state.fabProperties.config.editMode)
+  const guessingFeatureOn = useSelector((state: RootReducerT) => state.studyRandomMode.guessingFeatureOn)
   const [controlledInputs, setControlledInputs] = useState<ControlledInputsTypes>({
     data: [{ number: null, name: null, value: null }]
   })
@@ -82,14 +82,18 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
         }
       })
       setControlledInputs({ ...controlledInputs, data: modifiedData })
-    } else setControlledInputs({ ...controlledInputs, data: { ...controlledInputs.data, ...{ number, name, value } } })
+    } else setControlledInputs({
+      ...controlledInputs,
+      data: { ...controlledInputs.data, ...{ number, name, value } }
+    })
   }
   const handleOnBlur = () => {
     dispatch(saveControlledInputsToPao(controlledInputs))
   }
   const formatPaoItems = (key) => {
     if (typeof collection[key] === 'number' || typeof collection[key] === 'string') {
-      if (typeof collection[key] === 'number' && collection[key].toString().length === 1) return `0${collection[key]}`
+      if (typeof collection[key] === 'number' && collection[key].toString().length === 1)
+        return `0${collection[key]}`
       else return `${collection[key]}`
     } else return 'pao'
   }
@@ -98,7 +102,9 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
   const controlledTextColor = distinguishingTextColorFromRestOfText().color
   const textColorRenderConditionally = controlledTextColor ?? '#828282'
   const textColor = (key) => {
-    return typeof collection[key] === 'number' || typeof collection[key] === 'string' ? textColorRenderConditionally : 'rgba(51,51,51,.2)'
+    return typeof collection[key] === 'number' || typeof collection[key] === 'string'
+      ? textColorRenderConditionally
+      : 'rgba(51,51,51,.2)'
   }
 
   return (
@@ -107,22 +113,32 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
         <>
           <AnimatedFlashcard
             key={sidesDocument.side}
-            style={{ opacity: sidesDocument.opacity, transform: [{ rotateY: sidesDocument.interpolation }] }}
+            style={[
+              {
+                opacity: sidesDocument.opacity,
+                transform: [{ rotateY: sidesDocument.interpolation }]
+              },
+              guessingFeatureOn && isRandomStudyMode && { top: '15%' }
+            ]}
           >
             <TouchableWithoutFeedback
               style={{
+              }}
+              onPress={() => cardFliperOnPressProp()}
+            >
+              <View style={{
                 ...styles.cardDimensions,
                 width: SCREEN_WIDTH / 1.5,
                 height: SCREEN_HEIGHT / 1.8,
                 backgroundColor: bgColor,
-              }}
-              onPress={() => cardFliperOnPressProp()}
-            >
-              <>
-                {isRandomStudyMode ?
-                  <StudyModeTxt isFlipped={isFlipped} index={index} side={sidesDocument.side} />
-                  :
-                  <RenderPaoItems
+              }}>
+                {isRandomStudyMode
+                  ? <StudyModeTxt
+                    isFlipped={isFlipped}
+                    index={index}
+                    side={sidesDocument.side}
+                  />
+                  : <RenderPaoItems
                     editMode={editMode}
                     flashcardItemDisplayedFront={flashcardItemDisplayedFront}
                     sidesDocument={sidesDocument}
@@ -133,11 +149,16 @@ const FlashcardItSelf = ({ collection, index }: FlashcardsTypes) => {
                     onChangeHandler={onChangeHandler}
                   />
                 }
-              </>
-              <PaoEmpty flashcardItemDisplayedFront={flashcardItemDisplayedFront} symbol={sidesDocument.symbol} />
+                <PaoEmpty
+                  flashcardItemDisplayedFront={flashcardItemDisplayedFront}
+                  symbol={sidesDocument.symbol}
+                />
+              </View>
             </TouchableWithoutFeedback>
           </AnimatedFlashcard>
-          {sidesDocument.side === 'back' && <GuessingFeature index={index} />}
+          {sidesDocument.side === 'back' && isRandomStudyMode && guessingFeatureOn &&
+            <GuessingFeature index={index} />
+          }
         </>
       )}
     </>

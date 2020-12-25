@@ -27,7 +27,6 @@ const Row = ({ index }) => {
         <Icon name={'star'} size={13} color='#D9BF14' />
         <FirstItemInRow>
           {index}
-
         </FirstItemInRow>
       </View>
       <View style={{ ...paoTableStyles.itemInRow }}>

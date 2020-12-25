@@ -1,34 +1,40 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
-import { useTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { RootReducerT } from "../../../../../store";
 import {
   FLIP_STUDY_RANDOM_MODE_CARDS_FALSE,
   FLIP_STUDY_RANDOM_MODE_CARDS_TRUE,
+  SET_GUESSING_FEATURE,
 } from "../../../../../actions/types";
 import SelectorComp from "../../SelectorComp";
 import ButtonSave from "../../ButtonSave";
 
 const RandomStudyModeOpts = () => {
-  const isFlipped = useSelector(
-    (state: RootReducerT) => state.studyRandomMode.isFlipped
-  );
+  const isFlipped = useSelector((state: RootReducerT) => state.studyRandomMode.isFlipped);
+  const guessingFeatureOn = useSelector((state: RootReducerT) => state.studyRandomMode.guessingFeatureOn);
   const [switchSelectorValues, setSwitchSelectorValues] = useState(() => ({
     invertCard: isFlipped ? 1 : 0,
+    guessingFeature: guessingFeatureOn ? 1 : 0
   }));
   const switchSelectors = [
     {
       title: "Pao",
       leftLabel: "back",
       rightLabel: "front",
-      toggleState: switchSelectorValues.invertCard,
-      onPress: (toggle) =>
-        setSwitchSelectorValues((prev) => ({ ...prev, invertCard: toggle })),
+      initial: isFlipped,
+      onPress: (toggle) => setSwitchSelectorValues((prev) => ({ ...prev, invertCard: toggle })),
+    },
+    {
+      title: "Guess",
+      leftLabel: "false",
+      rightLabel: "true",
+      initial: guessingFeatureOn,
+      onPress: (toggle) => setSwitchSelectorValues((prev) => ({ ...prev, guessingFeature: toggle })),
     },
   ];
   const dispatch = useDispatch();
-  const theme = useTheme();
+
 
   const onPressSaveBtn = () => {
     dispatch({
@@ -36,6 +42,10 @@ const RandomStudyModeOpts = () => {
         ? FLIP_STUDY_RANDOM_MODE_CARDS_TRUE
         : FLIP_STUDY_RANDOM_MODE_CARDS_FALSE
     });
+    dispatch({
+      type: SET_GUESSING_FEATURE,
+      payload: switchSelectorValues.guessingFeature ? true : false
+    })
   };
 
   return (
@@ -43,13 +53,8 @@ const RandomStudyModeOpts = () => {
       {switchSelectors.map((switchSelectorItem) => {
         return (
           <SelectorComp
-            initial={isFlipped ? "front" : "back"}
-            onPress={(toggle) =>
-              setSwitchSelectorValues((prev) => ({
-                ...prev,
-                invertCard: toggle,
-              }))
-            }
+            initial={switchSelectorItem.initial}
+            onPress={switchSelectorItem.onPress}
             title={switchSelectorItem.title}
             options={[
               { value: 0, label: switchSelectorItem.leftLabel },

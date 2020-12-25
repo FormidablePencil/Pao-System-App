@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import ascertainPaoType, { PaoTypesT } from "../../../../functions/ascertainPaoType"
+import ascertainPaoType, { PaoTypesT } from "../../../../utilities/ascertainPaoType"
 import useGetStudyModeRandom from "../../../functions/useGetStudyModeRandom"
 
 const generateGuessingFeatureArr = ({ correctNumbers, arrOfNumbersToGuess, index }) => {

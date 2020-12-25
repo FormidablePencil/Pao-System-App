@@ -12,18 +12,18 @@ const FlashcardsOptsModal = ({
   const isRandomStudyMode = useSelector(
     (state: RootReducerT) => state.studyRandomMode.isRandomStudyMode
   )
-  
+
   return (
     <>
       {isRandomStudyMode ? (
         <RandomStudyModeOpts />
       ) : (
-        <RegModeOpts
-          setFlashcardSettings={setFlashcardSettings}
-          flashcardSettings={flashcardSettings}
-          theme={theme}
-        />
-      )}
+          <RegModeOpts
+            setFlashcardSettings={setFlashcardSettings}
+            flashcardSettings={flashcardSettings}
+            theme={theme}
+          />
+        )}
     </>
   )
 }

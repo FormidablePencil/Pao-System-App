@@ -10,6 +10,7 @@ import {
   DISPLAY_NUMBERS_IN_FRONT_FALSE,
   DISPLAY_NUMBERS_IN_FRONT_TRUE,
   SET_STUDY_RANDOM_AMOUNT,
+  SET_GUESSING_FEATURE,
 } from "../actions/types"
 import randomlyGeneratedPaoList from "../screens/flashcard-screen/functions/randomlyGeneratedPaoList";
 
@@ -19,6 +20,7 @@ export interface StudyRandomModeT {
   toggleRow: boolean
   displayNumberInFront: boolean
   studyAmount: number
+  guessingFeatureOn: boolean
   person: StudyRandomListItemT[]
   action: StudyRandomListItemT[]
   object: StudyRandomListItemT[]
@@ -31,10 +33,11 @@ interface StudyRandomListItemT {
 
 const initialState: StudyRandomModeT = {
   isFlipped: false,
-  isRandomStudyMode: true,
+  isRandomStudyMode: false,
   toggleRow: false,
   displayNumberInFront: false,
   studyAmount: 100,
+  guessingFeatureOn: true,
   person: [],
   action: [],
   object: [],
@@ -73,7 +76,9 @@ export default (state: StudyRandomModeT = initialState, { type, payload }) => {
 
     case SET_STUDY_RANDOM_AMOUNT:
       return { ...state, studyAmount: payload }
-
+      
+    case SET_GUESSING_FEATURE:
+      return { ...state, guessingFeatureOn: payload }
 
     default:
       return state

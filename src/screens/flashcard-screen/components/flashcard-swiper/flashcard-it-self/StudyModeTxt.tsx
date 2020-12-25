@@ -1,30 +1,39 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import styled from 'styled-components';
 import useGetStudyModeRandom from '../../../functions/useGetStudyModeRandom';
 
 const StudyModeTxt = ({ isFlipped, index, side }) => {
   const { getNumberRandomMode, getPaoItemRandomMode } = useGetStudyModeRandom()
+  const [showAnswer, setShowAnswer] = useState({
+    person: false,
+    action: false,
+    object: false,
+  })
 
   const showNumber = !isFlipped && side === 'front' || side === 'back'
   const showPaoItem = isFlipped && side === 'front' || side === 'back'
+
+  const onPressHandler = (name) => setShowAnswer(prev => ({ ...prev, [name]: !prev[name] }))
 
   return (
     <Wrapper>
       {['person', 'action', 'object'].map(name => {
         return (
           <StudyCardContainer key={name} side={side}>
-            <StudyCardText style={[
-              styles.numbers,
-              !showNumber ? styles.hiddenNumber : styles.visibleNumber
-            ]}>
-              {showNumber ? getNumberRandomMode(name, index) : ''}
-            </StudyCardText>
-            <StudyCardText style={[
-              !showPaoItem && styles.hiddenPaoText
-            ]}>
-              {showPaoItem ? getPaoItemRandomMode(name, index) : ''}
-            </StudyCardText>
+            <TouchableTxtBtn disabled={showPaoItem} onPress={() => onPressHandler(name)}>
+              <StudyCardText style={[
+                styles.numbers,
+                !showNumber ? styles.hiddenNumber : styles.visibleNumber
+              ]}>
+                {showNumber || showAnswer[name] ? getNumberRandomMode(name, index) : ''}
+              </StudyCardText>
+              <StudyCardText style={[
+                !showPaoItem && styles.hiddenPaoText
+              ]}>
+                {showPaoItem || showAnswer[name] ? getPaoItemRandomMode(name, index) : ''}
+              </StudyCardText>
+            </TouchableTxtBtn>
           </StudyCardContainer>
         )
       })}
@@ -32,6 +41,14 @@ const StudyModeTxt = ({ isFlipped, index, side }) => {
   )
 }
 
+const TouchableTxtBtn = ({ children, onPress, disabled }) => {
+  if (disabled) return <>{children}</>
+  return <TouchableWithoutFeedback onPress={onPress}>
+    <View style={{ height: '100%', width: "100%", flexDirection: 'row', }}>
+      {children}
+    </View>
+  </TouchableWithoutFeedback>
+}
 
 const Wrapper = styled(View)`
   align-items: center; 
@@ -49,16 +66,21 @@ const StudyCardText = styled(Text)`
   font-family: MontserratReg; 
   font-size: 30;
   width: 100%;
-  /* border-col */
+  /* height: 100%; */
+  text-align: center;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 75%;
 `
 
 const styles = StyleSheet.create({
   numbers: {
-    width: 45,
+    width: 40,
   },
   visibleNumber: {
     color: 'blue',
     marginLeft: 10,
+    alignItems: 'center',
   },
   hiddenNumber: {
     borderBottomWidth: 1,
@@ -66,7 +88,7 @@ const styles = StyleSheet.create({
   },
   hiddenPaoText: {
     borderBottomWidth: 1,
-    width: "63%"
+    
   }
 })
 

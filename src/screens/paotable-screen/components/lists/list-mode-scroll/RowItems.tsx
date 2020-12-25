@@ -5,6 +5,7 @@ import { useSelector } from "react-redux"
 import { RootReducerT } from "../../../../../store"
 import { FirstItemInRow, ItemInRow } from '../../../../../styles/paoTableStyles'
 import { getPaoNumber } from '../../../../flashcard-screen/functions/various'
+import { formatNum } from '../../../../utilities/formatNum'
 
 
 const RowItemNormalMode = ({ index, name }) => {
@@ -33,8 +34,14 @@ const RowItemStudyMode = ({ index, isNumberFromRow, name }) => {
     </ItemInRow>
   )
 }
-const ItemTxt = ({ studyRandomMode, name, index, isNumber }) =>
-  <Text style={{fontSize: 14}}>{studyRandomMode[name][index][isNumber ? 'number' : 'item']}</Text>
+const ItemTxt = ({ studyRandomMode, name, index, isNumber }) => {
+  const number = formatNum(studyRandomMode[name][index]['number'])
+  const text = studyRandomMode[name][index]['item']
+
+  return (
+    <Text style={{ fontSize: 14 }}>{isNumber ? number : text}</Text>
+  )
+}
 
 const styles = StyleSheet.create({
   itemBtn: {

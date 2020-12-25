@@ -18,7 +18,7 @@ export interface StudyModeT {
 const initialState: StudyModeT = {
   study: false,
   currentStudyCard: null,
-  list: []
+  list: [],
   // paoStudySets: {
   //   person: [],
   //   action: [],
