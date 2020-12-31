@@ -56,13 +56,13 @@ Not yet available in the play store or anywhere for that matter.
 
 - Authentication
 - Catalog table for pao system
-- Study with flashcards
-- Change the ordering of flashcards and change what side will each pao item will be on
-- Adjustable theme option, dark mode
+- Various study modes
+- Guessing feature
+- Adjustable theme option; dark mode
 
 **Bugs and todos**
 
 - Edit mode in flashcard and tables screens have a few bugs
 - Splash image must be changed
-- Add more study modes
 - Add the major system (another mnemonic device)
+- Better authentication
