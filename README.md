@@ -18,7 +18,6 @@ Demo video:https://youtu.be/-U7ysY2m1QE
 <img src="https://i.ibb.co/XXPcnsB/Screenshot-20201006-210038-The-Pao-System.jpg" width="200" title="app">.<img src="https://i.ibb.co/d50f1xv/paoImg4.jpg" width="200" title="app">
 <img src="https://i.ibb.co/WxHg6Tm/paoImg.jpg" width="200" title="app">
 <img src="https://i.ibb.co/Gp0TPrH/paoImg2.jpg" width="200" title="app">
-<img src="https://i.ibb.co/rM0hyr6/paoImg6.jpg" width="200" title="app">
 
 ## Technologies utilized
 
