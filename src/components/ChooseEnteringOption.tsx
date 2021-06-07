@@ -1,32 +1,38 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Button, withTheme } from 'react-native-paper'
-import { Text } from 'react-native'
-import {WhiteText} from '../styles/global';
+import React from "react";
+import { Button, withTheme } from "react-native-paper";
+import { WhiteText } from "../styles/global";
 
 const ChooseEnteringOption = ({ setEnteringMethod, comps, theme }: any) => {
-
   const funcOnPressHandler = (setComp: any) => {
-    setEnteringMethod(setComp)
-  }
+    setEnteringMethod(setComp);
+  };
 
   return (
     <>
-      <ButtonStyled style={{ color: 'white' }} contentStyle={{ height: theme.btnHeight.large }} mode='contained' onPress={() => funcOnPressHandler(comps.signin)}>
-          <WhiteText>Login</WhiteText>
-      </ButtonStyled>
-      <ButtonStyled contentStyle={{ height: theme.btnHeight.large }} mode='contained' onPress={() => funcOnPressHandler(comps.signup)}>
+      <Button
+        style={{
+          marginVertical: 10,
+          color: "white",
+        }}
+        contentStyle={{ padding: 10 }}
+        mode="contained"
+        onPress={() => funcOnPressHandler(comps.signin)}
+      >
+        <WhiteText>Login</WhiteText>
+      </Button>
+      <Button
+        style={{
+          marginVertical: 10,
+          color: "white",
+        }}
+        contentStyle={{ padding: 10 }}
+        mode="contained"
+        onPress={() => funcOnPressHandler(comps.signup)}
+      >
         <WhiteText>New account</WhiteText>
-      </ButtonStyled>
+      </Button>
     </>
-  )
-}
+  );
+};
 
-const ButtonStyled = styled<any>(Button)`
-  /* height: ${props => props}; */
-  margin-vertical: 10;
-  color: white;
-`;
-
-
-export default withTheme(ChooseEnteringOption)
+export default withTheme(ChooseEnteringOption);

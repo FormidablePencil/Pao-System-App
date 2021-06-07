@@ -1,12 +1,24 @@
-import { SIGNED_IN, SET_LOADING, SIGNED_UP, SIGNED_OUT, REFRESHED_TOKENS } from "./types"
-import { form_res_msg } from "../hooks/useUserAuthentication"
+import {
+  SIGNED_IN,
+  SET_LOADING,
+  SIGNED_UP,
+  SIGNED_OUT,
+  REFRESHED_TOKENS,
+} from "./types";
+import { form_res_msg } from "../hooks/useUserAuthentication";
+
+// export const DEV_API_URL = "http://192.168.0.26:4000";
+export const DEV_API_URL = "172.16.2.52:4000";
+export const DEV_CLOUD_API_URL = "https://pao-system-server.herokuapp.com";
+export const PRODUCTION_API_URL = "https://pao-server-315919.uk.r.appspot.com";
+export const API_URL = DEV_CLOUD_API_URL;
 
 export enum server_responses {
-  invalid_credentials = 'invalid credentials',
-  user_exists = 'user already exists',
-  signed_out = 'successfully signed out',
-  signed_out_with_err = 'signout failed. Token does not exist',
-  successfully_refreshed_token = 'returned fresh new tokens',
+  invalid_credentials = "invalid credentials",
+  user_exists = "user already exists",
+  signed_out = "successfully signed out",
+  signed_out_with_err = "signout failed. Token does not exist",
+  successfully_refreshed_token = "returned fresh new tokens",
 }
 
 export enum auth_responses {
@@ -14,84 +26,102 @@ export enum auth_responses {
   failed_to_refreshed_token,
 }
 
-export const signUp = ({ username, password, email }) => async dispatch => {
-  await dispatch({ type: SET_LOADING })
+export const signUp = ({ username, password, email }) => async (dispatch) => {
+  await dispatch({ type: SET_LOADING });
   const request = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ password, username, email })
-  }
-  const res = await fetch('http://10.0.0.7:4001/auth/signup', request)
-  const fetchedData = await res.json()
+    body: JSON.stringify({ password, username, email }),
+  };
+
+  const res = await fetch(API_URL + "/auth/signup", request);
+  const fetchedData = await res.json();
   // console.log(fetchedData)
 
   if (fetchedData.accessToken && fetchedData.refreshToken) {
-    dispatch({ type: SIGNED_UP, payload: { accessToken: fetchedData.accessToken, refreshToken: fetchedData.refreshToken, username } })
-    return form_res_msg.signed_up
+    dispatch({
+      type: SIGNED_UP,
+      payload: {
+        accessToken: fetchedData.accessToken,
+        refreshToken: fetchedData.refreshToken,
+        username,
+      },
+    });
+    return form_res_msg.signed_up;
   } else if (fetchedData.message === server_responses.user_exists) {
-    return form_res_msg.username_exists
+    return form_res_msg.username_exists;
   }
-}
+};
 
 export const signIn = ({ username, password }) => async (dispatch) => {
-  const res = await fetch('http://10.0.0.7:4001/auth/signin', {
-    method: 'POST',
+  console.log('j')
+  const res = await fetch(API_URL + "/auth/signin", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ password, username })
-  })
-  const fetchedData = await res.json()
+    body: JSON.stringify({ password, username }),
+  });
+  const fetchedData = await res.json();
   if (fetchedData.accessToken && fetchedData.refreshToken) {
-    dispatch({ type: SIGNED_IN, payload: { username, accessToken: fetchedData.accessToken, refreshToken: fetchedData.refreshToken } })
-    return form_res_msg.signed_in
+    dispatch({
+      type: SIGNED_IN,
+      payload: {
+        username,
+        accessToken: fetchedData.accessToken,
+        refreshToken: fetchedData.refreshToken,
+      },
+    });
+    return form_res_msg.signed_in;
   } else {
-    return form_res_msg.invalid_credentials
+    return form_res_msg.invalid_credentials;
   }
-}
+};
 
-export const signOut = ({ refreshToken }) => async dispatch => { //? I know you don't pass in refreshToken to clear it from db upon loging out
-  await dispatch({ type: SET_LOADING })
+export const signOut = ({ refreshToken }) => async (dispatch) => {
+  //? I know you don't pass in refreshToken to clear it from db upon loging out
+  await dispatch({ type: SET_LOADING });
   // console.lo/g(refreshToken)
   const request = {
-    method: 'delete',
+    method: "delete",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token: refreshToken })
-  }
-  const res = await fetch('http://10.0.0.7:4001/auth/signout', request)
-  const fetchedData = await res.json()
+    body: JSON.stringify({ token: refreshToken }),
+  };
+  const res = await fetch(API_URL + "/auth/signout", request);
+  const fetchedData = await res.json();
 
   if (fetchedData.mesg === server_responses.signed_out) {
-    dispatch({ type: SIGNED_OUT })
-    return form_res_msg.signed_out
+    dispatch({ type: SIGNED_OUT });
+    return form_res_msg.signed_out;
   } else if (fetchedData.mesg === server_responses.signed_out_with_err) {
-    dispatch({ type: SIGNED_OUT })
-    return form_res_msg.signed_out
+    dispatch({ type: SIGNED_OUT });
+    return form_res_msg.signed_out;
   }
+};
 
-}
-
-export const refreshAccessToken = ({ refreshToken }) => async (dispatch: any) => {
+export const refreshAccessToken = ({ refreshToken }) => async (
+  dispatch: any
+) => {
   const request = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token: refreshToken })
-  }
-  const res = await fetch('http://10.0.0.7:4001/auth/token', request)
-  const fetchedData = await res.json()
-  if (fetchedData.message = server_responses.successfully_refreshed_token) {
-    dispatch({ action: REFRESHED_TOKENS, payload: fetchedData.accessToken })
-    return server_responses.successfully_refreshed_token
+    body: JSON.stringify({ token: refreshToken }),
+  };
+  const res = await fetch(API_URL + "/auth/token", request);
+  const fetchedData = await res.json();
+  if ((fetchedData.message = server_responses.successfully_refreshed_token)) {
+    dispatch({ action: REFRESHED_TOKENS, payload: fetchedData.accessToken });
+    return server_responses.successfully_refreshed_token;
   } else {
-    return auth_responses.failed_to_refreshed_token
+    return auth_responses.failed_to_refreshed_token;
   }
-}
+};
 
 // export const deleteAccount = (username: string, password: string, token: string) => async (dispatch: any) => {
 //   const res = await fetch('http://10.0.0.6:8000/deleteaccount', {

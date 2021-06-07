@@ -108,7 +108,7 @@ const RenderPaoContent = ({ goToUnfilledTrigger, setGoToUnfilledTrigger }) => {
         <View>
           <KeyboardAwareScrollView style={{ height: '100%', }}>
             {isPagination ?
-              <Suspense fallback={<Text>wtf</Text>}>
+              <Suspense fallback={<Text>.</Text>}>
                 <LazyLoadListModePagination
                   listSortedInTens={listSortedInTens}
                   currentRenderItemsRange={currentRenderItemsRange}

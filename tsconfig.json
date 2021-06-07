@@ -6,19 +6,22 @@
     "isolatedModules": true,
     "jsx": "react",
     "lib": [
-      "es5", "es6", "dom", "dom.iterable"
-  ],
+      "es5",
+      "es6",
+      "dom",
+      "dom.iterable"
+    ],
     "moduleResolution": "node",
     "noEmit": true,
     "strict": false,
     "module": "esnext",
-    "target": "esnext",
-    // "noImplicitAny": false,
+    "target": "esnext"
   },
   "exclude": [
     "node_modules",
     "babel.config.js",
     "metro.config.js",
     "jest.config.js"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }

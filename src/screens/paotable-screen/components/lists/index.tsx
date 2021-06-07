@@ -20,6 +20,7 @@ const ListModeScroll = () => {
   const rowEvenBgColor = usePrimaryControlledColor(WhereToColor.rowEven)
   const rowOddBgColor = usePrimaryControlledColor(WhereToColor.rowOdd)
 
+  console.log(studyRandomMode.person.length, 'sdsl')
   return (
     <>
       <View style={{ height: SCREEN_HEIGHT - tableHeaderHeight }}>

@@ -1,7 +1,8 @@
-import { FETCHED_PAOLIST } from './types'
-import { PutPaoList } from '../reducerTypes/paoTypes'
-import paoSchemaGenerator from '../components/logic/paoSchemaGenerator'
-import { handle_update_and_create_pao_doc_server_responses } from './logic/useHandleServerResponses'
+import { FETCHED_PAOLIST } from "./types";
+import { PutPaoList } from "../reducerTypes/paoTypes";
+import paoSchemaGenerator from "../components/logic/paoSchemaGenerator";
+import { handle_update_and_create_pao_doc_server_responses } from "./logic/useHandleServerResponses";
+import { API_URL } from "./authActions";
 
 export enum PaoResponses {
   failed_to_save_pao_list_token_not_existent,
@@ -16,106 +17,97 @@ export enum PaoResponses {
 }
 
 export enum ServerPaoResponses {
-  save_pao_item_failed = 'failed to save pao item',
-  token_invalid = 'token does not exist',
-  doc_by_num_exists = 'Document with that number exists.',
-  saved_updated_document = 'saved updated document',
-  pushed_new_doc_and_saved_successfully = 'pushed new document to collection and saved',
+  save_pao_item_failed = "failed to save pao item",
+  token_invalid = "token does not exist",
+  doc_by_num_exists = "Document with that number exists.",
+  saved_updated_document = "saved updated document",
+  pushed_new_doc_and_saved_successfully = "pushed new document to collection and saved",
 }
 
-export const fetchPao = ({ accessToken }: { accessToken: string }) => async (dispatch: (arg0: { type: string; payload: string; }) => void) => {//TypeScript 
+export const fetchPao = ({ accessToken }: { accessToken: string }) => async (
+  dispatch: (arg0: { type: string; payload: string }) => void
+) => {
+  //TypeScript
   const request = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Authorization': `Bearer ${accessToken}`,
-    }
-  }
-  const res = await fetch('http://10.0.0.7:4001/lists', request)
-  const paoList = await res.json()
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+  const res = await fetch(API_URL + "/lists", request);
+  const paoList = await res.json();
 
   if (paoList.pao.list) {
-    dispatch({ type: FETCHED_PAOLIST, payload: paoList.pao.list }) //~ plug paoList to payload
+    dispatch({ type: FETCHED_PAOLIST, payload: paoList.pao.list }); //~ plug paoList to payload
   } else {
     // dispatch({ type: FAILED_TO_FETCH_PAOLIST, payload: '' })
   }
-}
-
-
-
-
-
-
-
-
+};
 
 export const putNewDoc = ({
   accessToken,
   controlledInput,
   paoListApprovedByServer,
 }: {
-  accessToken
-  controlledInput
-  paoListApprovedByServer
+  accessToken;
+  controlledInput;
+  paoListApprovedByServer;
 }) => async (dispatch) => {
-
-  const paoDocModal = paoSchemaGenerator(controlledInput)
+  const paoDocModal = paoSchemaGenerator(controlledInput);
 
   const request = {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       number: paoDocModal.number,
       person: paoDocModal.person,
       action: paoDocModal.action,
       object: paoDocModal.object,
+    }),
+  };
+
+  const res = await fetch(API_URL + "/lists/newdoc", request);
+  const fetchedData = await res.json();
+
+  const response = dispatch(
+    handle_update_and_create_pao_doc_server_responses({
+      fetchedData,
+      paoListApprovedByServer,
     })
-  }
-
-  const res = await fetch('http://10.0.0.7:4001/lists/newdoc', request)
-  const fetchedData = await res.json()
-
-  const response = dispatch(handle_update_and_create_pao_doc_server_responses({
-    fetchedData, paoListApprovedByServer
-  }))
-  return response
-}
-
-
-
-
-
-
-
-
+  );
+  return response;
+};
 
 export const updateExistingDoc = ({
   accessToken,
   controlledInput,
   paoListApprovedByServer,
-  id
+  id,
 }) => async (dispatch) => {
-
   const request = {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify(controlledInput)
-  }
+    body: JSON.stringify(controlledInput),
+  };
 
-  const res = await fetch(`http://10.0.0.7:4001/lists/update/${id}`, request)
-  const fetchedData = await res.json()
+  const res = await fetch(API_URL + `/lists/update/${id}`, request);
+  const fetchedData = await res.json();
 
   // console.log(paoListApprovedByServer)
-  const response = dispatch(handle_update_and_create_pao_doc_server_responses({
-    fetchedData, paoListApprovedByServer
-  }))
-  return response
-}
+  const response = dispatch(
+    handle_update_and_create_pao_doc_server_responses({
+      fetchedData,
+      paoListApprovedByServer,
+    })
+  );
+  return response;
+};
 
 // const putList = async () => {
 //   const request = {
@@ -134,7 +126,6 @@ export const updateExistingDoc = ({
 //     return PaoResponses.save_pao_list_failed
 //   }
 // }
-
 
 // export const updatePaoDocument = () => async (dispatch: any) => {
 //   const res = await fetch(`http://10.0.0.7:4001/lists/${docId}`, {

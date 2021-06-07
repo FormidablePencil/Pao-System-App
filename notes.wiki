@@ -1,0 +1,2 @@
+- Add unit tests everywhere. Debugging manually is a pain and stupid.
+- 
