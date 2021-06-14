@@ -3,7 +3,7 @@ import { Image } from 'react-native'
 import { View, Text } from 'react-native-tailwind'
 import img from './../assets/gear-option.png'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { StyledText } from '../styles/global'
+import { reusableStyles } from '../styles/global'
 
 const AppSettings = () => {
   return (
@@ -11,16 +11,16 @@ const AppSettings = () => {
       <Image source={img} style={{ height: 125, width: 125 }} />
       <View>
         <TouchableOpacity style={{ marginVertical: 5 }}>
-          <StyledText style={{ color: 'white' }}>Change wallpaper</StyledText>
+          <Text style={{ color: 'white', reusableStyles.styledText }}>Change wallpaper</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ marginVertical: 5 }}>
-          <StyledText style={{ color: 'white' }}>Sound effect volumn nob</StyledText>
+          <Text style={{ color: 'white', reusableStyles.styledText }}>Sound effect volumn nob</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ marginVertical: 5 }}>
-          <StyledText style={{ color: 'white' }}>Themes</StyledText>
+          <Text style={{ color: 'white', reusableStyles.styledText }}>Themes</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ marginVertical: 5 }}>
-          <StyledText style={{ color: 'white' }}>Darkmode</StyledText>
+          <Text style={{ color: 'white', reusableStyles.styledText }}>Darkmode</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -1,25 +1,24 @@
-import React, { useContext } from 'react'
-import styled from 'styled-components'
-import { Button, IconButton, useTheme, Text } from 'react-native-paper'
-import { LinearGradient } from 'expo-linear-gradient'
-import { PaoThemeType } from '../styles/theming'
-import { Animated, Dimensions } from 'react-native'
+import React, { useContext } from "react";
+import { Button, IconButton, useTheme, Text } from "react-native-paper";
+import { LinearGradient } from "expo-linear-gradient";
+import { PaoThemeType } from "../styles/theming";
+import { StyleSheet, Animated, Dimensions } from "react-native";
 import usePrimaryControlledColor, {
   WhereToColor,
   textControlledColorPagination,
-} from '../hooks/usePrimaryControlledColor'
-import { useSelector } from 'react-redux'
-import { RootReducerT } from '../store'
+} from "../hooks/usePrimaryControlledColor";
+import { useSelector } from "react-redux";
+import { RootReducerT } from "../store";
 
-const SCREEN_WIDTH = Dimensions.get('window').width
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
 interface PaginationType {
-  currentRenderItemsRange
-  setCurrentRenderItemsRange
-  navigateTextInputs
-  currentlyFocusedTextInput
-  swiperIndex
-  jumpToCertainTable
+  currentRenderItemsRange;
+  setCurrentRenderItemsRange;
+  navigateTextInputs;
+  currentlyFocusedTextInput;
+  swiperIndex;
+  jumpToCertainTable;
 }
 export enum paginateDirection {
   previous,
@@ -36,57 +35,68 @@ const Pagination = ({
   jumpToCertainTable,
   swiperIndex,
 }: PaginationType) => {
-  const keyboardPresent = useSelector((state: RootReducerT) => state.misc.keyboardPresent)
-  const editModeTrue = useSelector((state: RootReducerT) => state.fabProperties.config.editMode)
-  const theme: PaoThemeType = useTheme()
+  const keyboardPresent = useSelector(
+    (state: RootReducerT) => state.misc.keyboardPresent
+  );
+  const editModeTrue = useSelector(
+    (state: RootReducerT) => state.fabProperties.config.editMode
+  );
+  const theme: PaoThemeType = useTheme();
 
   // console.log(swiperIndex.current, 'swiperIndex from pagination');
   const paginateTo = (num: number) => {
-    const newNum = num * 10
-    jumpToCertainTable(num)
-    setCurrentRenderItemsRange(newNum)
-  } //table pagination option
+    const newNum = num * 10;
+    jumpToCertainTable(num);
+    setCurrentRenderItemsRange(newNum);
+  }; //table pagination option
 
   const renderItemsToCurrentPage = (selected: number) => {
     if (selected === paginateDirection.next) {
-      setCurrentRenderItemsRange((prevState: any) => (prevState < 89 ? prevState + 10 : prevState))
+      setCurrentRenderItemsRange((prevState: any) =>
+        prevState < 89 ? prevState + 10 : prevState
+      );
     } else if (selected === paginateDirection.previous) {
-      if (currentRenderItemsRange <= 0) return
-      setCurrentRenderItemsRange((prevState: any) => prevState - 10)
+      if (currentRenderItemsRange <= 0) return;
+      setCurrentRenderItemsRange((prevState: any) => prevState - 10);
     }
-  } //table pagination option
+  }; //table pagination option
 
   const paginationBtnOnPressHandler = (direction) => {
-    let atTheBeginningOrEndOfTable = false
+    let atTheBeginningOrEndOfTable = false;
     if (
       (currentlyFocusedTextInput.index === 0 &&
-        currentlyFocusedTextInput.name === 'person' &&
+        currentlyFocusedTextInput.name === "person" &&
         direction === paginateDirection.previous) ||
       (currentlyFocusedTextInput.index === 9 &&
-        currentlyFocusedTextInput.name === 'object' &&
+        currentlyFocusedTextInput.name === "object" &&
         direction === paginateDirection.next)
     )
-      atTheBeginningOrEndOfTable = true
+      atTheBeginningOrEndOfTable = true;
     //Todo - focus in on the first/last (depending on where your at) of the table when navigated there
     //~ idea: pass a type and handle it in paoTextInputs accordingly
     if (direction === paginateDirection.previous) {
       if (atTheBeginningOrEndOfTable) {
-        renderItemsToCurrentPage(paginateDirection.previous)
-        navigateTextInputs(paginateDirection.lastOfTable)
-      } else if (keyboardPresent) navigateTextInputs(paginateDirection.previous)
-      else renderItemsToCurrentPage(paginateDirection.previous)
+        renderItemsToCurrentPage(paginateDirection.previous);
+        navigateTextInputs(paginateDirection.lastOfTable);
+      } else if (keyboardPresent)
+        navigateTextInputs(paginateDirection.previous);
+      else renderItemsToCurrentPage(paginateDirection.previous);
     } else if (direction === paginateDirection.next) {
       if (atTheBeginningOrEndOfTable) {
-        renderItemsToCurrentPage(paginateDirection.next)
-        navigateTextInputs(paginateDirection.firstOfTable)
-      } else if (keyboardPresent) navigateTextInputs(paginateDirection.next)
-      else renderItemsToCurrentPage(paginateDirection.next)
+        renderItemsToCurrentPage(paginateDirection.next);
+        navigateTextInputs(paginateDirection.firstOfTable);
+      } else if (keyboardPresent) navigateTextInputs(paginateDirection.next);
+      else renderItemsToCurrentPage(paginateDirection.next);
     }
-  }
+  };
 
-  const controlledPgColor = usePrimaryControlledColor(WhereToColor.paginationSideBtn)
-  const paginationBtnColor = editModeTrue ? theme.colors.accent : controlledPgColor
-  const state = useSelector((state) => state.state)
+  const controlledPgColor = usePrimaryControlledColor(
+    WhereToColor.paginationSideBtn
+  );
+  const paginationBtnColor = editModeTrue
+    ? theme.colors.accent
+    : controlledPgColor;
+  const state = useSelector((state) => state.state);
 
   return (
     <LinearGradient
@@ -97,9 +107,10 @@ const Pagination = ({
       // colors={[theme.colors.linearGradientBgColors.first, theme.colors.linearGradientBgColors.second]}
       start={[0.8, 0.8]}
     >
-      <PaginationContainer>
+      <View>
         <PaginationBtnAnimated
           style={{
+            ...styles.paginationBtn,
             backgroundColor: paginationBtnColor,
             marginRight: SCREEN_WIDTH > 380 ? 4 : 0,
             width: SCREEN_WIDTH > 380 ? 50 : 40,
@@ -107,11 +118,13 @@ const Pagination = ({
           icon="menu-left"
           size={35}
           color="white"
-          onPress={() => paginationBtnOnPressHandler(paginateDirection.previous)}
+          onPress={() =>
+            paginationBtnOnPressHandler(paginateDirection.previous)
+          }
           mode="contained"
         />
-        <Column>
-          <Row>
+        <View style={{ ...styles.column }}>
+          <Row style={{ ...style.row }}>
             {[0, 1, 2, 3, 4].map((num) => (
               <PaginationBtnComponent
                 key={num}
@@ -122,7 +135,7 @@ const Pagination = ({
               />
             ))}
           </Row>
-          <Row>
+          <Row style={{ ...style.row }}>
             {[5, 6, 7, 8, 9].map((num) => (
               <PaginationBtnComponent
                 key={num}
@@ -133,8 +146,8 @@ const Pagination = ({
               />
             ))}
           </Row>
-        </Column>
-        <Row style={{ justifyContent: 'space-around' }}>
+        </View>
+        <Row style={{ justifyContent: "space-around", ...style.row }}>
           <PaginationBtnAnimated
             style={{
               backgroundColor: paginationBtnColor,
@@ -148,18 +161,28 @@ const Pagination = ({
             mode="contained"
           />
         </Row>
-      </PaginationContainer>
+      </View>
     </LinearGradient>
-  )
-}
+  );
+};
 
-const PaginationBtnComponent = ({ num, currentRenderItemsRange, paginateTo, theme }) => {
-  const controlledThemeColor = useSelector((state: any) => state.controlledThemeColor)
-  const active = currentRenderItemsRange.toString()[0] === num.toString()
-  const textColor = active ? 'white' : textControlledColorPagination()
+const PaginationBtnComponent = ({
+  num,
+  currentRenderItemsRange,
+  paginateTo,
+  theme,
+}) => {
+  const controlledThemeColor = useSelector(
+    (state: any) => state.controlledThemeColor
+  );
+  const active = currentRenderItemsRange.toString()[0] === num.toString();
+  const textColor = active ? "white" : textControlledColorPagination();
   const dynamicBackgroundColor = active && {
-    backgroundColor: usePrimaryControlledColor(WhereToColor.paginationBtns, theme.colors.primary),
-  }
+    backgroundColor: usePrimaryControlledColor(
+      WhereToColor.paginationBtns,
+      theme.colors.primary
+    ),
+  };
   return (
     <Button
       style={controlledThemeColor ? dynamicBackgroundColor : null}
@@ -167,37 +190,36 @@ const PaginationBtnComponent = ({ num, currentRenderItemsRange, paginateTo, them
       key={num}
       compact={true}
     >
-      <PaginationBtnText style={textColor}>{`${num}0`}</PaginationBtnText>
+      <Text style={textColor}>{`${num}0`}</Text>
     </Button>
-  )
-}
+  );
+};
 
-const PaginationBtnText = styled(Text)`
-  color: white;
-`
-const PaginationBtn = styled(IconButton)`
-  border-radius: 3px;
-  /* background-color: rgba(27,27,27,.2); */
-  elevation: 0;
-  margin: 0px;
-`
+const styles = StyleSheet.create({
+  paginationBtn: {
+    borderRadius: 3,
+    /* background-color: rgba(27,27,27,.2), */
+    elevation: 0,
+    margin: "0px",
+  },
+  column: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+  },
+  row: {
+    flexDirection: "row",
+  },
+  paginationContainer: {
+    /* height: ${({ height }) => height}; */
+    flexDirection: "row",
+    alignItems: "center",
+    padding: "5px 0px 5px 25px",
+  },
+});
+
 const PaginationBtnAnimated = Animated.createAnimatedComponent(
-  PaginationBtn
-) /* this is what show that 'functions cannot be given refs.' warning */
+  IconButton
+); /* this is what show that 'functions cannot be given refs.' warning */
 
-const Column = styled.View`
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-`
-const Row = styled.View`
-  flex-direction: row;
-`
-const PaginationContainer = styled.View`
-  /* height: ${({ height }) => height}; */
-  flex-direction: row;
-  align-items: center;
-  padding: 5px 0px 5px 25px;
-`
-
-export default Pagination
+export default Pagination;

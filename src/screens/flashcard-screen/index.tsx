@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View } from 'react-native-tailwind';
 import { reusableStyles, WhiteText } from '../../styles/global'
 import { Button, useTheme, TouchableRipple, Modal, Portal } from 'react-native-paper';
-import styled from 'styled-components';
 import FlashcardSwiper from './components/flashcard-swiper';
 import FabActionBtn from '../components/fab-action-btns';
 import { enumFabAction } from '../../constants/fabConstants';
@@ -81,36 +80,5 @@ export const FlashcardsScreen = () => {
     </>
   )
 }
-
-const LinearGradientStyled = styled(LinearGradient)`
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-`
-const InputSpinnerContainer = styled.View`
-  background-color: rgba(36,36,36,.7);
-  margin: 20px;
-  padding: 20px;
-  border-radius: 30px;
-`
-const ModalContainer = styled.View`
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-`
-
-const CardsLeftText = styled<any>(Text)`
-  align-items: center;
-  bottom: 10%;
-  position: absolute;
-  width: 100%;
-  font-family: MontserratLight;
-  font-size: 35px;
-  color: ${({ color }) => color};
-  text-align: center;
-  z-index: 5;
-`;
 
 export default FlashcardsScreen

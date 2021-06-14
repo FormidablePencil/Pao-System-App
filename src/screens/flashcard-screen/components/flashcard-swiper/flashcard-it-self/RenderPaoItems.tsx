@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import { useTheme } from "react-native-paper";
-import styled from "styled-components";
 
 const RenderPaoItems = ({
   editMode,
@@ -29,7 +28,7 @@ const RenderPaoItems = ({
         if (valuePair === sidesDocument.symbol) {
           return (
             <View style={styles.wrapper} key={name}>
-              <PaoName color={theme.colors.primary}>{key}</PaoName>
+              <Text style={{ color: theme.colors.primary }}>{key}</Text>
               <>
                 {editMode ? (
                   <TextInput
@@ -79,22 +78,11 @@ const styles = StyleSheet.create({
     fontFamily: "MontserratReg",
     width: "100%",
   },
-  // paoName: {
-  // color: ${({ color }) => color};
-  // },
   wrapper: {
-  alignItems: "center",
-  width: "100%",
-  }
+    alignItems: "center",
+    width: "100%",
+  },
 });
-// const PaoName = styled<any>(Text)`
-//   color: ${({ color }) => color};
-// `;
-
-// const Wrapper = styled(View)`
-//   align-items: center;
-//   width: 100%;
-// `;
 
 export default RenderPaoItems;
 

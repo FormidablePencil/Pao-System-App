@@ -1,20 +1,23 @@
-import React, { useEffect, useState, useRef, Suspense } from 'react'
-import styled from 'styled-components'
-import { FAB, Button, Text, Headline } from 'react-native-paper'
-import { useSelector } from 'react-redux'
-import { StyleSheet } from 'react-native'
-import FlashcardItSelf from './flashcard-it-self'
-import Swiper from 'react-native-swiper'
-import { LinearGradient } from 'expo-linear-gradient'
+import React, { useEffect, useState, useRef, Suspense } from "react";
+import { FAB, Button, Text, Headline } from "react-native-paper";
+import { useSelector } from "react-redux";
+import { StyleSheet } from "react-native";
+import FlashcardItSelf from "./flashcard-it-self";
+import Swiper from "react-native-swiper";
+import { LinearGradient } from "expo-linear-gradient";
 import usePrimaryControlledColor, {
   WhereToColor,
-} from '../../../../hooks/usePrimaryControlledColor'
-import { RootReducerT } from '../../../../store'
-import sortBy from 'lodash.sortby'
-import shuffle from 'shuffle-array'
-import { LazyloadScrollView, LazyloadView, LazyloadImage } from 'react-native-lazyload'
-import randomlyGeneratedPaoList from '../../functions/randomlyGeneratedPaoList'
-import { arrangmentOpt } from '../../../../reducer/flashcardOptionsReducer'
+} from "../../../../hooks/usePrimaryControlledColor";
+import { RootReducerT } from "../../../../store";
+import sortBy from "lodash.sortby";
+import shuffle from "shuffle-array";
+import {
+  LazyloadScrollView,
+  LazyloadView,
+  LazyloadImage,
+} from "react-native-lazyload";
+import randomlyGeneratedPaoList from "../../functions/randomlyGeneratedPaoList";
+import { arrangmentOpt } from "../../../../reducer/flashcardOptionsReducer";
 
 const defaultFlashcards = [
   {
@@ -24,39 +27,47 @@ const defaultFlashcards = [
     object: null,
     person: null,
   },
-]
+];
 
 const FlashcardSwiper = () => {
-  const pao = useSelector((state: RootReducerT) => state.pao)
-  const study = useSelector((state: RootReducerT) => state.study.study)
-  const studyRandomMode = useSelector((state: RootReducerT) => state.studyRandomMode)
-  const flashcardOrder = useSelector((state: RootReducerT) => state.flashcardOptions.flashcardOrder)
-  const studyList = useSelector((state: RootReducerT) => state.study.list)
-  const [flashcardOrderAssortment, setFlashcardOrderAssortment] = useState<any>(defaultFlashcards)
-  const swiperReff = useRef(null)
+  const pao = useSelector((state: RootReducerT) => state.pao);
+  const study = useSelector((state: RootReducerT) => state.study.study);
+  const studyRandomMode = useSelector(
+    (state: RootReducerT) => state.studyRandomMode
+  );
+  const flashcardOrder = useSelector(
+    (state: RootReducerT) => state.flashcardOptions.flashcardOrder
+  );
+  const studyList = useSelector((state: RootReducerT) => state.study.list);
+  const [flashcardOrderAssortment, setFlashcardOrderAssortment] = useState<any>(
+    defaultFlashcards
+  );
+  const swiperReff = useRef(null);
 
   const bgColor = [
     usePrimaryControlledColor(WhereToColor.flashcardBackground),
     usePrimaryControlledColor(WhereToColor.flashcardBackground2),
-  ]
-  const noItemsInPaoList = flashcardOrderAssortment[0].number === null
+  ];
+  const noItemsInPaoList = flashcardOrderAssortment[0].number === null;
 
   useEffect(() => {
     // if (study.study) setFlashcardOrderAssortment(study.paoStudySets)
     // else if (!study.study) {
-    setFlashcardOrderAssortment(sortBy(pao, 'number'))
+    setFlashcardOrderAssortment(sortBy(pao, "number"));
     // }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    console.log('hittttterer')
-    console.log(flashcardOrder === arrangmentOpt.random)
-    if (flashcardOrder === arrangmentOpt.random) setFlashcardOrderAssortment(shuffle(pao))
-    else if (flashcardOrder === arrangmentOpt.sorted) setFlashcardOrderAssortment(sortBy(pao, 'number'))
-  }, [flashcardOrder])
+    console.log("hittttterer");
+    console.log(flashcardOrder === arrangmentOpt.random);
+    if (flashcardOrder === arrangmentOpt.random)
+      setFlashcardOrderAssortment(shuffle(pao));
+    else if (flashcardOrder === arrangmentOpt.sorted)
+      setFlashcardOrderAssortment(sortBy(pao, "number"));
+  }, [flashcardOrder]);
 
   return (
-    <Container style={{ ...styles2.slide1 }}>
+    <View style={[styles2.slide1, styles2.container]}>
       <LinearGradient colors={bgColor} end={[0.75, 0.2]} start={[0.01, 0.75]}>
         {!noItemsInPaoList && (
           <Swiper
@@ -72,85 +83,77 @@ const FlashcardSwiper = () => {
             // onIndexChanged={async (index) =>} // the way we can know what direction the user swiped is by comparing prev to new index
             onIndexChanged={async (index) => await console.log(index)} // the way we can know what direction the user swiped is by comparing prev to new index
           >
-            {/*       <AlignCenterWrapper key={index}>
+            {/*       <View key={index} style={{...styles.alignContentCenter}}>
                     <FlashcardItSelf collection={study.paoStudySets} index={index} studyMode={true} />
-                  </AlignCenterWrapper> */}
+                  </View> */}
 
             {flashcardOrderAssortment.map((item, index) => {
               // console.log(currentDeckOfCard, 'sd');
-              if (!study || (study && studyList.filter((studyNum) => studyNum === item.number)[0]))
+              if (
+                !study ||
+                (study &&
+                  studyList.filter((studyNum) => studyNum === item.number)[0])
+              )
                 return (
-                  <AlignCenterWrapper key={item}>
+                  <View key={item}>
                     <FlashcardItSelf index={index} collection={item} />
-                  </AlignCenterWrapper>
-                )
+                  </View>
+                );
             })}
           </Swiper>
         )}
         {/* {noItemsInPaoList &&
-          <AlignCenterWrapper style={{ width: SCREEN_WIDTH }}>
-            <StyledHeadline color={textColor}>Add items to your pao list</StyledHeadline>
-            <ButtonStyled
+          <View style={{ width: SCREEN_WIDTH, ...styles.alignContentCenter }}>
+          <Headline style={{color: textColor}}>Add items to your pao list</Headline>
+            <Button style={{styles.button}}
               // color={usePrimaryControlledColor(WhereToColor.flashcardBtnGoToPaoList, null)}
               color={btnColorBg}
               mode='contained'
               onPress={() => navigation.navigate(tabScreens.Paotable)}>
-              <StyledText color={textColor}>Go to pao list</StyledText>
-            </ButtonStyled>
-          </AlignCenterWrapper>
+              <Text style={{ color: textColor }}>Go to pao list</Text>
+            </Button>
+          </View>
         } */}
       </LinearGradient>
-    </Container>
-  )
-}
+    </View>
+  );
+};
 
-export default FlashcardSwiper
+export default FlashcardSwiper;
 
-const ButtonStyled = styled(Button)`
-  margin: 30px 0px 0px 0px;
-`
-const StyledHeadline = styled<any>(Headline)`
-  color: ${({ color }) => color};
-`
-const StyledText = styled<any>(Text)`
-  color: ${({ color }) => color};
-`
-const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`
-const AlignCenterWrapper = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`
 const styles2 = StyleSheet.create({
+  alignContentCenter: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   wrapper: {},
   slide1: {
-    backgroundColor: '#9DD6EB',
+    backgroundColor: "#9DD6EB",
   },
   slide2: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#97CAE5",
   },
   slide3: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#92BBD9",
   },
   text: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-})
-
-const GoBackButton = styled(FAB)`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-`
+  button: {
+    margin: "30px 0px 0px 0px",
+  },
+});

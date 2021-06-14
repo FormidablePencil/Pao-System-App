@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, withTheme } from "react-native-paper";
-import { WhiteText } from "../styles/global";
+import { Button, Text, withTheme } from "react-native-paper";
+import { reusableStyles } from "../styles/global";
 
 const ChooseEnteringOption = ({ setEnteringMethod, comps, theme }: any) => {
   const funcOnPressHandler = (setComp: any) => {
@@ -18,7 +18,7 @@ const ChooseEnteringOption = ({ setEnteringMethod, comps, theme }: any) => {
         mode="contained"
         onPress={() => funcOnPressHandler(comps.signin)}
       >
-        <WhiteText>Login</WhiteText>
+        <Text style={reusableStyles.whiteText}>Login</Text>
       </Button>
       <Button
         style={{
@@ -29,7 +29,7 @@ const ChooseEnteringOption = ({ setEnteringMethod, comps, theme }: any) => {
         mode="contained"
         onPress={() => funcOnPressHandler(comps.signup)}
       >
-        <WhiteText>New account</WhiteText>
+        <Text style={reusableStyles.whiteText}>New account</Text>
       </Button>
     </>
   );

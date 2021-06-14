@@ -1,31 +1,33 @@
-import styled from 'styled-components';
+import { StyleSheet } from "react-native";
 
-export const Row = styled.View`
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-evenly;
-  padding: 0px 15px;
-`
-export const FirstItemInRow = styled.Text`
-  margin-left: 3;
-  align-self: center;
-  color: ${({ color }) => color ?? 'white'};
-  width: 20px;
-  text-align: center;
-  justify-content: center;
-`;
-export const FirstItemInRowImage = styled(FirstItemInRow)`
-  height: 30;
-  width: 30;
-`;
-export const ItemInRow = styled.View`
-  width: 33%;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
-export const StyledTextInRowItemStudyMode = styled.Text`
-  text-align: center;
-  color: ${({ color }) => color ?? 'white'};
-  font-size: 20px;
-`
+export const paoTableStyles = StyleSheet.create({
+  row: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    padding: "0px 15px",
+  },
+  firstItemInRow: {
+    marginLeft: 3,
+    alignSelf: "center",
+    // color: ${({ color }) => color ?? "white"},
+    width: "20px",
+    textAlign: "center",
+    justifyContent: "center",
+  },
+  firstItemInRowImage: {
+    height: 30,
+    width: 30,
+  },
+  itemInRow: {
+    width: "33%",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  styledTextInRowItemStudyMode: {
+    textAlign: "center",
+    // color: ${({ color }) => color ?? "white"},
+    fontSize: 20,
+  },
+});

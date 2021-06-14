@@ -50,7 +50,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-lazyload": "^1.1.0",
     "react-native-number-slider": "^1.0.0",
-    "react-native-paper": "git+https://github.com/FormidablePencil/react-native-paper.git",
+    "react-native-paper": "^4.9.1",
     "react-native-reanimated": "~2.1.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",

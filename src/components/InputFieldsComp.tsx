@@ -1,6 +1,11 @@
 import React, { useState, useRef } from "react";
-import { View, StyleSheet, LayoutAnimation, Keyboard } from "react-native";
-import styled from "styled-components";
+import {
+  View,
+  Text,
+  StyleSheet,
+  LayoutAnimation,
+  Keyboard,
+} from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import * as Animatable from "react-native-animatable";
 import { comps, tabScreens } from "../constants/constants";
@@ -11,7 +16,7 @@ import useUserAuthentication, {
   form_res_msg,
 } from "../hooks/useUserAuthentication";
 import { useNavigation } from "@react-navigation/native";
-import { WhiteText } from "../styles/global";
+import { reusableStyles } from "../styles/global";
 // import { Ionicons } from "@expo/vector-icons";
 
 interface propertyTypes {
@@ -108,7 +113,8 @@ const InputFieldsComp = ({
         {errorMsg !== form_res_msg.no_err && errorMsg}
       </Animatable.Text>
 
-      <StyledTextInput
+      <TextInput
+        style={styles.styledTextInput}
         multiline={false}
         underlineColor={theme.colors.primary}
         mode={"flat"}
@@ -122,7 +128,8 @@ const InputFieldsComp = ({
             : false
         }
       />
-      <StyledTextInput
+      <TextInput
+        style={styles.styledTextInput}
         multiline={false}
         underlineColor={theme.colors.primary}
         mode={"flat"}
@@ -137,8 +144,10 @@ const InputFieldsComp = ({
             : false
         }
       />
+
       {enteringMethod === comps.signup ? (
-        <StyledTextInput
+        <TextInput
+          style={styles.styledTextInput}
           multiline={false}
           underlineColor={theme.colors.primary}
           mode={"flat"}
@@ -154,36 +163,32 @@ const InputFieldsComp = ({
           }
         />
       ) : null}
-      <BottomSection>
-        <StyledButton
+
+      <View style={styles.bottomSection}>
+        <Button
+          style={styles.styledButton}
           contentStyle={{ height: theme.btnHeight.large }}
           mode="contained"
           onPress={() => onPressHandler(onPress.goBack)}
         >
-          {/* <IoniconsStyled name="ios-arrow-round-back" color="white" size={20} />{" "} */}
-          <IoniconsStyled />{" "}
-          <WhiteText>Back</WhiteText>
-        </StyledButton>
-        <StyledButton
+          {/* <View style={styles.ioniconsStyled} name="ios-arrow-round-back" color="white" size={20} />{" "} */}
+          <View style={styles.ioniconsStyled} />{" "}
+          <Text style={reusableStyles.whiteText}>Back</Text>
+        </Button>
+        <Button
+          style={styles.styledButton}
           contentStyle={{ height: theme.btnHeight.large }}
           mode="contained"
           onPress={() => onPressHandler(onPress.enter)}
           loading={loading === LoadingTypes.loading ? true : false}
           icon={loading === LoadingTypes.success && "check"}
         >
-          <WhiteText>{comps[enteringMethod]}</WhiteText>
-        </StyledButton>
-      </BottomSection>
+          <Text style={reusableStyles.whiteText}>{comps[enteringMethod]}</Text>
+        </Button>
+      </View>
     </View>
   );
 };
-
-const StyledTextInput = styled<any>(TextInput)`
-  background-color: #fff;
-  border-radius: 15;
-  margin: 10px 0px;
-  overflow: hidden;
-`;
 
 const styles = StyleSheet.create({
   errorMessage: {
@@ -194,19 +199,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
     position: "absolute",
   },
+  styledTextInput: {
+    backgroundColor: "#fff",
+    // borderRadius: 15,
+    // margin: "10px 0px",
+    overflow: "hidden",
+  },
+  ioniconsStyled: {
+    // margin: "0 0 20px",
+  },
+  styledButton: {
+    margin: 2,
+    flex: 1,
+  },
+  bottomSection: {
+    marginTop: 10,
+    flexDirection: "row",
+  },
 });
 
-// const IoniconsStyled = styled<any>(Ionicons)`
-const IoniconsStyled = styled(View)`
-  margin-right: 20px;
-`;
-const StyledButton = styled<any>(Button)`
-  margin: 2px;
-  flex: 1;
-`;
-const BottomSection = styled(View)`
-  margin-top: 10;
-  flex-direction: row;
-`;
+// const View style={styles.ioniconsStyled} = styled<any>(Ionicons)`
 
 export default withTheme(InputFieldsComp);

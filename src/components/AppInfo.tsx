@@ -1,63 +1,78 @@
-import React, { useEffect, useState } from 'react'
-import { Button, useTheme, Switch } from 'react-native-paper'
-import { useDispatch, useSelector } from 'react-redux'
-import { signOut } from '../actions/authActions'
-import useHandleSystemMesgAuth from '../hooks/useHandleSystemMesgAuth'
-import { LayoutAnimation, Animated, Slider, View, Text } from 'react-native'
-import styled from 'styled-components'
-import { PaoThemeType } from '../styles/theming'
-import { SAVE_CONTROLLED_THEME_COLOR } from '../actions/types'
-
+import React, { useEffect, useState } from "react";
+import { Button, useTheme, Switch } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import { signOut } from "../actions/authActions";
+import useHandleSystemMesgAuth from "../hooks/useHandleSystemMesgAuth";
+import {
+  LayoutAnimation,
+  Animated,
+  Slider,
+  View,
+  Text,
+  StyleSheet,
+} from "react-native";
+import { PaoThemeType } from "../styles/theming";
+import { SAVE_CONTROLLED_THEME_COLOR } from "../actions/types";
 
 const AppInfo = ({ navigation }: any) => {
-  const controlledThemeColor = useSelector((state: any) => state.controlledThemeColor)
-  const refreshToken = useSelector((state: any) => state.auth.refreshToken)
-  const loading = useSelector((state: any) => state.systemMessages.loading)
-  const { userSignedOut } = useHandleSystemMesgAuth()
-  const [loadingComplete, setLoadingComplete] = useState(false)
-  const [themeControllerValue, setThemeControllerValue] = useState(controlledThemeColor)
-  const dispatch = useDispatch()
-  const theme: PaoThemeType = useTheme()
+  const controlledThemeColor = useSelector(
+    (state: any) => state.controlledThemeColor
+  );
+  const refreshToken = useSelector((state: any) => state.auth.refreshToken);
+  const loading = useSelector((state: any) => state.systemMessages.loading);
+  const { userSignedOut } = useHandleSystemMesgAuth();
+  const [loadingComplete, setLoadingComplete] = useState(false);
+  const [themeControllerValue, setThemeControllerValue] = useState(
+    controlledThemeColor
+  );
+  const dispatch = useDispatch();
+  const theme: PaoThemeType = useTheme();
 
   useEffect(() => {
     if (userSignedOut === true || userSignedOut === false) {
-      setLoadingComplete(true)
+      setLoadingComplete(true);
       setTimeout(() => {
-        navigation.navigate('WelcomeScreen')
+        navigation.navigate("WelcomeScreen");
       }, 1150);
     }
-  }, [userSignedOut])
+  }, [userSignedOut]);
 
   useEffect(() => {
-    if (controlledThemeColor === null) setThemeControllerValue(.5)
-    else setThemeControllerValue(controlledThemeColor)
-  }, [])
+    if (controlledThemeColor === null) setThemeControllerValue(0.5);
+    else setThemeControllerValue(controlledThemeColor);
+  }, []);
 
   const handleOnPress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    dispatch(signOut({ refreshToken }))
-  }
-  const sliderOnValueChangeHandler = (value) => dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: value })
+    dispatch(signOut({ refreshToken }));
+  };
+  const sliderOnValueChangeHandler = (value) =>
+    dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: value });
 
   const onSlideCompleteHanlder = () => {
-    if (controlledThemeColor === null) setThemeControllerValue(.5)
-    else setThemeControllerValue(controlledThemeColor)
-  }
+    if (controlledThemeColor === null) setThemeControllerValue(0.5);
+    else setThemeControllerValue(controlledThemeColor);
+  };
 
   const switchOnValueChangeHander = () => {
     if (!controlledThemeColor) {
-      dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: themeControllerValue })
+      dispatch({
+        type: SAVE_CONTROLLED_THEME_COLOR,
+        payload: themeControllerValue,
+      });
     } else {
-      setThemeControllerValue(controlledThemeColor)
-      dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: null })
+      setThemeControllerValue(controlledThemeColor);
+      dispatch({ type: SAVE_CONTROLLED_THEME_COLOR, payload: null });
     }
-  }
+  };
 
   return (
-    <Container>
+    <View style={styles.container}>
       {/* //~ this will control the darkness of the app. Only applicable to plain mode */}
-      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <Animated.Text style={{ color: 'white' }}>Control theme opacity</Animated.Text>
+      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <Animated.Text style={{ color: "white" }}>
+          Control theme opacity
+        </Animated.Text>
         <Switch
           value={controlledThemeColor ? true : false}
           onValueChange={() => switchOnValueChangeHander()}
@@ -66,9 +81,11 @@ const AppInfo = ({ navigation }: any) => {
       <Slider
         value={themeControllerValue}
         disabled={controlledThemeColor ? false : true}
-        onValueChange={(value) => { sliderOnValueChangeHandler(value) }}
+        onValueChange={(value) => {
+          sliderOnValueChangeHandler(value);
+        }}
         style={{ width: 200, height: 40 }}
-        minimumValue={.05}
+        minimumValue={0.05}
         maximumValue={1}
         minimumTrackTintColor="#FFFFFF"
         maximumTrackTintColor="#000000"
@@ -77,19 +94,21 @@ const AppInfo = ({ navigation }: any) => {
       />
       <Button
         loading={loading}
-        mode='contained'
-        icon={loadingComplete && 'check'}
+        mode="contained"
+        icon={loadingComplete && "check"}
         onPress={() => handleOnPress()}
         style={{ marginTop: 30 }}
       >
-        <Text style={{ color: 'white' }}>Logout</Text>
+        <Text style={{ color: "white" }}>Logout</Text>
       </Button>
-    </Container>
-  )
-}
+    </View>
+  );
+};
 
-const Container = styled(View)`
-  bottom: 40
-`;
+const styles = StyleSheet.create({
+  container: {
+    bottom: 40,
+  },
+});
 
-export default AppInfo
+export default AppInfo;
