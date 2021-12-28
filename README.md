@@ -15,6 +15,8 @@ To learning such a system requires one to refer back to it every so often and pu
 ## Demo
 Demo video: https://youtu.be/-U7ysY2m1QE
 
+![image](https://octodex.github.com/images/dojocat.jpg)
+
 <img src="https://i.ibb.co/XXPcnsB/Screenshot-20201006-210038-The-Pao-System.jpg" width="200" title="app">.<img src="https://i.ibb.co/d50f1xv/paoImg4.jpg" width="200" title="app">
 <img src="https://i.ibb.co/WxHg6Tm/paoImg.jpg" width="200" title="app">
 <img src="https://i.ibb.co/Gp0TPrH/paoImg2.jpg" width="200" title="app">
