@@ -51,7 +51,7 @@ Not yet available in the play store or anywhere for that matter.
 
 ## NOTES
 
-**Features built**
+### Features built
 
 - Authentication
 - Catalog table for pao system
@@ -59,7 +59,7 @@ Not yet available in the play store or anywhere for that matter.
 - Guessing feature
 - Adjustable theme option; dark mode
 
-**Bugs and todos**
+### Bugs and todos
 
 - Edit mode in flashcard and tables screens have a few bugs
 - Splash image must be changed
